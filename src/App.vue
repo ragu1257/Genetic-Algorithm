@@ -4,17 +4,29 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th v-for="item in headline" :key="item">{{item}}</th>
+          <th v-for="item in openTime" :key="item">{{item}}</th>
+          <th>Daily working time</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item,i) in output" :key="i">
-          <td>{{item.employeeName}}</td>
-          <td v-for="number in headline" :key="number">
-            <span v-for="(time,i) in item.time" :key="i">
-              <span v-if="number == time" class="bg-green-200">{{time}}</span>
-            </span>
-          </td>
+        <tr v-for="(item,i) in employee" :key="i">
+          <td>{{item.emp_name}}</td>
+          <!-- <td v-for="number in openTime" :key="number"> -->
+            <td v-for="(time,i) in item.range" :key="i">
+              <div v-if="time>0" class="bg-green-200">{{item.emp_name}}</div>
+            </td>
+          <!-- </td> -->
+          <td>{{item.daily_working_time}}</td>
+        </tr>
+         <tr>
+           <td>Excess Employed / Demand</td>
+           <td v-for="number in openTime" :key="number">
+           <span v-for="(item,i) in demand" :key="i">
+             <span v-for="(demand,i) in item.totalDemand" :key="i">
+               <span v-if="demand.time == number">{{demand.currentDemand}} / {{item.demand}}</span>
+             </span>
+           </span>
+           </td>
         </tr>
       </tbody>
     </table>
@@ -23,13 +35,15 @@
       <span class="pr-5">start_time: {{item.start_time}} </span>
       <span class="pr-5">end_time: {{item.end_time}} </span>
       <span class="pr-5">demand: {{item.demand}} </span>
+      <span> totalDemand: {{item.totalDemand}}</span>
     </div>
     </div>
     <div v-for="(item,i) in employee" :key="i">
       <span class="pr-5">employee_name: {{item.emp_name}} </span>
       <span class="pr-5">daily_working_time_left: {{item.daily_working_time}} </span>
       <span class="pr-5">work_start_time: {{item.work_start_time}} </span>
-      <span>work_end_time: {{item.work_end_time}}</span>
+      <span class="pr-5">work_end_time: {{item.work_end_time}}</span>
+      <span>range: {{item.range}}</span>
     </div>
   </div>
 </template>
@@ -47,10 +61,9 @@ export default defineComponent({
   components: {
   },
   setup(){
-    const {employee, output, demand} = task();
-    const headline = ref([6,7,8,9,10,11,12,13,14,15,16,17,18]);
+    const {employee, demand, openTime} = task();
 
-    return {headline,employee, output, demand}
+    return {openTime,employee, demand}
   }
 });
 </script>
