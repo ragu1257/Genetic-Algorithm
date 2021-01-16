@@ -1,11 +1,22 @@
 /* eslint-disable */
 export function task() {
 
-  console.log("hello");
-  interface LooseObject {
-    [key: string]: any
+  interface employeeInfo {
+    emp_name: number,
+    daily_working_time: number,
+    work_start_time: number,
+    work_end_time: number,
+    range?: (number | string)[]
   }
-  const employee: LooseObject = [
+
+  interface demandInfo {
+    start_time: number,
+    end_time: number,
+    demand: number,
+    totalDemand?: (number | string)[]
+  }
+
+  let employee: employeeInfo[] = [
     { emp_name: 1, daily_working_time: 8, work_start_time: 6, work_end_time: 14 },
     { emp_name: 2, daily_working_time: 8, work_start_time: 6, work_end_time: 14 },
     { emp_name: 3, daily_working_time: 8, work_start_time: 8, work_end_time: 16 },
@@ -14,82 +25,80 @@ export function task() {
     { emp_name: 6, daily_working_time: 8, work_start_time: 10, work_end_time: 18 },
   ]
 
-  const demand: LooseObject = [
+  const demand: demandInfo[] = [
     { start_time: 6, end_time: 8, demand: 2 },
     { start_time: 8, end_time: 13, demand: 3 },
     { start_time: 13, end_time: 15, demand: 4 },
     { start_time: 15, end_time: 18, demand: 3 }
   ]
 
-  let timeTable = []
-  const openTime = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
-  // console.log(employee.length, demand[1]);
-  // type User = {
-  //     employeeName: number;
-  //     time: any
-  // }
+  const officeOpenTimings: number[] = [];
 
-  for (let i = 0; i < employee.length; i++) {
-    let rangeArray = []
-    for (let j = employee[i].work_start_time; j < employee[i].work_end_time; j++) {
-      rangeArray.push(j)
+  function assignOfficeOpenTime(startTime: number, endTime: number) {
+    for (let i = startTime; i < endTime; i++) {
+      officeOpenTimings.push(i)
     }
-    employee[i].range = rangeArray;
   }
-  // for (let i = 0; i < demand.length; i++) {
-  //   let rangeArray = []
-  //   for (let j = demand[i].start_time; j < demand[i].end_time; j++) {
-  //     rangeArray.push(j)
-  //   }
-  //   demand[i].range = rangeArray;
-  // }
 
-  console.log(openTime[openTime.length - 1]);
 
-  for (let i = 0; i < employee.length; i++) {
-    let newRange = []
-    for (let j = openTime[0]; j <= openTime[openTime.length-1]; j++) {
-      if (employee[i].range.includes(j)) {
-        newRange.push(j)
-      } else {
-        newRange.push(0)
+  function calculateEmployeeTimeRange() {
+    for (let i = 0; i < employee.length; i++) {
+      let rangeArray = []
+      for (let j = employee[i].work_start_time; j < employee[i].work_end_time; j++) {
+        rangeArray.push(j)
       }
-
+      employee[i].range = rangeArray;
     }
-    employee[i].daily_working_time = employee[i].work_end_time - employee[i].work_start_time
-    employee[i].range = newRange;
   }
 
-
-  for(let i=0; i<demand.length;i++){
-    let totalDemandNew = []
-    for(let j=demand[i].start_time; j<demand[i].end_time;j++){  
-      let currentDemand = 0
-      let demandObject: any = {}
-      for (let k = 0; k < employee.length; k++) {
-        if (employee[k].range.includes(j)) {
-          currentDemand = currentDemand + 1
+  function updateEmployeeRange() {
+    for (let i = 0; i < employee.length; i++) {
+      console.log("this is emp length", employee.length, employee[i].range, officeOpenTimings, officeOpenTimings.length);
+      let newRange = []
+      for (let j = officeOpenTimings[0]; j <= officeOpenTimings[officeOpenTimings.length - 1]; j++) {
+        if (employee[i].range?.includes(j)) {
+          newRange.push(j)
+        } else {
+          newRange.push(0)
         }
+
       }
-      currentDemand = currentDemand - demand[i].demand 
-      demandObject.time = j
-      demandObject.currentDemand = currentDemand
-      totalDemandNew.push(demandObject)
+      employee[i].daily_working_time = employee[i].work_end_time - employee[i].work_start_time
+      employee[i].range = newRange;
     }
-    demand[i].totalDemand = totalDemandNew
-   console.log(demand);
-   
   }
-//   console.log(employee);
-// console.log(totalDemand);
-// console.log("total Demand New",totalDemandNew);
 
-console.log("final demand",demand);
+  function excessEmployeeInDemand() {
+    for (let i = 0; i < demand.length; i++) {
+      let totalDemandNew = []
+      for (let j = demand[i].start_time; j < demand[i].end_time; j++) {
+        let excessEmployee = 0
+        let demandObject: any = {}
+        for (let k = 0; k < employee.length; k++) {
+          if (employee[k].range?.includes(j)) {
+            excessEmployee = excessEmployee + 1
+          }
+        }
+        excessEmployee = excessEmployee - demand[i].demand
+        demandObject.time = j
+        demandObject.excessEmployee = excessEmployee
+        totalDemandNew.push(demandObject)
+      }
+      demand[i].totalDemand = totalDemandNew
+    }
+  }
 
+  // set the opening time of office
+  assignOfficeOpenTime(6, 18)
 
+  // put the working time in range eg. Emp1 [6,7.....13]
+  calculateEmployeeTimeRange()
 
+  // put 0 at the places where the emp is not working for the ease to make table eg Emp1 [6,7...13,0,0,0,0,0]
+  updateEmployeeRange()
 
+  // adding a new array object in demand that shows excessEmployee for each time(hour) eg. [{time:6, excessEmployee:2}, {time:7, excessEmployee:4}]
+  excessEmployeeInDemand()
 
-
-  return { employee, demand, openTime }
+  return { employee, demand, officeOpenTimings }
 }

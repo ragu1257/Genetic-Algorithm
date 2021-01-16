@@ -1,29 +1,29 @@
 <template>
   <div>
-    <table class="table-auto w-1/2" v-bind:style="{ display: 'inline-table' }">
+    <table class="table-auto w-2/3 text-center" v-bind:style="{ display: 'inline-table' }">
       <thead>
         <tr>
           <th>Name</th>
-          <th v-for="item in openTime" :key="item">{{item}}</th>
-          <th>Daily working time</th>
+          <th v-for="item in officeOpenTimings" :key="item">{{item}}</th>
+          <th>Daily working time / Fixed Working Time</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item,i) in employee" :key="i">
           <td>{{item.emp_name}}</td>
-          <!-- <td v-for="number in openTime" :key="number"> -->
+          <!-- <td v-for="number in officeOpenTimings" :key="number"> -->
             <td v-for="(time,i) in item.range" :key="i">
               <div v-if="time>0" class="bg-green-200">{{item.emp_name}}</div>
             </td>
           <!-- </td> -->
-          <td>{{item.daily_working_time}}</td>
+          <td class="m-3"> {{item.daily_working_time}}/8 </td>
         </tr>
          <tr>
            <td>Excess Employed / Demand</td>
-           <td v-for="number in openTime" :key="number">
+           <td v-for="number in officeOpenTimings" :key="number">
            <span v-for="(item,i) in demand" :key="i">
              <span v-for="(demand,i) in item.totalDemand" :key="i">
-               <span v-if="demand.time == number">{{demand.currentDemand}} / {{item.demand}}</span>
+               <span v-if="demand.time == number" class="p-3"> {{demand.excessEmployee}}/{{item.demand}} </span>
              </span>
            </span>
            </td>
@@ -61,9 +61,9 @@ export default defineComponent({
   components: {
   },
   setup(){
-    const {employee, demand, openTime} = task();
+    const {employee, demand, officeOpenTimings} = task();
 
-    return {openTime,employee, demand}
+    return {officeOpenTimings,employee, demand}
   }
 });
 </script>
