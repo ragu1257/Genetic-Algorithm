@@ -25,7 +25,7 @@ export function task() {
     { emp_name: 6, daily_working_time: 8, work_start_time: 10, work_end_time: 18 },
   ]
 
-  const demand: demandInfo[] = [
+  const demandBooks: demandInfo[] = [
     { start_time: 6, end_time: 8, demand: 2 },
     { start_time: 8, end_time: 13, demand: 3 },
     { start_time: 13, end_time: 15, demand: 4 },
@@ -69,9 +69,9 @@ export function task() {
   }
 
   function excessEmployeeInDemand() {
-    for (let i = 0; i < demand.length; i++) {
+    for (let i = 0; i < demandBooks.length; i++) {
       let totalDemandNew = []
-      for (let j = demand[i].start_time; j < demand[i].end_time; j++) {
+      for (let j = demandBooks[i].start_time; j < demandBooks[i].end_time; j++) {
         let excessEmployee = 0
         let demandObject: any = {}
         for (let k = 0; k < employee.length; k++) {
@@ -79,12 +79,12 @@ export function task() {
             excessEmployee = excessEmployee + 1
           }
         }
-        excessEmployee = excessEmployee - demand[i].demand
+        excessEmployee = excessEmployee - demandBooks[i].demand
         demandObject.time = j
         demandObject.excessEmployee = excessEmployee
         totalDemandNew.push(demandObject)
       }
-      demand[i].totalDemand = totalDemandNew
+      demandBooks[i].totalDemand = totalDemandNew
     }
   }
 
@@ -100,5 +100,5 @@ export function task() {
   // adding a new array object in demand that shows excessEmployee for each time(hour) eg. [{time:6, excessEmployee:2}, {time:7, excessEmployee:4}]
   excessEmployeeInDemand()
 
-  return { employee, demand, officeOpenTimings }
+  return { employee, demandBooks, officeOpenTimings }
 }

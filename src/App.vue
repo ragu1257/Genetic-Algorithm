@@ -19,11 +19,11 @@
           <td class="m-3"> {{item.daily_working_time}}/8 </td>
         </tr>
          <tr>
-           <td>Excess Employed / Demand</td>
+           <td>Excess Employed / demandBooks</td>
            <td v-for="number in officeOpenTimings" :key="number">
-           <span v-for="(item,i) in demand" :key="i">
-             <span v-for="(demand,i) in item.totalDemand" :key="i">
-               <span v-if="demand.time == number" class="p-3"> {{demand.excessEmployee}}/{{item.demand}} </span>
+           <span v-for="(item,i) in demandBooks" :key="i">
+             <span v-for="(demandBooks,i) in item.totalDemand" :key="i">
+               <span v-if="demandBooks.time == number" class="p-3"> {{demandBooks.excessEmployee}}/{{item.demand}} </span>
              </span>
            </span>
            </td>
@@ -31,10 +31,10 @@
       </tbody>
     </table>
     <div class="inline-grid p-10">
-        <div v-for="(item,i) in demand" :key="i">
+        <div v-for="(item,i) in demandBooks" :key="i">
       <span class="pr-5">start_time: {{item.start_time}} </span>
       <span class="pr-5">end_time: {{item.end_time}} </span>
-      <span class="pr-5">demand: {{item.demand}} </span>
+      <span class="pr-5">demandBooks: {{item.demand}} </span>
       <span> totalDemand: {{item.totalDemand}}</span>
     </div>
     </div>
@@ -61,9 +61,9 @@ export default defineComponent({
   components: {
   },
   setup(){
-    const {employee, demand, officeOpenTimings} = task();
+    const {employee, demandBooks, officeOpenTimings} = task();
 
-    return {officeOpenTimings,employee, demand}
+    return {officeOpenTimings,employee, demandBooks}
   }
 });
 </script>
