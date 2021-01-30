@@ -173,7 +173,10 @@ export function task() {
             excessEmployee = excessEmployee + 1
           }
         }
-        excessEmployee = excessEmployee - demand[i].amount
+
+        excessEmployee = excessEmployee
+        // show negative values if employee is less
+        // excessEmployee = excessEmployee - demand[i].amount
         demandObject.time = j
         demandObject.excessEmployee = excessEmployee
         totalDemandNew.push(demandObject)
