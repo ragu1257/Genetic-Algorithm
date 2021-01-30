@@ -6,6 +6,7 @@ export function task() {
     empId: number,
     empName: string,
     weeklyWorkingHours: number,
+    notAvailableEmployee?: any[],
     totalTime?: (number | string)[]
   }
 
@@ -30,17 +31,18 @@ export function task() {
     startTime: number,
     endTime: number,
     range?: (number | string)[],
+    notAvailable?: (number | string)[],
     totalTime?: number
   }
 
   const employee: employeeInfo[] = [
-    { empId: 1, empName: "Rachit", weeklyWorkingHours: 40 },
+    { empId: 1, empName: "Rachit", weeklyWorkingHours: 40, notAvailableEmployee: [8, 9, 10, 15] },
     { empId: 2, empName: "Rachit1", weeklyWorkingHours: 40 },
     { empId: 3, empName: "Rachit2", weeklyWorkingHours: 40 },
     { empId: 4, empName: "Rachit3", weeklyWorkingHours: 40 },
     { empId: 5, empName: "Rachit4", weeklyWorkingHours: 40 },
     { empId: 6, empName: "Rachit5", weeklyWorkingHours: 40 },
-    { empId: 7, empName: "Rachit6", weeklyWorkingHours: 40 },
+    { empId: 7, empName: "Rachit6", weeklyWorkingHours: 40,  notAvailableEmployee: [11,12,15] },
     { empId: 8, empName: "Rachit7", weeklyWorkingHours: 40 },
     { empId: 9, empName: "Rachit8", weeklyWorkingHours: 40 },
     { empId: 10, empName: "Rachit9", weeklyWorkingHours: 40 },
@@ -54,7 +56,8 @@ export function task() {
     { empId: 18, empName: "Rachit17", weeklyWorkingHours: 40 },
     { empId: 19, empName: "Rachit18", weeklyWorkingHours: 40 },
     { empId: 20, empName: "Rachit19", weeklyWorkingHours: 40 },
-    { empId: 21, empName: "Rachit20", weeklyWorkingHours: 40 }
+    { empId: 21, empName: "Rachit20", weeklyWorkingHours: 40, notAvailableEmployee: [8, 9, 10, 15]  },
+    { empId: 22, empName: "Rachit21", weeklyWorkingHours: 40, notAvailableEmployee: [12,15,18]  }
   ]
 
   const workArea: workArea[] = [
@@ -97,6 +100,7 @@ export function task() {
     { employeeId: 19, workAreaId: 3, startTime: 11, endTime: 18 },
     { employeeId: 20, workAreaId: 3, startTime: 11, endTime: 18 },
     { employeeId: 21, workAreaId: 3, startTime: 12, endTime: 18 },
+    { employeeId: 22, workAreaId: 1, startTime: 12, endTime: 18 },
   ]
 
   const officeOpenTimings: number[] = [];
@@ -186,6 +190,7 @@ export function task() {
   }
 
 
+
   // set the opening time of office
   assignOfficeOpenTime(6, 18)
 
@@ -220,6 +225,15 @@ export function task() {
 
   // adding a new array object in demand that shows excessEmployee for each time(hour) eg. [{time:6, excessEmployee:2}, {time:7, excessEmployee:4}]
   excessEmployeeInDemand()
+
+  for (let i = 0; i < shift.length; i++) {
+    // let totalNotAvailableTime = []
+    for (let j = 0; j < employee.length; j++) {
+      if ( employee[j].empId == shift[i].employeeId && employee[j].notAvailableEmployee?.length) {
+        shift[i].notAvailable =  employee[j].notAvailableEmployee       
+      }
+    }    
+  } 
 
   return { officeOpenTimings, demand, shift, workArea }
 
