@@ -23,24 +23,46 @@
               {{ item.employeeId }}
             </td>
             <td v-for="(time, i) in item.range" :key="i">
-              <span v-if="item.notAvailable && time > 0">
-                <div
-                  v-if="time > 0 && item.notAvailable.includes(time)"
+              <span  v-if="item.absenceRange && time > 0 && item.absenceRange.includes(time)">
+                <!-- <div
+                  v-if="time > 0 && item.absenceRange.includes(time)"
                   class="bg-red-200"
-                >
+                > -->
+                 <div class="bg-red-600">{{ item.employeeId }}</div> 
+                <!-- </div> -->
+                <!-- <div v-else class="bg-green-200">
                   {{ item.employeeId }}
-                </div>
-                <div v-else class="bg-green-200">
+                </div> -->
+              </span>
+              <span  v-else-if="item.negativeWish && time > 0 && item.negativeWish.includes(time)">
+                <!-- <div
+                  v-if="time > 0 && item.negativeWish.includes(time)"
+                  class="bg-red-200"
+                > -->
+                 <div class="bg-red-200">{{ item.employeeId }}</div> 
+                <!-- </div> -->
+                <!-- <div v-else class="bg-green-200">
                   {{ item.employeeId }}
-                </div>
+                </div> -->
+              </span>
+      <span  v-else-if="item.positiveWish && time > 0 && item.positiveWish.includes(time)">
+                <!-- <div
+                  v-if="time > 0 && item.positiveWish.includes(time)"
+                  class="bg-red-200"
+                > -->
+                 <div class="bg-green-400">{{ item.employeeId }}</div> 
+                <!-- </div> -->
+                <!-- <div v-else class="bg-green-200">
+                  {{ item.employeeId }}
+                </div> -->
               </span>
               <span v-else>
-                <div v-if="time > 0" class="bg-green-200">
+                <div v-if="time > 0" >
                   {{ item.employeeId }}
                 </div>
               </span>
             </td>
-            <td class="m-3">{{ item.totalTime }}/8</td>
+            <td class="m-3">{{ item.totalTime }}/{{item.weeklyWorkingHours/5}}</td>
           </tr>
         </template>
         <td>demand coverage</td>
@@ -49,7 +71,7 @@
             <span v-if="item.workAreaId == workArea.workAreaId">
               <span v-for="(demand, i) in item.totalDemand" :key="i">
                 <span v-if="demand.time == number" class="p-3">
-                  {{ demand.excessEmployee }}/{{ item.amount }}
+                  {{ demand.currentlyEmployed }}/{{ item.amount }}
                 </span>
               </span>
             </span>
