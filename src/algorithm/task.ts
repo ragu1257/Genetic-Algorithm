@@ -15,7 +15,14 @@ export function task() {
 
   interface workArea {
     workAreaId: number,
-    workAreaName: string
+    workAreaName: string,
+    // stuffing?:  Array<{
+    //   overStuffing: number;
+    //   underStuffing: number;
+    //   underTime: number;
+    //   overtime: number;
+    //   workAreaId: number;
+    // }>
   }
 
   interface demand {
@@ -39,7 +46,10 @@ export function task() {
     absenceRange?: (number | string)[],
     negativeWish?: (number | string)[],
     positiveWish?: (number | string)[],
-    weeklyWorkingHours?: number
+    weeklyWorkingHours?: number,
+    positiveWishFulfilled?: number,
+    negativeWishFulfilled?: number,
+    absenceWishFulfilled?: number
   }
   interface absence {
     empId: number,
@@ -57,12 +67,14 @@ export function task() {
   }
 
   interface stuffing {
-    overStuffing?: any,
-    underStuffing?: any,
+    overStuffing?: number,
+    underStuffing?: number,
     workAreaId?: number,
-    underTime?: any,
-    overtime?:any
-    
+    underTime?: number,
+    overtime?: number,
+    wishNegative?: number,
+    wishPositive?: number,
+    absenceWish?: number
   }
 
   const employee: employeeInfo[] = [
@@ -144,9 +156,9 @@ export function task() {
   ]
 
   const shift: shift[] = [
-    { employeeId: 1, workAreaId: 1, startTime: 6, endTime: 10 },
+    { employeeId: 1, workAreaId: 1, startTime: 7, endTime: 10 },
     { employeeId: 1, workAreaId: 2, startTime: 11, endTime: 15 },
-    { employeeId: 2, workAreaId: 1, startTime: 6, endTime: 14 },
+    { employeeId: 2, workAreaId: 1, startTime: 8, endTime: 14 },
     { employeeId: 3, workAreaId: 1, startTime: 8, endTime: 16 },
     { employeeId: 4, workAreaId: 1, startTime: 8, endTime: 16 },
     { employeeId: 5, workAreaId: 1, startTime: 10, endTime: 18 },
@@ -215,12 +227,12 @@ export function task() {
       for (let j = 0; j < wish.length; j++) {
         if (employee[i].empId == wish[j].empId) {
           for (let k = wish[j].startTime; k < wish[j].endTime; k++) {
-            if(wish[j].wantsToWork){
+            if (wish[j].wantsToWork) {
               positiveWish.push(k)
-            }else{
+            } else {
               negativeWish.push(k)
             }
-            
+
           }
         }
       }
@@ -281,10 +293,10 @@ export function task() {
       for (let j = demand[i].startTime; j < demand[i].endTime; j++) {
         let currentlyEmployed = 0
         let demandObject: any = {}
-        for (let k = 0; k < shift.length; k++) {          
+        for (let k = 0; k < shift.length; k++) {
           if (shift[k].range?.includes(j) && demand[i].workAreaId == shift[k].workAreaId && !shift[k].absenceRange?.includes(j)) {
             // console.log("it is entered for", shift[k].range,shift[k].absenceRange);
-            
+
             currentlyEmployed = currentlyEmployed + 1
           }
         }
@@ -359,75 +371,121 @@ export function task() {
 
   let stuffingFinal: stuffing[] = []
 
-function overstuffing(){
-  for(let i=0; i<workArea.length; i++){
-    let trailStuffing : stuffing = {}
-    let overStuffingEmployee = 0
-    let underStuffingEmployee = 0
-    for(let j=0; j<demand.length; j++){      
-      if(workArea[i].workAreaId == demand[j].workAreaId){
-        // console.log("this is is workarea ID", workArea[i].workAreaId, underStuffingEmployee, overStuffingEmployee);
-        
-        for(let k=0; k< demand[j].totalDemand!.length ; k++){
-          // console.log(demand[j].totalDemand![k].employeeNeeded);
-          
-          if(demand[j].totalDemand![k].currentlyEmployed > demand[j].totalDemand![k].employeeNeeded ){
-            // console.log(demand[j].totalDemand![k].currentlyEmployed, demand[j].totalDemand![k].employeeNeeded);
-            
-            overStuffingEmployee += (demand[j].totalDemand![k].currentlyEmployed - demand[j].totalDemand![k].employeeNeeded)
-            // console.log("it is overstuffing", overStuffingEmployee);            
-          }else if(demand[j].totalDemand![k].currentlyEmployed < demand[j].totalDemand![k].employeeNeeded){
-            underStuffingEmployee += (demand[j].totalDemand![k].employeeNeeded - demand[j].totalDemand![k].currentlyEmployed)
-            // console.log("it is understuffing", underStuffingEmployee);            
+  function overstuffing() {
+    for (let i = 0; i < workArea.length; i++) {
+      let trailStuffing: stuffing = {}
+      let overStuffingEmployee = 0
+      let underStuffingEmployee = 0
+      for (let j = 0; j < demand.length; j++) {
+        if (workArea[i].workAreaId == demand[j].workAreaId) {
+          // console.log("this is is workarea ID", workArea[i].workAreaId, underStuffingEmployee, overStuffingEmployee);
+
+          for (let k = 0; k < demand[j].totalDemand!.length; k++) {
+            // console.log(demand[j].totalDemand![k].employeeNeeded);
+
+            if (demand[j].totalDemand![k].currentlyEmployed > demand[j].totalDemand![k].employeeNeeded) {
+              // console.log(demand[j].totalDemand![k].currentlyEmployed, demand[j].totalDemand![k].employeeNeeded);
+
+              overStuffingEmployee += (demand[j].totalDemand![k].currentlyEmployed - demand[j].totalDemand![k].employeeNeeded)
+              // console.log("it is overstuffing", overStuffingEmployee);            
+            } else if (demand[j].totalDemand![k].currentlyEmployed < demand[j].totalDemand![k].employeeNeeded) {
+              underStuffingEmployee += (demand[j].totalDemand![k].employeeNeeded - demand[j].totalDemand![k].currentlyEmployed)
+              // console.log("it is understuffing", underStuffingEmployee);            
+            }
           }
         }
       }
+      trailStuffing.overStuffing = overStuffingEmployee
+      trailStuffing.underStuffing = underStuffingEmployee
+      trailStuffing.workAreaId = workArea[i].workAreaId
+      stuffingFinal.push(trailStuffing)
     }
-    trailStuffing.overStuffing = overStuffingEmployee
-    trailStuffing.underStuffing = underStuffingEmployee
-    trailStuffing.workAreaId = workArea[i].workAreaId
-    stuffingFinal.push(trailStuffing)
   }
-}
-overstuffing()
-console.log("this is shift", shift);
+  overstuffing()
+  console.log("this is shift", shift);
 
-for(let i=0; i<workArea.length; i++){
-  let overTime = 0
-  let underTime =0 
-  for(let j=0; j< shift.length; j++){
-    if(workArea[i].workAreaId == shift[j].workAreaId){
-      console.log(((shift[j].weeklyWorkingHours!)/5), shift[i].totalTime )
-          if(((shift[j].weeklyWorkingHours!)/5) > shift[j].totalTime!){
-            console.log(((shift[j].weeklyWorkingHours!)/5), shift[j].totalTime! );
-            
-            underTime += ((shift[j].weeklyWorkingHours!)/5) - (shift[j].totalTime!)
-          }else if(((shift[j].weeklyWorkingHours!)/5) < shift[j].totalTime!){
-            overTime +=(shift[j].totalTime!) - ((shift[j].weeklyWorkingHours!)/5)
+  for (let i = 0; i < workArea.length; i++) {
+    let overTime = 0
+    let underTime = 0
+    let positiveWishFulfilled = 0
+    let negativeWishFulfilled = 0
+    let absenceWishFulfilled =0
+    for (let j = 0; j < shift.length; j++) {
+      let shiftPositiveWishFulfilled = 0
+      let shiftNegativeWishFulfilled = 0
+      let shiftAbsenceWishFulfilled = 0
+      if (workArea[i].workAreaId == shift[j].workAreaId) {
+        // console.log(((shift[j].weeklyWorkingHours!)/5), shift[i].totalTime )
+
+        //Calculation for under and overtime
+        if (((shift[j].weeklyWorkingHours!) / 5) > shift[j].totalTime!) {
+          // console.log(((shift[j].weeklyWorkingHours!)/5), shift[j].totalTime! );
+
+          underTime += ((shift[j].weeklyWorkingHours!) / 5) - (shift[j].totalTime!)
+        } else if (((shift[j].weeklyWorkingHours!) / 5) < shift[j].totalTime!) {
+          overTime += (shift[j].totalTime!) - ((shift[j].weeklyWorkingHours!) / 5)
+        }
+
+        //calculation for positive and neative wish
+        for (let k = 0; k < shift[j].positiveWish!.length; k++) {
+          if (shift[j].range?.includes(shift[j].positiveWish![k])) {
+            console.log(shift[j].workAreaId);
+
+            positiveWishFulfilled += 1
+            shiftPositiveWishFulfilled +=1
           }
+        }
+        for (let k = 0; k < shift[j].negativeWish!.length; k++) {
+          // console.log(shift[j], shift[j].negativeWish!.length, shift[j].negativeWish![k]);
+          
+          if ((!shift[j].range?.includes(shift[j].negativeWish![k]))) {
+            // console.log("shift[j] negative", shift[j].range, !(shift[j].range?.includes(shift[j].negativeWish![k])));
+            // console.log("shiftNegativeWishFulfilled",shiftNegativeWishFulfilled);
+            
+            negativeWishFulfilled += 1
+            shiftNegativeWishFulfilled +=1
+          }
+        }
+
+        for (let k = 0; k < shift[j].absenceRange!.length; k++) {
+          // console.log(shift[j], shift[j].negativeWish!.length, shift[j].negativeWish![k]);
+          
+          if ((!shift[j].range?.includes(shift[j].absenceRange![k]))) {
+            // console.log("shift[j] negative", shift[j].range, !(shift[j].range?.includes(shift[j].negativeWish![k])));
+            // console.log("shiftNegativeWishFulfilled",shiftNegativeWishFulfilled);
+            
+            absenceWishFulfilled += 1
+            shiftAbsenceWishFulfilled +=1
+          }
+        }
+        // console.log("shiftNegativeWishFulfilled end", shiftNegativeWishFulfilled);
+        
+       
+        
+        shift[j].positiveWishFulfilled = shiftPositiveWishFulfilled
+        shift[j].negativeWishFulfilled = shiftNegativeWishFulfilled
+        shift[j].absenceWishFulfilled= shiftAbsenceWishFulfilled
+      }      
     }
+    stuffingFinal[i].underTime = underTime
+    stuffingFinal[i].overtime = overTime
+    stuffingFinal[i].wishNegative = negativeWishFulfilled
+    stuffingFinal[i].wishPositive = positiveWishFulfilled
+    stuffingFinal[i].absenceWish = absenceWishFulfilled
   }
-  stuffingFinal[i].underTime = underTime
-  stuffingFinal[i].overtime = overTime
-}
 
-// for(let i=0; i<demand.length; i++){
-//   for(let j=0; j< demand[i].totalDemand!.length; j++){
-    
-//     console.log("this is demand totalLength values", demand[i].totalDemand![j].time);
-//   }
-  
-  
-// }
 
-console.log("stuffingFinal",stuffingFinal);
+
+
+  // console.log("workarea", workArea);
+  console.log("stuffingFinal", stuffingFinal);
 
   // console.log("this is emp", demand);
 
- 
 
 
 
-  return { officeOpenTimings, demand, shift, workArea }
+
+  return { officeOpenTimings, demand, shift, workArea, stuffingFinal }
 
 }
