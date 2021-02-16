@@ -86,19 +86,19 @@
             <td class="m-3" 
                :class="
                       (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 20
-                        ? 'bg-purple-200'
+                        ? 'bg-orange-200'
                         : (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 >= 20 && (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 40?
-                        'bg-purple-300'
+                        'bg-orange-300'
                         : (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 >= 40 && (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 60?
-                        'bg-purple-400' 
+                        'bg-orange-400' 
                         : (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 >= 60 && (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 80?
-                        'bg-purple-500' 
+                        'bg-orange-500' 
                         : (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 >= 80 && (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 90?
-                        'bg-purple-600' 
+                        'bg-orange-600' 
                         : ((item.totalTime / (item.weeklyWorkingHours / 5)) * 100) >=90 && ((item.totalTime / (item.weeklyWorkingHours / 5)) * 100) &lt;= 100?
                         'bg-green-700' 
                         : ((item.totalTime / (item.weeklyWorkingHours / 5)) * 100) >100 ?
-                        'bg-purple-700' : 'bg-red-800'
+                        'bg-orange-700' : 'bg-red-800'
                     "
             >
               {{ item.totalTime }}/{{ (item.weeklyWorkingHours / 5) }}
@@ -176,19 +176,19 @@
                     class="p-3"
                     :class="
                       (demand.currentlyEmployed / item.amount) * 100 &lt; 20
-                        ? 'bg-yellow-200'
+                        ? 'bg-pink-200'
                         : (demand.currentlyEmployed / item.amount) * 100 >= 20 && (demand.currentlyEmployed / item.amount) * 100 &lt; 40?
-                        'bg-yellow-300'
+                        'bg-pink-300'
                         : (demand.currentlyEmployed / item.amount) * 100 >= 40 && (demand.currentlyEmployed / item.amount) * 100 &lt; 60?
-                        'bg-yellow-400' 
+                        'bg-pink-400' 
                         : (demand.currentlyEmployed / item.amount) * 100 >= 60 && (demand.currentlyEmployed / item.amount) * 100 &lt; 80?
-                        'bg-yellow-500' 
+                        'bg-pink-500' 
                         : (demand.currentlyEmployed / item.amount) * 100 >= 80 && (demand.currentlyEmployed / item.amount) * 100 &lt; 90?
-                        'bg-yellow-600' 
+                        'bg-pink-600' 
                         : ((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100?
                         'bg-green-700' 
                         : ((demand.currentlyEmployed / item.amount) * 100) >100 ?
-                        'bg-yellow-700' : 'bg-red-800'
+                        'bg-pink-700' : 'bg-red-800'
                     "
                   >
                   <!-- {{((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100}} -->
@@ -207,19 +207,19 @@
         <template v-for="(staffing, i) in stuffingFinal" :key="i">
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>overStuffing</td>
-            <td colspan="12" class="bg-yellow-700">{{ staffing.overStuffing }}</td>
+            <td colspan="12" class="bg-pink-700">{{ staffing.overStuffing }}</td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underStuffing</td>
-            <td colspan="12" class="bg-yellow-200">{{ staffing.underStuffing }}</td>
+            <td colspan="12" class="bg-pink-200">{{ staffing.underStuffing }}</td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underTime</td>
-            <td colspan="12" class="bg-purple-200">{{ staffing.underTime }}</td>
+            <td colspan="12" class="bg-orange-200">{{ staffing.underTime }}</td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>overtime</td>
-            <td colspan="12" class="bg-purple-700">{{ staffing.overtime }}</td>
+            <td colspan="12" class="bg-orange-700">{{ staffing.overtime }}</td>
           </tr>
         </template>
       </tbody>
