@@ -1,6 +1,21 @@
 /* eslint-disable */
+import DNA from './dna'
+const dna_new = new DNA()
 
 export function task() {
+
+
+  // interface testingShift {
+  //   empId?: number,
+  //   workAreaId?: number,
+  //   startTime?: number,
+  //   endTime?: number
+  // }
+
+
+
+  // console.log("this is final result", testingShift)
+
 
   interface employeeInfo {
     empId: number,
@@ -36,10 +51,10 @@ export function task() {
   }
 
   interface shift {
-    employeeId: number,
-    workAreaId: number,
-    startTime: number,
-    endTime: number,
+    employeeId?: number,
+    workAreaId?: number,
+    startTime?: number,
+    endTime?: number,
     range?: (number | string)[],
     notAvailable?: (number | string)[],
     totalTime?: number,
@@ -76,6 +91,50 @@ export function task() {
     wishPositive?: number,
     absenceWish?: number
   }
+
+  const shift: shift[] = []
+  // console.log(dna_new.generateDNA(), dna_new.generateDNA().length, dna_new.generateDNA()[0].length);
+  const generatedDNA = dna_new.generateDNA()
+  console.log("this is dna", generatedDNA);
+  //  let starting_time 
+  //  let ending_time
+
+  let workid
+  let starting_time
+  let ending_time : any
+
+  for (let i = 0; i < generatedDNA.length; i++) {
+
+    for (let j = 6; j <= generatedDNA[i].length; j++) {
+      // console.log("thi is generatedDNA[i].length", generatedDNA[i].length);      
+
+
+      if (j === 6) {
+        // console.log(j);
+
+        workid = generatedDNA[i][j]
+        starting_time = j
+        ending_time = j
+        // console.log(i, j, generatedDNA[i][j], workid);
+
+      } else {
+        // workid = generatedDNA[i][j-1]
+        if (generatedDNA[i][j] === workid) {
+          ending_time = j
+        } else {
+
+          shift.push({ employeeId: i+1, workAreaId: workid, startTime: starting_time, endTime: ending_time+1 })
+          workid = generatedDNA[i][j]
+          starting_time = j
+          ending_time = j
+
+        }
+
+      }
+    }
+  }
+  console.log(shift);
+  
 
   const employee: employeeInfo[] = [
     { empId: 1, empName: "Rachit", weeklyWorkingHours: 40 },
@@ -155,31 +214,31 @@ export function task() {
     { demandId: 9, startTime: 15, endTime: 18, amount: 2, workAreaId: 3 }
   ]
 
-  const shift: shift[] = [
-    { employeeId: 1, workAreaId: 1, startTime: 7, endTime: 10 },
-    { employeeId: 1, workAreaId: 2, startTime: 11, endTime: 15 },
-    { employeeId: 2, workAreaId: 1, startTime: 8, endTime: 14 },
-    { employeeId: 3, workAreaId: 1, startTime: 8, endTime: 16 },
-    { employeeId: 4, workAreaId: 1, startTime: 8, endTime: 16 },
-    { employeeId: 5, workAreaId: 1, startTime: 10, endTime: 18 },
-    { employeeId: 6, workAreaId: 1, startTime: 10, endTime: 18 },
-    { employeeId: 7, workAreaId: 1, startTime: 10, endTime: 18 },
-    { employeeId: 8, workAreaId: 2, startTime: 9, endTime: 14 },
-    { employeeId: 9, workAreaId: 2, startTime: 9, endTime: 14 },
-    { employeeId: 10, workAreaId: 2, startTime: 10, endTime: 16 },
-    { employeeId: 11, workAreaId: 2, startTime: 10, endTime: 16 },
-    { employeeId: 12, workAreaId: 2, startTime: 11, endTime: 18 },
-    { employeeId: 13, workAreaId: 2, startTime: 11, endTime: 18 },
-    { employeeId: 14, workAreaId: 2, startTime: 11, endTime: 18 },
-    { employeeId: 15, workAreaId: 3, startTime: 10, endTime: 14 },
-    { employeeId: 16, workAreaId: 3, startTime: 10, endTime: 14 },
-    { employeeId: 17, workAreaId: 3, startTime: 10, endTime: 16 },
-    { employeeId: 18, workAreaId: 3, startTime: 11, endTime: 16 },
-    { employeeId: 19, workAreaId: 3, startTime: 11, endTime: 18 },
-    { employeeId: 20, workAreaId: 3, startTime: 11, endTime: 18 },
-    { employeeId: 21, workAreaId: 3, startTime: 12, endTime: 18 },
-    { employeeId: 22, workAreaId: 1, startTime: 12, endTime: 18 },
-  ]
+  // const shift: shift[] = [
+  //   { employeeId: 1, workAreaId: 1, startTime: 7, endTime: 10 },
+  //   { employeeId: 1, workAreaId: 2, startTime: 11, endTime: 15 },
+  //   { employeeId: 2, workAreaId: 1, startTime: 8, endTime: 14 },
+  //   { employeeId: 3, workAreaId: 1, startTime: 8, endTime: 16 },
+  //   { employeeId: 4, workAreaId: 1, startTime: 8, endTime: 16 },
+  //   { employeeId: 5, workAreaId: 1, startTime: 10, endTime: 18 },
+  //   { employeeId: 6, workAreaId: 1, startTime: 10, endTime: 18 },
+  //   { employeeId: 7, workAreaId: 1, startTime: 10, endTime: 18 },
+  //   { employeeId: 8, workAreaId: 2, startTime: 9, endTime: 14 },
+  //   { employeeId: 9, workAreaId: 2, startTime: 9, endTime: 14 },
+  //   { employeeId: 10, workAreaId: 2, startTime: 10, endTime: 16 },
+  //   { employeeId: 11, workAreaId: 2, startTime: 10, endTime: 16 },
+  //   { employeeId: 12, workAreaId: 2, startTime: 11, endTime: 18 },
+  //   { employeeId: 13, workAreaId: 2, startTime: 11, endTime: 18 },
+  //   { employeeId: 14, workAreaId: 2, startTime: 11, endTime: 18 },
+  //   { employeeId: 15, workAreaId: 3, startTime: 10, endTime: 14 },
+  //   { employeeId: 16, workAreaId: 3, startTime: 10, endTime: 14 },
+  //   { employeeId: 17, workAreaId: 3, startTime: 10, endTime: 16 },
+  //   { employeeId: 18, workAreaId: 3, startTime: 11, endTime: 16 },
+  //   { employeeId: 19, workAreaId: 3, startTime: 11, endTime: 18 },
+  //   { employeeId: 20, workAreaId: 3, startTime: 11, endTime: 18 },
+  //   { employeeId: 21, workAreaId: 3, startTime: 12, endTime: 18 },
+  //   { employeeId: 22, workAreaId: 1, startTime: 12, endTime: 18 },
+  // ]
 
   const officeOpenTimings: number[] = [];
 
@@ -194,7 +253,7 @@ export function task() {
       let rangeArray = []
       for (let j = 0; j < shift.length; j++) {
         if (employee[i].empId == shift[j].employeeId) {
-          for (let k = shift[j].startTime; k < shift[j].endTime; k++) {
+          for (let k = shift[j].startTime!; k < shift[j].endTime!; k++) {
             rangeArray.push(k)
           }
         }
@@ -402,14 +461,14 @@ export function task() {
     }
   }
   overstuffing()
-  console.log("this is shift", shift);
+  // console.log("this is shift", shift);
 
   for (let i = 0; i < workArea.length; i++) {
     let overTime = 0
     let underTime = 0
     let positiveWishFulfilled = 0
     let negativeWishFulfilled = 0
-    let absenceWishFulfilled =0
+    let absenceWishFulfilled = 0
     for (let j = 0; j < shift.length; j++) {
       let shiftPositiveWishFulfilled = 0
       let shiftNegativeWishFulfilled = 0
@@ -429,43 +488,43 @@ export function task() {
         //calculation for positive and neative wish
         for (let k = 0; k < shift[j].positiveWish!.length; k++) {
           if (shift[j].range?.includes(shift[j].positiveWish![k])) {
-            console.log(shift[j].workAreaId);
+            // console.log(shift[j].workAreaId);
 
             positiveWishFulfilled += 1
-            shiftPositiveWishFulfilled +=1
+            shiftPositiveWishFulfilled += 1
           }
         }
         for (let k = 0; k < shift[j].negativeWish!.length; k++) {
           // console.log(shift[j], shift[j].negativeWish!.length, shift[j].negativeWish![k]);
-          
+
           if ((!shift[j].range?.includes(shift[j].negativeWish![k]))) {
             // console.log("shift[j] negative", shift[j].range, !(shift[j].range?.includes(shift[j].negativeWish![k])));
             // console.log("shiftNegativeWishFulfilled",shiftNegativeWishFulfilled);
-            
+
             negativeWishFulfilled += 1
-            shiftNegativeWishFulfilled +=1
+            shiftNegativeWishFulfilled += 1
           }
         }
 
         for (let k = 0; k < shift[j].absenceRange!.length; k++) {
           // console.log(shift[j], shift[j].negativeWish!.length, shift[j].negativeWish![k]);
-          
+
           if ((!shift[j].range?.includes(shift[j].absenceRange![k]))) {
             // console.log("shift[j] negative", shift[j].range, !(shift[j].range?.includes(shift[j].negativeWish![k])));
             // console.log("shiftNegativeWishFulfilled",shiftNegativeWishFulfilled);
-            
+
             absenceWishFulfilled += 1
-            shiftAbsenceWishFulfilled +=1
+            shiftAbsenceWishFulfilled += 1
           }
         }
         // console.log("shiftNegativeWishFulfilled end", shiftNegativeWishFulfilled);
-        
-       
-        
+
+
+
         shift[j].positiveWishFulfilled = shiftPositiveWishFulfilled
         shift[j].negativeWishFulfilled = shiftNegativeWishFulfilled
-        shift[j].absenceWishFulfilled= shiftAbsenceWishFulfilled
-      }      
+        shift[j].absenceWishFulfilled = shiftAbsenceWishFulfilled
+      }
     }
     stuffingFinal[i].underTime = underTime
     stuffingFinal[i].overtime = overTime
@@ -478,7 +537,7 @@ export function task() {
 
 
   // console.log("workarea", workArea);
-  console.log("stuffingFinal", stuffingFinal);
+  // console.log("stuffingFinal", stuffingFinal);
 
   // console.log("this is emp", demand);
 

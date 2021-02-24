@@ -250,7 +250,7 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
-
+// import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
   components: {},
@@ -262,6 +262,8 @@ export default defineComponent({
       workArea,
       stuffingFinal,
     } = task();
+
+// console.log("this is dna", dna);
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal };
   },
