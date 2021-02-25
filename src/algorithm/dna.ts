@@ -11,11 +11,11 @@ import { TARGET } from "./target";
 class DNA {
     genes: any[] = [];
     fitness: number;
-    numberOfEmployees: number
+    // numberOfEmployees: number
     constructor() {
         this.genes = this.generateDNA()
         this.fitness = 0;
-        this.numberOfEmployees = 10
+        // this.numberOfEmployees = 10
     }
 
     generateDNA() {
@@ -59,6 +59,47 @@ class DNA {
         }
         return result
     }
+
+    calcFitness(){
+        console.log("this is genes", this.genes);
+        
+    //     let score: number = 0;
+    //     let shift: any[] = [];
+    //     const countOccurrences = (arr: any[], val: any) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+    //     for (let j = 1; j < 8; j++) {
+    //       for(let i=0; i<this.genes.length;i++){
+    //         shift.push(this.genes[i][j])
+    //       }
+    // // console.log("this is shift for j= ", j, shift);
+    // // countOccurrences(shift,'m')>1 && countOccurrences(shift,'m')<3
+    //       if( countOccurrences(shift,'m') >= 2){
+    //         score++
+    //       }else{
+    //         score +=0
+    //       }
+    //       if(countOccurrences(shift,'d') >= 2){
+    //         score++
+    //       }else{
+    //         score +=0
+    //       }
+    //       if(countOccurrences(shift,'e') >= 2){
+    //         score++
+    //       }else{
+    //         score +=0
+    //       }
+    //       if(countOccurrences(shift,'o') >=  1){
+    //         score++
+    //       }else{
+    //         score +=0
+    //       }
+    
+    //       // console.log("this is shifts", shift, score);
+    //      shift = []
+         
+          
+    //     }
+    //     this.fitness = score ;
+      }
 
 }
 

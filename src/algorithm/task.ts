@@ -1,10 +1,18 @@
 /* eslint-disable */
 import DNA from './dna'
-const dna_new = new DNA()
+import Population from './population'
+
 
 export function task() {
 
 
+  const pop_size: number = 2;
+
+  const pop = new Population(pop_size);
+  console.log("this is population", pop);
+  
+  
+  const dna_new = new DNA()
   // interface testingShift {
   //   empId?: number,
   //   workAreaId?: number,
@@ -534,10 +542,14 @@ export function task() {
   }
 
 
+let finalOverstuffing: number = 0
 
+for(let i=0; i<stuffingFinal.length; i++){
+  finalOverstuffing += stuffingFinal[i].overStuffing!
+}
 
   // console.log("workarea", workArea);
-  // console.log("stuffingFinal", stuffingFinal);
+  console.log("stuffingFinal", stuffingFinal, finalOverstuffing);
 
   // console.log("this is emp", demand);
 
