@@ -255,13 +255,14 @@ export default defineComponent({
   name: "App",
   components: {},
   setup() {
+    const a: any[] = []
     const {
       officeOpenTimings,
       demand,
       shift,
       workArea,
       stuffingFinal,
-    } = task();
+    } = task(a);
 
 // console.log("this is dna", dna);
 

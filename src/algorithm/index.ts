@@ -1,18 +1,30 @@
-// import Population from './population.js'
+import Population from './population.js'
 
-// const pop_size: number = 100;
+export function index() {
+    const pop_size: number = 10;
 
-// const pop = new Population(pop_size);
+    const pop = new Population(pop_size);
+    for (let i = 0; i < 10; i++) {
+        // console.log("natural selection");
 
-// while(1) {
-//     pop.naturalSelection()
-//     pop.generate()
-//     pop.calcFitness()
-//     pop.evaluate();
-//     console.log(pop.generations);
-//     console.log(pop.best);
-//     // console.log("thi si finished", pop.finished);
-//     if (pop.isFinished()) {
-//         break;
-//     }
-// }
+        pop.naturalSelection()
+        // console.log("generate");
+
+        pop.generate()
+
+        // console.log("calc fitness");
+
+        pop.calcFitness()
+        // console.log("evaluate");
+
+        pop.evaluate();
+        console.log("generation number", pop.generations);
+        console.log("best ", pop.best);
+        // generatedDNA = pop.best
+        // console.log("thi si finished", pop.finished);
+        if (pop.isFinished()) {
+            break;
+        }
+    }
+}
+
