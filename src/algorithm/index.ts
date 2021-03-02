@@ -7,7 +7,7 @@ export function index() {
     for (let i = 0; i < 10; i++) {
         // console.log("natural selection");
 
-        pop.naturalSelection()
+        // pop.naturalSelection()
         // console.log("generate");
 
         pop.generate()

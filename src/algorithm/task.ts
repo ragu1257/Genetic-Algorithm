@@ -3,7 +3,7 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 100;
+const pop_size: number = 150;
 
 const pop = new Population(pop_size);
 
@@ -22,10 +22,11 @@ export function task() {
   // let workArea: string | any[]
   // let stuffingFinal : any
   let shiftTestArray: any[]
-for(let i = 0; i<10 ; i++){
+// for(let i = 0; i<10 ; i++){
+  while(1){
     // console.log("natural selection");
   
-    pop.naturalSelection()
+    // pop.naturalSelection()
     // console.log("generate");
   
     pop.generate()

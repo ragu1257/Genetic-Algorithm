@@ -69,10 +69,10 @@ class DNA {
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score: number = 0;
-        if(finalOverstuffing == 0 && finalUnderStuffing == 0){
-            score += 500
-        }else if(finalOverstuffing< 10 && finalUnderStuffing<20){
-            score -= 400
+        if(finalOverstuffing == 0){
+            score += 300
+        }else if(finalOverstuffing< 10){
+            score -= 200
         } else{
             score -= 200
         }
