@@ -28,6 +28,8 @@ class Population {
         }
     }
 
+
+    //selection based on mating pool with ranking percentage
     naturalSelection() {
         this.matingPool = [];
         // let maxFitness: number = 0;
@@ -39,6 +41,8 @@ class Population {
         let totalFitness: number = 0;
 
         for (let i = 0; i < this.population.length; i++) {
+            console.log(this.population[i].fitness);
+            
             totalFitness += this.population[i].fitness
         }
         this.averageFitness = totalFitness / this.population.length
@@ -61,6 +65,10 @@ class Population {
         // console.log(this.matingPool);
     }
 
+    // naturalSelection(){
+    //     this.matingPool = [];
+        
+    // }
     generate() {
         for (let i = 0; i < this.population.length; i++) {
             let a = Math.floor(Math.random() * Math.floor(this.matingPool.length));
@@ -85,7 +93,7 @@ class Population {
         let worldrecord = 0;
         let index = 0;
         for (let i = 0; i < this.population.length; i++) {
-            // console.log("evalutate is called", this.population[i].fitness );
+            console.log("evalutate is called", this.population[i].fitness );
 
             if (this.population[i].fitness > worldrecord) {
 

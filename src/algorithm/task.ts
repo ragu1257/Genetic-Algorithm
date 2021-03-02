@@ -3,46 +3,49 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 10;
+const pop_size: number = 100;
 
 const pop = new Population(pop_size);
-for (let i = 0; i <= 10; i++) {
-  // console.log("natural selection");
 
-  pop.naturalSelection()
-  // console.log("generate");
-
-  pop.generate()
-
-  // console.log("calc fitness");
-
-  pop.calcFitness()
-  // console.log("evaluate");
-
-  pop.evaluate();
-  console.log("generation number", pop.generations);
-  console.log("best ", pop.best);
-  task(pop.best)
-  taskTesting(pop.best)
-  // console.log("thi si finished", pop.finished);
-  if (pop.isFinished()) {
-    break;
-  }
-}
 
 function taskTesting(best: any[]) {
   console.log("this is testing task", best);
 
 }
 
-export function task(generatedDNA: any[]) {
+export function task() {
   // let generatedDNA = best
 
-  let officeOpenTimings: number[]
-  let demand: string | any[]
-  let shift: any[]
-  let workArea: string | any[]
-  let stuffingFinal : any
+  // let officeOpenTimings: number[]
+  // let demand: string | any[]
+  // let shift: any[]
+  // let workArea: string | any[]
+  // let stuffingFinal : any
+  let shiftTestArray: any[]
+for(let i = 0; i<10 ; i++){
+    // console.log("natural selection");
+  
+    pop.naturalSelection()
+    // console.log("generate");
+  
+    pop.generate()
+  
+    // console.log("calc fitness");
+  
+    pop.calcFitness()
+    // console.log("evaluate");
+  
+    pop.evaluate();
+    console.log("generation number", pop.generations);
+    console.log("best ", pop.best);
+    shiftTestArray = pop.best
+    // task(pop.best)
+    // taskTesting(pop.best)
+    // console.log("thi si finished", pop.finished);
+    if (pop.isFinished()) {
+      break;
+    }
+  }
 
   interface employeeInfo {
     empId: number,
@@ -201,8 +204,8 @@ export function task(generatedDNA: any[]) {
   const officeOpenTimings: number[] = [];
   let stuffingFinal: stuffing[] = []
 
-  if (generatedDNA !== undefined) {
-    console.log("this is generatedDNA", generatedDNA!);
+  // if (generatedDNA !== undefined) {
+    // console.log("this is generatedDNA", generatedDNA!);
 
 
     // const dna_new = new DNA()
@@ -233,28 +236,28 @@ export function task(generatedDNA: any[]) {
     // console.log("new generated dna", generatedDNA);
 
 
-    for (let i = 0; i < generatedDNA!.length; i++) {
+    for (let i = 0; i < shiftTestArray!.length; i++) {
 
-      for (let j = 6; j <= generatedDNA![i].length; j++) {
-        // console.log("thi is generatedDNA[i].length", generatedDNA[i].length);      
+      for (let j = 6; j <= shiftTestArray![i].length; j++) {
+        // console.log("thi is shiftTestArray[i].length", shiftTestArray[i].length);      
 
 
         if (j === 6) {
           // console.log(j);
 
-          workid = generatedDNA![i][j]
+          workid = shiftTestArray![i][j]
           starting_time = j
           ending_time = j
-          // console.log(i, j, generatedDNA[i][j], workid);
+          // console.log(i, j, shiftTestArray[i][j], workid);
 
         } else {
-          // workid = generatedDNA[i][j-1]
-          if (generatedDNA![i][j] === workid) {
+          // workid = shiftTestArray[i][j-1]
+          if (shiftTestArray![i][j] === workid) {
             ending_time = j
           } else {
 
             shift.push({ employeeId: i + 1, workAreaId: workid, startTime: starting_time, endTime: ending_time + 1 })
-            workid = generatedDNA![i][j]
+            workid = shiftTestArray![i][j]
             starting_time = j
             ending_time = j
 
@@ -561,13 +564,16 @@ export function task(generatedDNA: any[]) {
 
 
     let finalOverstuffing: number = 0
+    let finalUnderStuffing: number = 0
 
     for (let i = 0; i < stuffingFinal.length; i++) {
       finalOverstuffing += stuffingFinal[i].overStuffing!
+      finalUnderStuffing += stuffingFinal[i].underStuffing!
     }
+    
 
     // console.log("workarea", workArea);
-    // console.log("stuffingFinal", stuffingFinal, finalOverstuffing);
+    // console.log("stuffingFinal", stuffingFinal, finalOverstuffing, finalUnderStuffing);
 
     // console.log("this is emp", demand);
 
@@ -576,7 +582,7 @@ export function task(generatedDNA: any[]) {
 
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal }
-  }
+  // }
   
   // return { officeOpenTimings, demand, shift, workArea, stuffingFinal }
 
