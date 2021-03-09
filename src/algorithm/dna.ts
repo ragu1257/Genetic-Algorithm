@@ -69,13 +69,15 @@ class DNA {
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score: number = 0;
-        if(finalOverstuffing == 0){
-            score += 300
-        }else if(finalOverstuffing< 10){
-            score -= 200
-        } else{
-            score -= 200
-        }
+        score = finalOverstuffing + finalUnderStuffing;
+        
+        // if(finalOverstuffing == 0){
+        //     score += 300
+        // }else if(finalOverstuffing< 10){
+        //     score -= 200
+        // } else{
+        //     score -= 300
+        // }
        
         //     let shift: any[] = [];
         //     const countOccurrences = (arr: any[], val: any) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);

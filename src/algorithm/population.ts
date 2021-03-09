@@ -104,7 +104,7 @@ class Population {
                 // console.log("in tournament", bestFitness);
 
             } else {
-                if (ind.fitness > bestFitness.fitness) {
+                if (ind.fitness < bestFitness.fitness) {
                     // console.log("this is ind", ind);
 
                     bestFitness = ind
@@ -119,12 +119,12 @@ class Population {
 
     evaluate() {
 
-        let worldrecord = 0;
+        let worldrecord = 100000000000000000000;
         let index = 0;
         for (let i = 0; i < this.population.length; i++) {
             // console.log("evalutate is called", this.population[i].fitness);
 
-            if (this.population[i].fitness > worldrecord) {
+            if (this.population[i].fitness < worldrecord) {
 
                 index = i;
                 worldrecord = this.population[i].fitness;
@@ -136,7 +136,7 @@ class Population {
         this.best = this.population[index].genes;
         console.log("this is best Record", worldrecord);
 
-        if (worldrecord > 0) {
+        if (worldrecord < 2) {
             this.finished = true;
         }
         // console.log("this is finished", this.finished);

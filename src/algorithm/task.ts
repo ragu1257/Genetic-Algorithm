@@ -3,7 +3,8 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 150;
+const pop_size: number = 50;
+const generation_number: number = 200;
 
 const pop = new Population(pop_size);
 
@@ -22,8 +23,8 @@ export function task() {
   // let workArea: string | any[]
   // let stuffingFinal : any
   let shiftTestArray: any[]
-// for(let i = 0; i<10 ; i++){
-  while(1){
+for(let i = 0; i<generation_number ; i++){
+  // while(1){
     // console.log("natural selection");
   
     // pop.naturalSelection()
@@ -574,7 +575,7 @@ export function task() {
     
 
     // console.log("workarea", workArea);
-    // console.log("stuffingFinal", stuffingFinal, finalOverstuffing, finalUnderStuffing);
+    console.log("staffingFinal", stuffingFinal, finalOverstuffing, finalUnderStuffing);
 
     // console.log("this is emp", demand);
 
