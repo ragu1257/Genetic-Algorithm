@@ -64,61 +64,16 @@ class DNA {
     calcFitness() {
         // console.log("this is genes", this.genes);
 
-        const {finalOverstuffing, finalUnderStuffing} =  this.calculateOverStuffing(this.genes)
+        const { finalOverstuffing, finalUnderStuffing } = this.calculateOverStuffing(this.genes)
         // console.log("this is overstuffing in each loop", overStuffing);
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
-        let score: number = 0;
-        if(finalOverstuffing == 0 && finalUnderStuffing == 0){
-            score += 500
-        }else if(finalOverstuffing< 10 && finalUnderStuffing<20){
-            score -= 400
-        } else{
-            score -= 200
-        }
-       
-        //     let shift: any[] = [];
-        //     const countOccurrences = (arr: any[], val: any) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-        //     for (let j = 1; j < 8; j++) {
-        //       for(let i=0; i<this.genes.length;i++){
-        //         shift.push(this.genes[i][j])
-        //       }
-        // // console.log("this is shift for j= ", j, shift);
-        // // countOccurrences(shift,'m')>1 && countOccurrences(shift,'m')<3
-        //       if( countOccurrences(shift,'m') >= 2){
-        //         score++
-        //       }else{
-        //         score +=0
-        //       }
-        //       if(countOccurrences(shift,'d') >= 2){
-        //         score++
-        //       }else{
-        //         score +=0
-        //       }
-        //       if(countOccurrences(shift,'e') >= 2){
-        //         score++
-        //       }else{
-        //         score +=0
-        //       }
-        //       if(countOccurrences(shift,'o') >=  1){
-        //         score++
-        //       }else{
-        //         score +=0
-        //       }
-
-        //       // console.log("this is shifts", shift, score);
-        //      shift = []
-
-
-        //     }
-        // console.log("score", score);
-        
-            this.fitness = score ;
+        let score = 0;
+        score = finalOverstuffing + finalUnderStuffing
+        this.fitness = score;
     }
 
     calculateOverStuffing(dna: any[]) {
-
-
 
         interface employeeInfo {
             empId: number,
@@ -638,12 +593,12 @@ class DNA {
 
         let finalOverstuffing: number = 0
         let finalUnderStuffing: number = 0
-    
+
         for (let i = 0; i < stuffingFinal.length; i++) {
-          finalOverstuffing += stuffingFinal[i].overStuffing!
-          finalUnderStuffing += stuffingFinal[i].underStuffing!
+            finalOverstuffing += stuffingFinal[i].overStuffing!
+            finalUnderStuffing += stuffingFinal[i].underStuffing!
         }
-        
+
 
         // console.log("workarea", workArea);
         // console.log("stuffingFinal IN DNA TS", stuffingFinal, finalOverstuffing);
@@ -654,53 +609,53 @@ class DNA {
 
 
 
-        return {finalOverstuffing, finalUnderStuffing}
+        return { finalOverstuffing, finalUnderStuffing }
 
     }
 
-        // Crossover
-        crossover(partner: DNA) {
-            // A new child
-            let child = new DNA();
-            // console.log(child, child.genes.length, child.genes[0].length);
-            // let midpoint = Math.floor(Math.random() * child.genes.length); // Pick a midpoint
-            let midpoint = Math.floor(Math.random() * (18 - 6 + 1) ) + 6;
-            // console.log("midpoint", midpoint);
-        
-            // console.log("thisis partner genes", partner.genes);
-            // console.log("thisis partner 2 genes", this.genes);
-            // console.log("thisis child genes", child.genes);
-            // Half from one, half from the other
-            // for (let i = 0; i < this.genes.length; i++) {
-            //   if (i > midpoint) child.genes[i] = this.genes[i];
-            //   else child.genes[i] = partner.genes[i];
-            // }
+    // Crossover
+    crossover(partner: DNA) {
+        // A new child
+        let child = new DNA();
+        // console.log(child, child.genes.length, child.genes[0].length);
+        // let midpoint = Math.floor(Math.random() * child.genes.length); // Pick a midpoint
+        let midpoint = Math.floor(Math.random() * (18 - 6 + 1)) + 6;
+        // console.log("midpoint", midpoint);
 
-            for (let i = 0; i < this.genes.length; i++) {
-                for(let j = 6; j<this.genes[i].length;j++){
-                    if(j>midpoint){
-                        child.genes[i][j] = this.genes[i][j]
-                    }else{
-                        child.genes[i][j] = partner.genes[i][j]
-                    }
+        // console.log("thisis partner genes", partner.genes);
+        // console.log("thisis partner 2 genes", this.genes);
+        // console.log("thisis child genes", child.genes);
+        // Half from one, half from the other
+        // for (let i = 0; i < this.genes.length; i++) {
+        //   if (i > midpoint) child.genes[i] = this.genes[i];
+        //   else child.genes[i] = partner.genes[i];
+        // }
+
+        for (let i = 0; i < this.genes.length; i++) {
+            for (let j = 6; j < this.genes[i].length; j++) {
+                if (j > midpoint) {
+                    child.genes[i][j] = this.genes[i][j]
+                } else {
+                    child.genes[i][j] = partner.genes[i][j]
                 }
             }
-            return child;
-          }
+        }
+        return child;
+    }
 
-          mutate(mutationRate: number) {     
-            for (let i = 0; i < this.genes.length; i++) {
-              for (let j = 6; j < this.genes[i].length; j++) {
-              if (Math.random() < mutationRate) {
-                // console.log("it si inside mutation rate if", i,j, TARGET[(Math.floor(Math.random() * TARGET.length))]);
-      
-                this.genes[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))];
-              }
+    mutate(mutationRate: number) {
+        for (let i = 0; i < this.genes.length; i++) {
+            for (let j = 6; j < this.genes[i].length; j++) {
+                if (Math.random() < mutationRate) {
+                    // console.log("it si inside mutation rate if", i,j, TARGET[(Math.floor(Math.random() * TARGET.length))]);
+
+                    this.genes[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))];
+                }
             }
-            }
-            // console.log("this is in DNA genes", this.genes);
-        
-          }
+        }
+        // console.log("this is in DNA genes", this.genes);
+
+    }
 }
 
 export default DNA;

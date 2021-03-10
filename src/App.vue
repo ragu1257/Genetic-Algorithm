@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div id="chart">
+      <apexchart
+        type="line"
+        height="350"
+        :options="chartOptions"
+        :series="series"
+      ></apexchart>
+    </div>
     <table
       class="table-auto w-2/3 text-center"
       v-bind:style="{ display: 'inline-table' }"
@@ -83,8 +91,9 @@
                 </div>
               </span>
             </td>
-            <td class="m-3" 
-               :class="
+            <td
+              class="m-3"
+              :class="
                       (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 20
                         ? 'bg-orange-200'
                         : (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 >= 20 && (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 40?
@@ -101,10 +110,11 @@
                         'bg-orange-700' : 'bg-red-800'
                     "
             >
-              {{ item.totalTime }}/{{ (item.weeklyWorkingHours / 5) }}
+              {{ item.totalTime }}/{{ item.weeklyWorkingHours / 5 }}
             </td>
-            <td class="m-3"
-                 :class="
+            <td
+              class="m-3"
+              :class="
                       (item.positiveWishFulfilled / item.positiveWish.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.positiveWishFulfilled / item.positiveWish.length) * 100 >= 20 && (item.positiveWishFulfilled / item.positiveWish.length) * 100 &lt; 40?
@@ -123,8 +133,9 @@
             >
               {{ item.positiveWishFulfilled }}/{{ item.positiveWish.length }}
             </td>
-            <td class="m-3" 
-            :class="
+            <td
+              class="m-3"
+              :class="
                       (item.negativeWishFulfilled / item.negativeWish.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.negativeWishFulfilled / item.negativeWish.length) * 100 >= 20 && (item.negativeWishFulfilled / item.negativeWish.length) * 100 &lt; 40?
@@ -143,8 +154,9 @@
             >
               {{ item.negativeWishFulfilled }}/{{ item.negativeWish.length }}
             </td>
-            <td class="m-3" 
-            :class="
+            <td
+              class="m-3"
+              :class="
                       (item.absenceWishFulfilled / item.absenceRange.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.absenceWishFulfilled / item.absenceRange.length) * 100 >= 20 && (item.absenceWishFulfilled / item.absenceRange.length) * 100 &lt; 40?
@@ -191,7 +203,7 @@
                         'bg-pink-700' : 'bg-red-800'
                     "
                   >
-                  <!-- {{((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100}} -->
+                    <!-- {{((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100}} -->
                     <!-- {{((demand.currentlyEmployed/item.amount)*100 > 20) && (((demand.currentlyEmployed/item.amount)*100) &lt; 90)}} -->
                     {{ demand.currentlyEmployed }}/{{ item.amount }}
                   </span>
@@ -207,11 +219,15 @@
         <template v-for="(staffing, i) in stuffingFinal" :key="i">
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>overStuffing</td>
-            <td colspan="12" class="bg-pink-700">{{ staffing.overStuffing }}</td>
+            <td colspan="12" class="bg-pink-700">
+              {{ staffing.overStuffing }}
+            </td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underStuffing</td>
-            <td colspan="12" class="bg-pink-200">{{ staffing.underStuffing }}</td>
+            <td colspan="12" class="bg-pink-200">
+              {{ staffing.underStuffing }}
+            </td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underTime</td>
@@ -250,10 +266,14 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
+import VueApexCharts from "vue3-apexcharts";
+
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
-  components: {},
+  components: {
+    apexchart: VueApexCharts,
+  },
   setup() {
     const {
       officeOpenTimings,
@@ -263,9 +283,57 @@ export default defineComponent({
       stuffingFinal,
     } = task();
 
-// console.log("this is dna", dna);
+    // console.log("this is dna", dna);
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal };
+  },
+  data: function() {
+    return {
+      series: [
+        {
+          name: "Desktops",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+        },
+      ],
+      chartOptions: {
+        chart: {
+          height: 350,
+          type: "line",
+          zoom: {
+            enabled: false,
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        stroke: {
+          curve: "straight",
+        },
+        title: {
+          text: "Product Trends by Month",
+          align: "left",
+        },
+        grid: {
+          row: {
+            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+            opacity: 0.5,
+          },
+        },
+        xaxis: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+          ],
+        },
+      },
+    };
   },
 });
 </script>

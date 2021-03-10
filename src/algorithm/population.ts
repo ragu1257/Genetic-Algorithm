@@ -13,6 +13,7 @@ class Population {
     // best: string = ""
     perfectScore = 1
     averageFitness = 0
+    bestFitness!: number;
     constructor(popSize: number) {
         for (let i = 0; i < popSize; i++) {
             this.population.push(new DNA())
@@ -41,7 +42,7 @@ class Population {
         let totalFitness: number = 0;
 
         for (let i = 0; i < this.population.length; i++) {
-            console.log(this.population[i].fitness);
+            // console.log(this.population[i].fitness);
             
             totalFitness += this.population[i].fitness
         }
@@ -55,12 +56,12 @@ class Population {
             // console.log("thisis m",n);
             // console.log("this is population fitness", this.population[i].fitness);
 
-            // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
-            //     this.matingPool.push(this.population[i]);
-            // }
-            if (this.population[i].fitness >= this.averageFitness) {
+            for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
                 this.matingPool.push(this.population[i]);
             }
+            // if (this.population[i].fitness >= this.averageFitness) {
+            //     this.matingPool.push(this.population[i]);
+            // }
         }
         // console.log(this.matingPool);
     }
@@ -81,7 +82,7 @@ class Population {
 
             let child = partnerA.crossover(partnerB);
             // console.log("Before mutation", child)
-            // child.mutate(this.mutationRate)
+            child.mutate(this.mutationRate)
             // console.log("after mutation",mutateChild)
             this.population[i] = child
         }
@@ -90,12 +91,12 @@ class Population {
 
     evaluate() {
 
-        let worldrecord = 0;
+        let worldrecord = 1000000000000000000;
         let index = 0;
         for (let i = 0; i < this.population.length; i++) {
-            console.log("evalutate is called", this.population[i].fitness );
+            // console.log("evalutate is called", this.population[i].fitness );
 
-            if (this.population[i].fitness > worldrecord) {
+            if (this.population[i].fitness < worldrecord) {
 
                 index = i;
                 worldrecord = this.population[i].fitness;
@@ -105,9 +106,10 @@ class Population {
         }
 
         this.best = this.population[index].genes;
-        console.log("this is best Record", worldrecord);
+        // console.log("this is best Record", worldrecord);
+        this.bestFitness = worldrecord
 
-        if(worldrecord > 0) {
+        if(worldrecord == 0) {
           this.finished = true;
         }
         // console.log("this is finished", this.finished);
