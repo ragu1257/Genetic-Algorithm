@@ -4,7 +4,7 @@ import Population from './population'
 
 
 const pop_size: number = 50;
-const population_number = 10;
+const population_number = 100;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
@@ -31,7 +31,6 @@ for (let i = 0; i < population_number; i++) {
   generattion_array.push(pop.generations)
   best_pop_array.push(pop.bestFitness)
 
-  console.log("generattion_arraygenerattion_arraygenerattion_arraygenerattion_array", generattion_array);
 
   shiftTestArray = pop.best
   task()
@@ -577,11 +576,12 @@ export function task() {
 
   // console.log("this is emp", demand);
 
+  // console.log("generattion_arraygenerattion_arraygenerattion_arraygenerattion_array", generattion_array);
 
 
 
 
-  return { officeOpenTimings, demand, shift, workArea, stuffingFinal }
+  return { officeOpenTimings, demand, shift, workArea, stuffingFinal,generattion_array,best_pop_array }
   // }
 
   // return { officeOpenTimings, demand, shift, workArea, stuffingFinal }

@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div id="chart">
-      <apexchart
-        type="line"
-        height="350"
-        :options="chartOptions"
-        :series="series"
-      ></apexchart>
-    </div>
+  <chart :generattionArray="generattion_array" :bestPopArray="best_pop_array"/>
     <table
       class="table-auto w-2/3 text-center"
       v-bind:style="{ display: 'inline-table' }"
@@ -266,13 +259,13 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
-import VueApexCharts from "vue3-apexcharts";
 
+import chart from "./chart.vue"
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
   components: {
-    apexchart: VueApexCharts,
+    chart
   },
   setup() {
     const {
@@ -281,60 +274,15 @@ export default defineComponent({
       shift,
       workArea,
       stuffingFinal,
+      generattion_array,
+      best_pop_array
     } = task();
 
     // console.log("this is dna", dna);
 
-    return { officeOpenTimings, demand, shift, workArea, stuffingFinal };
+    return { officeOpenTimings, demand, shift, workArea, stuffingFinal, generattion_array, best_pop_array };
   },
-  data: function() {
-    return {
-      series: [
-        {
-          name: "Desktops",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
-        },
-      ],
-      chartOptions: {
-        chart: {
-          height: 350,
-          type: "line",
-          zoom: {
-            enabled: false,
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: "straight",
-        },
-        title: {
-          text: "Product Trends by Month",
-          align: "left",
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
-        },
-        xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-          ],
-        },
-      },
-    };
-  },
+  
 });
 </script>
 
