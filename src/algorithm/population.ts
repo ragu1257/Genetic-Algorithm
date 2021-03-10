@@ -56,12 +56,12 @@ class Population {
             // console.log("thisis m",n);
             // console.log("this is population fitness", this.population[i].fitness);
 
-            for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
-                this.matingPool.push(this.population[i]);
-            }
-            // if (this.population[i].fitness >= this.averageFitness) {
+            // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
             //     this.matingPool.push(this.population[i]);
             // }
+            if (this.population[i].fitness <= this.averageFitness) {
+                this.matingPool.push(this.population[i]);
+            }
         }
         // console.log(this.matingPool);
     }

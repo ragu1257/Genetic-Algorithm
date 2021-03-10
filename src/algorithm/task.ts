@@ -23,9 +23,9 @@ for (let i = 0; i < population_number; i++) {
 
   // console.log("evaluate");
   pop.evaluate();
-  console.log("generation number", pop.generations);
-  console.log("best ", pop.best);
-  console.log("pop.bestFitness", pop.bestFitness);
+  // console.log("generation number", pop.generations);
+  // console.log("best ", pop.best);
+  // console.log("pop.bestFitness", pop.bestFitness);
 
 
   generattion_array.push(pop.generations)
@@ -44,7 +44,7 @@ for (let i = 0; i < population_number; i++) {
 export function task() {
 
   // const shiftTestArray = shiftTestArrayTest
-  console.log("this is shiftArray", shiftTestArray);
+  // console.log("this is shiftArray", shiftTestArray);
 
   interface employeeInfo {
     empId: number,

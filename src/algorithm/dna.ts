@@ -630,16 +630,29 @@ class DNA {
         //   if (i > midpoint) child.genes[i] = this.genes[i];
         //   else child.genes[i] = partner.genes[i];
         // }
+        // console.log("all genes");
+        // console.log("child.genes", child.genes);
+        // console.log("this.genes",this.genes);
+        
+        // console.log("partner.genes", partner.genes);
+        
+        
+        
+        
 
         for (let i = 0; i < this.genes.length; i++) {
             for (let j = 6; j < this.genes[i].length; j++) {
-                if (j > midpoint) {
+                if (j < midpoint) {
                     child.genes[i][j] = this.genes[i][j]
                 } else {
                     child.genes[i][j] = partner.genes[i][j]
                 }
             }
         }
+        // console.log("midpoint", midpoint);
+        
+        // console.log("child", child);
+        
         return child;
     }
 
