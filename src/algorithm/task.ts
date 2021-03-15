@@ -3,8 +3,8 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 50;
-const population_number = 100;
+const pop_size: number = 100;
+const population_number = 1;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
@@ -13,7 +13,7 @@ let shiftTestArray: any[] = []
 for (let i = 0; i < population_number; i++) {
 
   // console.log("natural selection");
-  pop.naturalSelection()
+  // pop.naturalSelection()
 
   // console.log("generate");
   pop.generate()

@@ -12,6 +12,7 @@ import { TARGET } from "./target";
 class DNA {
     genes: any[] = [];
     fitness: number;
+    prob: number = 0;
     // numberOfEmployees: number
     constructor() {
         this.genes = this.generateDNA()
@@ -70,7 +71,8 @@ class DNA {
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
-        this.fitness = score;
+        // this.fitness = Math.pow(score, 2);
+        this.fitness = score + 0.01
     }
 
     calculateOverStuffing(dna: any[]) {
