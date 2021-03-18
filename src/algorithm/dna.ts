@@ -12,10 +12,14 @@ import { TARGET } from "./target";
 class DNA {
     genes: any[] = [];
     fitness: number;
+    staffing: number;
+    staffTime: number;
     // numberOfEmployees: number
     constructor() {
         this.genes = this.generateDNA()
         this.fitness = 0;
+        this.staffing = 0;
+        this.staffTime = 0
         // this.numberOfEmployees = 10
     }
 
@@ -61,7 +65,7 @@ class DNA {
         return result
     }
 
-    calcFitness() {
+    calcStaffing() {
         // console.log("this is genes", this.genes);
 
         const { finalOverstuffing, finalUnderStuffing } = this.calculateOverStuffing(this.genes)
@@ -69,8 +73,22 @@ class DNA {
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score = 0;
-        score = finalOverstuffing + finalUnderStuffing
-        this.fitness = score;
+        score = finalOverstuffing + finalUnderStuffing        
+        this.staffing = score;
+    }
+    calcStaffTiming(){
+                // console.log("this is genes", this.genes);
+
+                const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
+                // console.log("this is overstuffing in each loop", overStuffing);
+                // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
+        
+                let score = 0;
+                score = finalUnderTime + finalOverTime                
+                this.staffTime = score;
+    }
+    calcFitness(){        
+        this.fitness = this.staffTime + this.staffing
     }
 
     calculateOverStuffing(dna: any[]) {
@@ -593,10 +611,14 @@ class DNA {
 
         let finalOverstuffing: number = 0
         let finalUnderStuffing: number = 0
+        let finalOverTime: number = 0
+        let finalUnderTime: number = 0
 
         for (let i = 0; i < stuffingFinal.length; i++) {
             finalOverstuffing += stuffingFinal[i].overStuffing!
             finalUnderStuffing += stuffingFinal[i].underStuffing!
+            finalOverTime += stuffingFinal[i].overtime!
+            finalUnderTime += stuffingFinal[i].underTime!
         }
 
 
@@ -609,7 +631,7 @@ class DNA {
 
 
 
-        return { finalOverstuffing, finalUnderStuffing }
+        return { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime }
 
     }
 

@@ -19,14 +19,28 @@ class Population {
             this.population.push(new DNA())
         }
 
-        this.calcFitness();
-        // console.log("it kkis population", this.population);
+
+        this.calcFitness()
 
     }
-    calcFitness() {
+    calcStaffing() {
         for (let i = 0; i < this.population.length; i++) {
-            this.population[i].calcFitness();
+            this.population[i].calcStaffing();
         }
+    }
+    calcStaffTiming() {
+        for (let i = 0; i < this.population.length; i++) {
+            this.population[i].calcStaffTiming();
+        }
+    }
+
+    calcFitness(){
+        this.calcStaffing();
+        // console.log("it kkis population", this.population);
+        this.calcStaffTiming();
+        for (let i = 0; i < this.population.length; i++) {
+           this.population[i].calcFitness()
+        }        
     }
 
 
@@ -40,6 +54,8 @@ class Population {
         //     }
         // }
         let totalFitness: number = 0;
+        console.log(this.population);
+        
 
         for (let i = 0; i < this.population.length; i++) {
             // console.log(this.population[i].fitness);

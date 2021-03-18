@@ -4,7 +4,7 @@ import Population from './population'
 
 
 const pop_size: number = 50;
-const population_number = 100;
+const population_number = 10;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
