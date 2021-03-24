@@ -34,15 +34,113 @@ class Population {
         }
     }
 
-    calcFitness(){
+    calcFitness() {
         this.calcStaffing();
         // console.log("it kkis population", this.population);
         this.calcStaffTiming();
         for (let i = 0; i < this.population.length; i++) {
-           this.population[i].calcFitness()
-        }        
+            this.population[i].calcFitness()
+        }
     }
 
+    //NSGA-II
+    nonDominatedSorting() {
+        let finalRanks: any[] = []
+        
+        for(let L=0; L< this.population.length; L++){
+            let P: number[] = []
+            for (let i = 0; i < this.population.length; i++) {
+                if(finalRanks.length>0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))){     
+                    console.log("continue of finalranks i");
+                                   
+                    continue;
+                }
+                let valueOfJ = 0
+                for (let j = 0; j < this.population.length; j++) {
+                    if(finalRanks.length>0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))){
+                        
+                    console.log("continue of finalranks j");
+                        continue;
+                    }
+                    valueOfJ++
+                    if (i == j) {
+                        continue;
+                    }
+                    if (this.nonDominatedSolution(i, j)) {
+                        console.log("it is break");
+    
+                        break;
+                    }
+                }
+                if(valueOfJ == this.population.length){
+                    P.push(i)
+                    console.log("this is P after each i", P);
+                    
+                }
+            }
+            console.log("this is P", P);
+            
+            finalRanks.push(P)
+        }
+ 
+        console.log("final finaRanks",finalRanks );
+
+
+    }
+    // nonDominatedSorting(){
+    //    let front: any[]
+    // this.population.forEach((p, indexP) => {
+
+    //     p.dominatedSolutions = [];
+    //     p.dominationCount = 0;
+
+    //     this.population.forEach((q, indexQ) => {
+            
+    //         if (indexP === indexQ) return;
+    //         if (this.nonDominatedSolution(p,q)) {
+    //             p.dominatedSolutions.push(q);
+    //         } else if (this.nonDominatedSolution(q,p)) {
+    //             p.dominationCount++;
+    //         }
+    //     });        
+    //     if (p.dominationCount === 0) {
+            
+    //         p.rank = 1;
+    //         front[0].push(p)
+    //     }
+    // });
+
+    // let i = 0;
+    // while (front![i].length > 0) {
+    //     let nextFront: any[] = [];
+    //     front![i].forEach((p: { dominatedSolutions: any[]; }) => {
+    //         p.dominatedSolutions.forEach((q: { dominationCount: number; rank: number; }) => {
+    //             q.dominationCount--;
+    //             if (q.dominationCount === 0) {
+    //                 q.rank = i + 2;
+    //                 nextFront.push(q);
+    //             }
+    //         });
+    //     });
+    //     i++;
+    //     front!.push(nextFront);
+    // }
+    // console.log(front!);
+    
+    // // return front;
+    // }
+
+    nonDominatedSolution(i: number, j: number) {
+        // console.log(this.population[i], this.population[j]);
+        
+        if (this.population[i].staffing >= this.population[j].staffing && this.population[i].staffTime >= this.population[j].staffTime) {
+            if (this.population[i].staffing > this.population[j].staffing || this.population[i].staffTime > this.population[j].staffTime) {
+                return true
+            }
+        } else {
+            return false
+        }
+    }
 
     //selection based on mating pool with ranking percentage
     naturalSelection() {
@@ -54,12 +152,12 @@ class Population {
         //     }
         // }
         let totalFitness: number = 0;
-        console.log(this.population);
-        
+        // console.log(this.population);
+
 
         for (let i = 0; i < this.population.length; i++) {
             // console.log(this.population[i].fitness);
-            
+
             totalFitness += this.population[i].fitness
         }
         this.averageFitness = totalFitness / this.population.length
@@ -84,7 +182,7 @@ class Population {
 
     // naturalSelection(){
     //     this.matingPool = [];
-        
+
     // }
     generate() {
         for (let i = 0; i < this.population.length; i++) {
@@ -125,8 +223,8 @@ class Population {
         // console.log("this is best Record", worldrecord);
         this.bestFitness = worldrecord
 
-        if(worldrecord == 0) {
-          this.finished = true;
+        if (worldrecord == 0) {
+            this.finished = true;
         }
         // console.log("this is finished", this.finished);
 

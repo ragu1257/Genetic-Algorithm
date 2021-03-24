@@ -14,6 +14,9 @@ class DNA {
     fitness: number;
     staffing: number;
     staffTime: number;
+    dominatedSolutions: any[]  =[];
+    dominationCount: number = 0;
+    rank: number = 0;
     // numberOfEmployees: number
     constructor() {
         this.genes = this.generateDNA()
