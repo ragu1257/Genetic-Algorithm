@@ -46,44 +46,51 @@ class Population {
     //NSGA-II
     nonDominatedSorting() {
         let finalRanks: any[] = []
-        
-        for(let L=0; L< this.population.length; L++){
-            let P: number[] = []
-            for (let i = 0; i < this.population.length; i++) {
-                if(finalRanks.length>0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))){     
-                    console.log("continue of finalranks i");
-                                   
-                    continue;
-                }
-                let valueOfJ = 0
-                for (let j = 0; j < this.population.length; j++) {
-                    if(finalRanks.length>0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))){
-                        
-                    console.log("continue of finalranks j");
+        console.log(this.population);
+
+        for (let L = 0; L < this.population.length; L++) {
+            // if (this.allTaskCompleted(finalRanks)) {
+            //     break;
+            // } else {
+                let P: number[] = []
+                for (let i = 0; i < this.population.length; i++) {
+                    if (finalRanks.length > 0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))) {
+                        // console.log("continue of finalranks i");
+
                         continue;
                     }
-                    valueOfJ++
-                    if (i == j) {
-                        continue;
+                    let valueOfJ = 0
+                    for (let j = 0; j < this.population.length; j++) {
+
+                        valueOfJ++
+                        if (finalRanks.length > 0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))) {
+
+                            // console.log("continue of finalranks j");
+                            continue;
+                        }
+                        if (i == j) {
+                            continue;
+                        }
+                        if (this.nonDominatedSolution(i, j)) {
+                            // console.log("it is break");
+
+                            valueOfJ--
+                            break;
+                        }
                     }
-                    if (this.nonDominatedSolution(i, j)) {
-                        console.log("it is break");
-    
-                        break;
+                    if (valueOfJ == this.population.length) {
+                        P.push(i)
+                        // console.log("this is P after each i", P);
+
                     }
                 }
-                if(valueOfJ == this.population.length){
-                    P.push(i)
-                    console.log("this is P after each i", P);
-                    
-                }
-            }
-            console.log("this is P", P);
-            
-            finalRanks.push(P)
+                // console.log("this is P", P);
+
+                finalRanks.push(P)
+            // }
         }
- 
-        console.log("final finaRanks",finalRanks );
+
+        console.log("final finaRanks", finalRanks);
 
 
     }
@@ -95,7 +102,7 @@ class Population {
     //     p.dominationCount = 0;
 
     //     this.population.forEach((q, indexQ) => {
-            
+
     //         if (indexP === indexQ) return;
     //         if (this.nonDominatedSolution(p,q)) {
     //             p.dominatedSolutions.push(q);
@@ -104,7 +111,7 @@ class Population {
     //         }
     //     });        
     //     if (p.dominationCount === 0) {
-            
+
     //         p.rank = 1;
     //         front[0].push(p)
     //     }
@@ -126,13 +133,23 @@ class Population {
     //     front!.push(nextFront);
     // }
     // console.log(front!);
-    
+
     // // return front;
     // }
-
+    allTaskCompleted(finaRanks: string | any[]) {
+        let totalValue = 0;
+        for (let i = 0; i < finaRanks.length; i++) {
+            for (let j = 0; j < finaRanks[i].length; j++) {
+                totalValue = totalValue + 1
+            }
+        }
+        if (totalValue == this.population.length) {
+            return true
+        }
+    }
     nonDominatedSolution(i: number, j: number) {
         // console.log(this.population[i], this.population[j]);
-        
+
         if (this.population[i].staffing >= this.population[j].staffing && this.population[i].staffTime >= this.population[j].staffTime) {
             if (this.population[i].staffing > this.population[j].staffing || this.population[i].staffTime > this.population[j].staffTime) {
                 return true
