@@ -3,7 +3,7 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 11;
+const pop_size: number = 100;
 const population_number = 1;
 
 const pop = new Population(pop_size);

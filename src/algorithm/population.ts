@@ -46,52 +46,62 @@ class Population {
     //NSGA-II
     nonDominatedSorting() {
         let finalRanks: any[] = []
-        console.log(this.population);
+        // console.log(this.population);
+        if (this.population) {
 
-        for (let L = 0; L < this.population.length; L++) {
-            // if (this.allTaskCompleted(finalRanks)) {
-            //     break;
-            // } else {
-                let P: number[] = []
-                for (let i = 0; i < this.population.length; i++) {
-                    if (finalRanks.length > 0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))) {
-                        // console.log("continue of finalranks i");
+console.log("popu", this.population);
 
-                        continue;
-                    }
-                    let valueOfJ = 0
-                    for (let j = 0; j < this.population.length; j++) {
+            for (let L = 0; L < this.population.length; L++) {
+                if (finalRanks.length >=0 && this.allTaskCompleted(finalRanks)) {
+                    break;
+                } else {
+                    let P: number[] = []
+                    for (let i = 0; i < this.population.length; i++) {
 
-                        valueOfJ++
-                        if (finalRanks.length > 0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))) {
-
-                            // console.log("continue of finalranks j");
+                        if(this.checkIncludes(finalRanks, i)){
                             continue;
                         }
-                        if (i == j) {
-                            continue;
-                        }
-                        if (this.nonDominatedSolution(i, j)) {
-                            // console.log("it is break");
+                        // if (finalRanks.length >=0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))) {
+                        //     // console.log("continue of finalranks i");
 
-                            valueOfJ--
-                            break;
+                        //     continue;
+                        // }
+                        let valueOfJ = 0
+                        for (let j = 0; j < this.population.length; j++) {
+
+                            valueOfJ++
+                            if(this.checkIncludes(finalRanks, j)){
+                                continue;
+                            }
+                            // if (finalRanks.length >=0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))) {
+
+                            //     // console.log("continue of finalranks j");
+                            //     continue;
+                            // }
+                            if (i == j) {
+                                continue;
+                            }
+                            if (this.nonDominatedSolution(i, j)) {
+                                // console.log("it is break");
+
+                                valueOfJ--
+                                break;
+                            }
+                        }
+                        if (valueOfJ == this.population.length) {
+                            P.push(i)
+                            // console.log("this is P after each i", P);
+
                         }
                     }
-                    if (valueOfJ == this.population.length) {
-                        P.push(i)
-                        // console.log("this is P after each i", P);
+                    // console.log("this is P", P);
 
-                    }
+                    finalRanks.push(P)
                 }
-                // console.log("this is P", P);
+            }
 
-                finalRanks.push(P)
-            // }
+            console.log("final finalRanks", finalRanks);
         }
-
-        console.log("final finaRanks", finalRanks);
-
 
     }
     // nonDominatedSorting(){
@@ -136,10 +146,20 @@ class Population {
 
     // // return front;
     // }
-    allTaskCompleted(finaRanks: string | any[]) {
+
+    checkIncludes(ranks: any[], i: number){
+        
+        for(let z=0; z<ranks.length; z++){
+            if (ranks[z].includes(i)){ 
+                return true
+            }}
+    }
+    allTaskCompleted(finalRanks: any[]) {
         let totalValue = 0;
-        for (let i = 0; i < finaRanks.length; i++) {
-            for (let j = 0; j < finaRanks[i].length; j++) {
+        // console.log("finalRanks", finalRanks);
+
+        for (let i = 0; i < finalRanks.length; i++) {
+            for (let j = 0; j < finalRanks[i].length; j++) {
                 totalValue = totalValue + 1
             }
         }
