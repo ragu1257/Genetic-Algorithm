@@ -140,37 +140,17 @@ class Population {
             time?: number,
         }
         let objInfo: objArray[] = []
-        // let popObjStaff = {} as any
-        // let popObjTime = {} as any
-        // let sortedArray 
-        for (let i = 0; i < rankArray.length; i++) {
-            // let parentNumber = rankArray[i]
-            // console.log("this.population[rankArray[i]].calcStaffing", this.population[rankArray[i]], rankArray[i]);
-            objInfo.push({ popnumber: rankArray[i], staff: this.population[rankArray[i]].staffing, time: this.population[rankArray[i]].staffTime })
-            // objInfo[i].popnumber = rankArray[i]
-            // objInfo[i].staff = this.population[rankArray[i]].staffing
-            // objInfo[i].time = this.population[rankArray[i]].staffTime
-        }
-        // const sortStaff: objArray[] = []
-        // const sortTime: objArray[] = []
-        console.log("popObjStaff", objInfo);
-        if(objInfo){
-            let sortedArray=   objInfo.sort((a, b) => (a.popnumber! > b.popnumber!) ? 1 : -1)
-            console.log("sortedArraysortedArray",sortedArray);
-        }
-     
         
-
-       let sortStaff = objInfo.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
-
-       let sortTime = objInfo.sort( (a, b) => {
-            return a.time! - b.time!
-        });
-        console.log("sorted value", sortStaff, sortTime);
+        for (let i = 0; i < rankArray.length; i++) {
+            objInfo.push({ popnumber: rankArray[i], staff: this.population[rankArray[i]].staffing, time: this.population[rankArray[i]].staffTime })
+        }
 
 
-        // let sortedObjStaff = Object.keys(popObjStaff).sort((a, b) => popObjStaff[a] - popObjStaff[b]);
-        // let sortedObjTime = Object.keys(popObjTime).sort((a, b) => popObjTime[a] - popObjTime[b]);
+        let sortStaff = [ ...objInfo]
+        
+        sortStaff = sortStaff.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
+        let sortTime = [ ...objInfo ]
+        sortTime = sortTime.sort((a, b) => (a.time! < b.time! ? -1 : 1));
 
 
     }
