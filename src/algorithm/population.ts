@@ -185,12 +185,23 @@ class Population {
 
         console.log("final ---", newsortStaff, newsortTime);
 
-        // const newData = sortStaff.map((item, row) => {
-        //     const found = sortTime.find((element) => item.popnumber == element.popnumber);
-        //     return { ...item, ...found };
-        //  });
-        //  console.log(newData);
+        let combinedArrayPop: any[] = []
+        newsortTime.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
+        newsortStaff.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
         
+        const result = [...combinedArrayPop.reduce((r, o) => {
+            const key = o.popnumber;
+            
+            const item = r.get(key) || Object.assign({}, o, {
+              crowdingDistance: 0
+            });
+            
+            item.crowdingDistance += o.crowdingDistance;
+          
+            return r.set(key, item);
+          }, new Map).values()];
+          
+          console.log(result);
         
 
     }
