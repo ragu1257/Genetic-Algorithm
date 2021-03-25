@@ -103,13 +103,18 @@ class Population {
             // console.log("final finalRanks", finalRanks);
         }
 
-        let finalSortRanks = this.crowdingDistance(finalRanks)
+        let finalSortRanks = this.crowdingDistance(finalRanks);
+        console.log("finalSortRanksfinalSortRanksfinalSortRanks",finalSortRanks);
+        
 
     }
 
     crowdingDistance(finalRanks: any[]) {
         let total = 0;
-        let totalArray = []
+        let totalArray = [];
+        let parentsNeeded = Math.floor(this.population.length / 2)
+        let giveNeededParents 
+console.log("parents needed", parentsNeeded);
 
         for (let i = 0; i < finalRanks.length; i++) {
             // console.log(finalRanks[i].length);
@@ -118,20 +123,26 @@ class Population {
             // console.log(total);
 
             if (total <= Math.floor(this.population.length / 2)) {
+                parentsNeeded = parentsNeeded - finalRanks[i].length;
+                console.log("parents now", parentsNeeded);
+                
                 totalArray.push(finalRanks[i])
             } else {
                 // console.log(finalRanks[i]);
 
-                this.doCrowdingDistance(finalRanks[i])
+               giveNeededParents = this.doCrowdingDistance(finalRanks[i], parentsNeeded)
                 break;
             }
         }
+        totalArray.push(giveNeededParents)
+        console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents);
+        return totalArray
         // console.log("final array", totalArray, total);
 
     }
 
 
-    doCrowdingDistance(rankArray: any[]) {
+    doCrowdingDistance(rankArray: any[], parentsNeeded: number) {
         console.log(rankArray);
         interface objArray {
             popnumber?: number,
@@ -206,7 +217,12 @@ class Population {
           result.forEach(val => resultArray.push(Object.assign({}, val)));
         resultArray = resultArray.sort((a, b) => (a.crowdingDistance! > b.crowdingDistance! ? -1 : 1));
         console.log("final sort now", resultArray);
-        
+        let returnCrowdedSortingArray = []
+        for(let i=0; i<parentsNeeded; i++){
+            returnCrowdedSortingArray.push(resultArray[i].popnumber)
+        }
+        console.log("returnCrowdedSortingArray",parentsNeeded, returnCrowdedSortingArray);
+        return returnCrowdedSortingArray
 
     }
     // nonDominatedSorting(){
