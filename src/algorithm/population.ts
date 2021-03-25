@@ -49,16 +49,16 @@ class Population {
         // console.log(this.population);
         if (this.population) {
 
-console.log("popu", this.population);
+            // console.log("popu", this.population);
 
             for (let L = 0; L < this.population.length; L++) {
-                if (finalRanks.length >=0 && this.allTaskCompleted(finalRanks)) {
+                if (finalRanks.length >= 0 && this.allTaskCompleted(finalRanks)) {
                     break;
                 } else {
                     let P: number[] = []
                     for (let i = 0; i < this.population.length; i++) {
 
-                        if(this.checkIncludes(finalRanks, i)){
+                        if (this.checkIncludes(finalRanks, i)) {
                             continue;
                         }
                         // if (finalRanks.length >=0 && JSON.stringify(finalRanks).includes(JSON.stringify(i))) {
@@ -70,7 +70,7 @@ console.log("popu", this.population);
                         for (let j = 0; j < this.population.length; j++) {
 
                             valueOfJ++
-                            if(this.checkIncludes(finalRanks, j)){
+                            if (this.checkIncludes(finalRanks, j)) {
                                 continue;
                             }
                             // if (finalRanks.length >=0 && JSON.stringify(finalRanks).includes(JSON.stringify(j))) {
@@ -100,8 +100,53 @@ console.log("popu", this.population);
                 }
             }
 
-            console.log("final finalRanks", finalRanks);
+            // console.log("final finalRanks", finalRanks);
         }
+
+        let finalSortRanks = this.crowdingDistance(finalRanks)
+
+    }
+
+    crowdingDistance(finalRanks: any[]) {
+        let total = 0;
+        let totalArray = []
+
+        for (let i = 0; i < finalRanks.length; i++) {
+            // console.log(finalRanks[i].length);
+
+            total += finalRanks[i].length;
+            // console.log(total);
+
+            if (total <= Math.floor(this.population.length / 2)) {
+                totalArray.push(finalRanks[i])
+            } else {
+                // console.log(finalRanks[i]);
+
+                this.doCrowdingDistance(finalRanks[i])
+                break;
+            }
+        }
+        // console.log("final array", totalArray, total);
+
+    }
+
+
+    doCrowdingDistance(rankArray: any[]) {
+        console.log(rankArray);
+        let popObjStaff = {} as any
+        let popObjTime = {} as any
+        for (let i = 0; i < rankArray.length; i++) {
+            // let parentNumber = rankArray[i]
+            console.log("this.population[rankArray[i]].calcStaffing", this.population[rankArray[i]].staffing);
+
+            popObjStaff[rankArray[i]] = this.population[rankArray[i]].staffing
+            popObjTime[rankArray[i]] = this.population[rankArray[i]].staffTime
+        }
+        console.log("popObjStaff", popObjStaff);
+
+        let sortedObjStaff = Object.keys(popObjStaff).sort((a, b) => popObjStaff[a] - popObjStaff[b]);
+        let sortedObjTime = Object.keys(popObjTime).sort((a, b) => popObjTime[a] - popObjTime[b]);
+
 
     }
     // nonDominatedSorting(){
@@ -147,12 +192,13 @@ console.log("popu", this.population);
     // // return front;
     // }
 
-    checkIncludes(ranks: any[], i: number){
-        
-        for(let z=0; z<ranks.length; z++){
-            if (ranks[z].includes(i)){ 
+    checkIncludes(ranks: any[], i: number) {
+
+        for (let z = 0; z < ranks.length; z++) {
+            if (ranks[z].includes(i)) {
                 return true
-            }}
+            }
+        }
     }
     allTaskCompleted(finalRanks: any[]) {
         let totalValue = 0;
