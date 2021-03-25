@@ -202,6 +202,10 @@ class Population {
           }, new Map).values()];
           
           console.log(result);
+          let resultArray: any[] = []
+          result.forEach(val => resultArray.push(Object.assign({}, val)));
+        resultArray = resultArray.sort((a, b) => (a.crowdingDistance! > b.crowdingDistance! ? -1 : 1));
+        console.log("final sort now", resultArray);
         
 
     }
