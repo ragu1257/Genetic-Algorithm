@@ -135,23 +135,50 @@ class Population {
         console.log(rankArray);
         interface objArray {
             popnumber?: number,
-            crowdingDistance?: any,
+            crowdingDistance?: number,
             staff?: number,
             time?: number,
         }
         let objInfo: objArray[] = []
-        
+
         for (let i = 0; i < rankArray.length; i++) {
             objInfo.push({ popnumber: rankArray[i], staff: this.population[rankArray[i]].staffing, time: this.population[rankArray[i]].staffTime })
+
         }
 
 
-        let sortStaff = [ ...objInfo]
-        
-        sortStaff = sortStaff.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
-        let sortTime = [ ...objInfo ]
-        sortTime = sortTime.sort((a, b) => (a.time! < b.time! ? -1 : 1));
+        let sortStaff = [...objInfo]
 
+        sortStaff = sortStaff.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
+        sortStaff[0].crowdingDistance = Infinity
+        sortStaff[sortStaff.length - 1].crowdingDistance = Infinity
+
+        let sortTime = [...objInfo]
+        sortTime = sortTime.sort((a, b) => (a.time! < b.time! ? -1 : 1));
+        sortTime[0].crowdingDistance = Infinity
+        sortTime[sortTime.length - 1].crowdingDistance = Infinity
+
+        // console.log("finally", sortStaff, sortTime);
+        // console.log("this pop", this.population);
+
+        let maxStaffing = Math.max.apply(Math, this.population.map(function (o) { return o.staffing; }))
+        let maxTiming = Math.max.apply(Math, this.population.map(function (o) { return o.staffTime; }))
+        // let minStaffing = Math.min.apply(Math, this.population.map(function (o) { return o.staffing; }))
+        // let minTiming = Math.min.apply(Math, this.population.map(function (o) { return o.staffTime; }))
+        let minStaffing = 0
+        let minTiming = 0
+        // console.log("max", maxStaffing, maxTiming, minStaffing, minTiming);
+
+        for(let i=1; i<sortStaff.length-1;i++){            
+            sortStaff[i].crowdingDistance = ((sortStaff[i+1].staff! - sortStaff[i-1].staff!)/(maxStaffing-minStaffing))
+        }
+        for(let i=1; i<sortTime.length-1;i++){            
+            sortTime[i].crowdingDistance = ((sortTime[i+1].time! - sortTime[i-1].time!)/(maxStaffing-minStaffing))
+        }
+
+        console.log("final ---", sortStaff, sortTime);
+        
+        
 
     }
     // nonDominatedSorting(){
