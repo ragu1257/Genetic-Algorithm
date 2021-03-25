@@ -147,18 +147,21 @@ class Population {
         }
 
 
-        let sortStaff = [...objInfo]
+        let sortStaff: any[] = []
+        objInfo.forEach(val => sortStaff.push(Object.assign({}, val)));
 
         sortStaff = sortStaff.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
         sortStaff[0].crowdingDistance = Infinity
         sortStaff[sortStaff.length - 1].crowdingDistance = Infinity
+        
 
-        let sortTime = [...objInfo]
+        let sortTime: any[] = []
+        objInfo.forEach(val => sortTime.push(Object.assign({}, val)));
         sortTime = sortTime.sort((a, b) => (a.time! < b.time! ? -1 : 1));
         sortTime[0].crowdingDistance = Infinity
         sortTime[sortTime.length - 1].crowdingDistance = Infinity
 
-        // console.log("finally", sortStaff, sortTime);
+        console.log("finally", sortStaff,sortTime);
         // console.log("this pop", this.population);
 
         let maxStaffing = Math.max.apply(Math, this.population.map(function (o) { return o.staffing; }))
@@ -168,15 +171,25 @@ class Population {
         let minStaffing = 0
         let minTiming = 0
         // console.log("max", maxStaffing, maxTiming, minStaffing, minTiming);
+        let newsortStaff: any[] = []
+        sortStaff.forEach(val => newsortStaff.push(Object.assign({}, val)));
 
-        for(let i=1; i<sortStaff.length-1;i++){            
-            sortStaff[i].crowdingDistance = ((sortStaff[i+1].staff! - sortStaff[i-1].staff!)/(maxStaffing-minStaffing))
+        for(let i=1; i<newsortStaff.length-1;i++){            
+            newsortStaff[i].crowdingDistance = ((newsortStaff[i+1].staff! - newsortStaff[i-1].staff!)/(maxStaffing-minStaffing))
         }
-        for(let i=1; i<sortTime.length-1;i++){            
-            sortTime[i].crowdingDistance = ((sortTime[i+1].time! - sortTime[i-1].time!)/(maxStaffing-minStaffing))
+        let newsortTime: any[] = []
+        sortTime.forEach(val => newsortTime.push(Object.assign({}, val)));
+        for(let i=1; i<newsortTime.length-1;i++){            
+            newsortTime[i].crowdingDistance = ((newsortTime[i+1].time! - newsortTime[i-1].time!)/(maxTiming-minTiming))
         }
 
-        console.log("final ---", sortStaff, sortTime);
+        console.log("final ---", newsortStaff, newsortTime);
+
+        // const newData = sortStaff.map((item, row) => {
+        //     const found = sortTime.find((element) => item.popnumber == element.popnumber);
+        //     return { ...item, ...found };
+        //  });
+        //  console.log(newData);
         
         
 
