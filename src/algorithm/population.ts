@@ -114,7 +114,7 @@ class Population {
         let totalArray = [];
         let parentsNeeded = Math.floor(this.population.length / 2)
         let giveNeededParents 
-console.log("parents needed", parentsNeeded);
+// console.log("parents needed", parentsNeeded);
 
         for (let i = 0; i < finalRanks.length; i++) {
             // console.log(finalRanks[i].length);
@@ -135,15 +135,15 @@ console.log("parents needed", parentsNeeded);
             }
         }
         totalArray.push(giveNeededParents)
-        console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents);
+        // console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents);
         return totalArray
-        // console.log("final array", totalArray, total);
+        // // console.log("final array", totalArray, total);
 
     }
 
 
     doCrowdingDistance(rankArray: any[], parentsNeeded: number) {
-        console.log(rankArray);
+        // console.log(rankArray);
         interface objArray {
             popnumber?: number,
             crowdingDistance?: number,
@@ -172,8 +172,8 @@ console.log("parents needed", parentsNeeded);
         sortTime[0].crowdingDistance = Infinity
         sortTime[sortTime.length - 1].crowdingDistance = Infinity
 
-        console.log("finally", sortStaff,sortTime);
-        // console.log("this pop", this.population);
+        // console.log("finally", sortStaff,sortTime);
+        // // console.log("this pop", this.population);
 
         let maxStaffing = Math.max.apply(Math, this.population.map(function (o) { return o.staffing; }))
         let maxTiming = Math.max.apply(Math, this.population.map(function (o) { return o.staffTime; }))
@@ -181,7 +181,7 @@ console.log("parents needed", parentsNeeded);
         // let minTiming = Math.min.apply(Math, this.population.map(function (o) { return o.staffTime; }))
         let minStaffing = 0
         let minTiming = 0
-        // console.log("max", maxStaffing, maxTiming, minStaffing, minTiming);
+        // // console.log("max", maxStaffing, maxTiming, minStaffing, minTiming);
         let newsortStaff: any[] = []
         sortStaff.forEach(val => newsortStaff.push(Object.assign({}, val)));
 
@@ -194,7 +194,7 @@ console.log("parents needed", parentsNeeded);
             newsortTime[i].crowdingDistance = ((newsortTime[i+1].time! - newsortTime[i-1].time!)/(maxTiming-minTiming))
         }
 
-        console.log("final ---", newsortStaff, newsortTime);
+        // console.log("final ---", newsortStaff, newsortTime);
 
         let combinedArrayPop: any[] = []
         newsortTime.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
@@ -212,16 +212,16 @@ console.log("parents needed", parentsNeeded);
             return r.set(key, item);
           }, new Map).values()];
           
-          console.log(result);
+        //   console.log(result);
           let resultArray: any[] = []
           result.forEach(val => resultArray.push(Object.assign({}, val)));
         resultArray = resultArray.sort((a, b) => (a.crowdingDistance! > b.crowdingDistance! ? -1 : 1));
-        console.log("final sort now", resultArray);
+        // console.log("final sort now", resultArray);
         let returnCrowdedSortingArray = []
         for(let i=0; i<parentsNeeded; i++){
             returnCrowdedSortingArray.push(resultArray[i].popnumber)
         }
-        console.log("returnCrowdedSortingArray",parentsNeeded, returnCrowdedSortingArray);
+        // console.log("returnCrowdedSortingArray",parentsNeeded, returnCrowdedSortingArray);
         return returnCrowdedSortingArray
 
     }
