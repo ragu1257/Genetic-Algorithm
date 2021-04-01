@@ -52,6 +52,8 @@ class Population {
             // console.log("popu", this.population);
 
             for (let L = 0; L < this.population.length; L++) {
+                // console.log("this is L", L);
+                
                 if (finalRanks.length >= 0 && this.allTaskCompleted(finalRanks)) {
                     break;
                 } else {
@@ -103,9 +105,15 @@ class Population {
             // console.log("final finalRanks", finalRanks);
         }
 
+
+       
+
         let finalSortRanks = this.crowdingDistance(finalRanks);
-        console.log("finalSortRanksfinalSortRanksfinalSortRanks",finalSortRanks);
+        // this.assignRank(finalSortRanks);
+        // console.log("this is final Ranks",  this.population);
+        console.log("finalSortRanksfinalSortRanksfinalSortRanks",finalSortRanks, this.population[finalSortRanks[0][0]]);
         
+        return finalSortRanks
 
     }
 
@@ -124,7 +132,7 @@ class Population {
 
             if (total <= Math.floor(this.population.length / 2)) {
                 parentsNeeded = parentsNeeded - finalRanks[i].length;
-                console.log("parents now", parentsNeeded);
+                // console.log("parents now", parentsNeeded);
                 
                 totalArray.push(finalRanks[i])
             } else {
@@ -225,48 +233,7 @@ class Population {
         return returnCrowdedSortingArray
 
     }
-    // nonDominatedSorting(){
-    //    let front: any[]
-    // this.population.forEach((p, indexP) => {
 
-    //     p.dominatedSolutions = [];
-    //     p.dominationCount = 0;
-
-    //     this.population.forEach((q, indexQ) => {
-
-    //         if (indexP === indexQ) return;
-    //         if (this.nonDominatedSolution(p,q)) {
-    //             p.dominatedSolutions.push(q);
-    //         } else if (this.nonDominatedSolution(q,p)) {
-    //             p.dominationCount++;
-    //         }
-    //     });        
-    //     if (p.dominationCount === 0) {
-
-    //         p.rank = 1;
-    //         front[0].push(p)
-    //     }
-    // });
-
-    // let i = 0;
-    // while (front![i].length > 0) {
-    //     let nextFront: any[] = [];
-    //     front![i].forEach((p: { dominatedSolutions: any[]; }) => {
-    //         p.dominatedSolutions.forEach((q: { dominationCount: number; rank: number; }) => {
-    //             q.dominationCount--;
-    //             if (q.dominationCount === 0) {
-    //                 q.rank = i + 2;
-    //                 nextFront.push(q);
-    //             }
-    //         });
-    //     });
-    //     i++;
-    //     front!.push(nextFront);
-    // }
-    // console.log(front!);
-
-    // // return front;
-    // }
 
     checkIncludes(ranks: any[], i: number) {
 
@@ -302,7 +269,11 @@ class Population {
     }
 
     //selection based on mating pool with ranking percentage
-    naturalSelection() {
+    naturalSelection(sortedRanks: any[] | undefined) {
+        console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
+        
+        // console.log("this is natureal seletion popu", this.population);
+        
         this.matingPool = [];
         // let maxFitness: number = 0;
         // for (let i = 0; i < this.population.length; i++) {

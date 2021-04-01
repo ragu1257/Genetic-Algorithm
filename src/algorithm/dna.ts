@@ -19,7 +19,7 @@ class DNA {
         this.genes = this.generateDNA()
         this.fitness = 0;
         this.staffing = 0;
-        this.staffTime = 0
+        this.staffTime = 0;
         // this.numberOfEmployees = 10
     }
 

@@ -13,9 +13,9 @@ let shiftTestArray: any[] = []
 for (let i = 0; i < population_number; i++) {
 
   //NSGA-II
-  pop.nonDominatedSorting()
+  let sortedRanks = pop.nonDominatedSorting()
   // console.log("natural selection");
-  pop.naturalSelection()
+  pop.naturalSelection(sortedRanks)
 
   // console.log("generate");
   pop.generate()
