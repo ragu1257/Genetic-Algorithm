@@ -4,13 +4,14 @@ import Population from './population'
 
 
 const pop_size: number = 100;
-const population_number = 1;
+const population_number = 1000;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
 let best_pop_array: number[] = []
 let shiftTestArray: any[] = []
 for (let i = 0; i < population_number; i++) {
+// console.log("last pop again", pop);
 
   //NSGA-II
   let sortedRanks = pop.nonDominatedSorting(pop_size)
@@ -26,14 +27,14 @@ for (let i = 0; i < population_number; i++) {
   
   // console.log("calc fitness");
   pop.calcFitness()
-  console.log("new fitness", pop);
+  // console.log("new fitness", pop);
   
   let newSortedPop = pop.nonDominatedSorting(pop_size)
-  console.log("new sorted half array", newSortedPop);
+  // console.log("new sorted half array", newSortedPop);
   
   pop.updatePopulation(newSortedPop)
 
-  console.log("updated popoulation", pop);
+  // console.log("updated popoulation", pop);
   
   // console.log("evaluate");
   pop.evaluate();

@@ -47,7 +47,7 @@ class Population {
     //NSGA-II
     nonDominatedSorting(pop_size: number) {
         let finalRanks: any[] = []
-        console.log(this.population);
+        // console.log(this.population);
         if (this.population) {
 
             // console.log("popu", this.population);
@@ -146,7 +146,7 @@ class Population {
             }
         }
         totalArray.push(giveNeededParents)
-        console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents, totalArray);
+        // console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents, totalArray);
         return totalArray
         // // console.log("final array", totalArray, total);
 
@@ -298,7 +298,7 @@ class Population {
         let winnerParents = this.winnerParents(combinedArray, sortedRanks)
         // console.log("winnerParentsssssssss", winnerParents);
         let unique = [...new Set(winnerParents)];
-        console.log("unique", unique.sort(function (a, b) { return a - b }));
+        // console.log("unique", unique.sort(function (a, b) { return a - b }));
 
         // console.log(this.check(5,8, sortedRanks!));
 
@@ -477,8 +477,8 @@ class Population {
             // console.log("after mutation",mutateChild)
             newPopQ.push(child)
         }
-        console.log("final populatin length", this.population, this.population.length, newPopQ);
-        console.log("concatinated array", this.population.concat(newPopQ));
+        // console.log("final populatin length", this.population, this.population.length, newPopQ);
+        // console.log("concatinated array", this.population.concat(newPopQ));
         this.population = this.population.concat(newPopQ)
         this.generations++
     }
@@ -492,13 +492,14 @@ class Population {
                 emptyArray.push(this.population[sortedArray[i][j]])
             }
         }
-        console.log("emoty array now", emptyArray);
+        // console.log("emoty array now", emptyArray);
         this.population = emptyArray
         
     }
 
     evaluate() {
-
+        // console.log("pop in evaluation", this.population);
+        
         let worldrecord = 1000000000000000000;
         let index = 0;
         for (let i = 0; i < this.population.length; i++) {
