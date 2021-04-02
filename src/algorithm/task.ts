@@ -3,7 +3,7 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 20;
+const pop_size: number = 100;
 const population_number = 1;
 
 const pop = new Population(pop_size);
@@ -14,19 +14,27 @@ for (let i = 0; i < population_number; i++) {
 
   //NSGA-II
   let sortedRanks = pop.nonDominatedSorting(pop_size)
-  console.log("natural selection", sortedRanks);
+  // console.log("natural selection", sortedRanks);
   pop.naturalSelection(sortedRanks)
 
   // console.log("generate");
   pop.generate()
-  console.log("new pop", pop);
+  // console.log("new pop", pop);
   
-  let sortedRanks2 = pop.nonDominatedSorting(pop_size)
-  console.log("sortedRanks2", sortedRanks2);
+  // let sortedRanks2 = pop.nonDominatedSorting(pop_size)
+  // console.log("sortedRanks2", sortedRanks2);
   
   // console.log("calc fitness");
   pop.calcFitness()
+  console.log("new fitness", pop);
+  
+  let newSortedPop = pop.nonDominatedSorting(pop_size)
+  console.log("new sorted half array", newSortedPop);
+  
+  pop.updatePopulation(newSortedPop)
 
+  console.log("updated popoulation", pop);
+  
   // console.log("evaluate");
   pop.evaluate();
   // console.log("generation number", pop.generations);
