@@ -14,6 +14,7 @@ class DNA {
     fitness: number;
     staffing: number;
     staffTime: number;
+    rank: number | undefined;
     // numberOfEmployees: number
     constructor() {
         this.genes = this.generateDNA()

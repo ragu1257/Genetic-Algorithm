@@ -53,7 +53,7 @@ class Population {
 
             for (let L = 0; L < this.population.length; L++) {
                 // console.log("this is L", L);
-                
+
                 if (finalRanks.length >= 0 && this.allTaskCompleted(finalRanks)) {
                     break;
                 } else {
@@ -106,13 +106,13 @@ class Population {
         }
 
 
-       
+
 
         let finalSortRanks = this.crowdingDistance(finalRanks);
         // this.assignRank(finalSortRanks);
         // console.log("this is final Ranks",  this.population);
-        console.log("finalSortRanksfinalSortRanksfinalSortRanks",finalSortRanks, this.population[finalSortRanks[0][0]]);
-        
+        console.log("finalSortRanksfinalSortRanksfinalSortRanks", finalSortRanks, this.population[finalSortRanks[0][0]]);
+
         return finalSortRanks
 
     }
@@ -121,8 +121,8 @@ class Population {
         let total = 0;
         let totalArray = [];
         let parentsNeeded = Math.floor(this.population.length / 2)
-        let giveNeededParents 
-// console.log("parents needed", parentsNeeded);
+        let giveNeededParents
+        // console.log("parents needed", parentsNeeded);
 
         for (let i = 0; i < finalRanks.length; i++) {
             // console.log(finalRanks[i].length);
@@ -133,12 +133,12 @@ class Population {
             if (total <= Math.floor(this.population.length / 2)) {
                 parentsNeeded = parentsNeeded - finalRanks[i].length;
                 // console.log("parents now", parentsNeeded);
-                
+
                 totalArray.push(finalRanks[i])
             } else {
                 // console.log(finalRanks[i]);
 
-               giveNeededParents = this.doCrowdingDistance(finalRanks[i], parentsNeeded)
+                giveNeededParents = this.doCrowdingDistance(finalRanks[i], parentsNeeded)
                 break;
             }
         }
@@ -172,7 +172,7 @@ class Population {
         sortStaff = sortStaff.sort((a, b) => (a.staff! < b.staff! ? -1 : 1));
         sortStaff[0].crowdingDistance = Infinity
         sortStaff[sortStaff.length - 1].crowdingDistance = Infinity
-        
+
 
         let sortTime: any[] = []
         objInfo.forEach(val => sortTime.push(Object.assign({}, val)));
@@ -193,13 +193,13 @@ class Population {
         let newsortStaff: any[] = []
         sortStaff.forEach(val => newsortStaff.push(Object.assign({}, val)));
 
-        for(let i=1; i<newsortStaff.length-1;i++){            
-            newsortStaff[i].crowdingDistance = ((newsortStaff[i+1].staff! - newsortStaff[i-1].staff!)/(maxStaffing-minStaffing))
+        for (let i = 1; i < newsortStaff.length - 1; i++) {
+            newsortStaff[i].crowdingDistance = ((newsortStaff[i + 1].staff! - newsortStaff[i - 1].staff!) / (maxStaffing - minStaffing))
         }
         let newsortTime: any[] = []
         sortTime.forEach(val => newsortTime.push(Object.assign({}, val)));
-        for(let i=1; i<newsortTime.length-1;i++){            
-            newsortTime[i].crowdingDistance = ((newsortTime[i+1].time! - newsortTime[i-1].time!)/(maxTiming-minTiming))
+        for (let i = 1; i < newsortTime.length - 1; i++) {
+            newsortTime[i].crowdingDistance = ((newsortTime[i + 1].time! - newsortTime[i - 1].time!) / (maxTiming - minTiming))
         }
 
         // console.log("final ---", newsortStaff, newsortTime);
@@ -207,26 +207,26 @@ class Population {
         let combinedArrayPop: any[] = []
         newsortTime.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
         newsortStaff.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
-        
+
         const result = [...combinedArrayPop.reduce((r, o) => {
             const key = o.popnumber;
-            
+
             const item = r.get(key) || Object.assign({}, o, {
-              crowdingDistance: 0
+                crowdingDistance: 0
             });
-            
+
             item.crowdingDistance += o.crowdingDistance;
-          
+
             return r.set(key, item);
-          }, new Map).values()];
-          
+        }, new Map).values()];
+
         //   console.log(result);
-          let resultArray: any[] = []
-          result.forEach(val => resultArray.push(Object.assign({}, val)));
+        let resultArray: any[] = []
+        result.forEach(val => resultArray.push(Object.assign({}, val)));
         resultArray = resultArray.sort((a, b) => (a.crowdingDistance! > b.crowdingDistance! ? -1 : 1));
         // console.log("final sort now", resultArray);
         let returnCrowdedSortingArray = []
-        for(let i=0; i<parentsNeeded; i++){
+        for (let i = 0; i < parentsNeeded; i++) {
             returnCrowdedSortingArray.push(resultArray[i].popnumber)
         }
         // console.log("returnCrowdedSortingArray",parentsNeeded, returnCrowdedSortingArray);
@@ -267,103 +267,198 @@ class Population {
             return false
         }
     }
-
-    //selection based on mating pool with ranking percentage
-    naturalSelection(sortedRanks: any[] | undefined) {
-        console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
-        
-        // console.log("this is natureal seletion popu", this.population);
-        
-        this.matingPool = [];
-        // let maxFitness: number = 0;
-        // for (let i = 0; i < this.population.length; i++) {
-        //     if (this.population[i].fitness > maxFitness) {
-        //         maxFitness = this.population[i].fitness;
-        //     }
-        // }
-        let totalFitness: number = 0;
-        // console.log(this.population);
-
-
-        for (let i = 0; i < this.population.length; i++) {
-            // console.log(this.population[i].fitness);
-
-            totalFitness += this.population[i].fitness
-        }
-        this.averageFitness = totalFitness / this.population.length
-        // console.log("this is average firtness", this.averageFitness);
-
-
-        for (let i = 0; i < this.population.length; i++) {
-            //   let fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
-            // let n = Math.floor(this.population[i].fitness * 100); // Arbitrary multiplier, we can also use monte carlo method
-            // console.log("thisis m",n);
-            // console.log("this is population fitness", this.population[i].fitness);
-
-            // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
-            //     this.matingPool.push(this.population[i]);
-            // }
-            if (this.population[i].fitness <= this.averageFitness) {
-                this.matingPool.push(this.population[i]);
+    check(a: any, b: any, array: string | any[]) { 
+        let included = false
+        for(let i = 0; i < array.length; i++) { 
+            if (array[i].includes(a) && array[i].includes(b)) { 
+                included = true 
+            } 
+            if(included){
+                break;
             }
         }
-        // console.log(this.matingPool);
+        return included 
     }
 
-    // naturalSelection(){
-    //     this.matingPool = [];
+//selection based on mating pool with ranking percentage
+naturalSelection(sortedRanks: any[] | undefined) {
+    console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
+    let allParents = []
+    // let array = [[0,1,2], [5,4,6,7],[8,9,10,11]];
+    let combinedArray = []
+    for (let i = 0; i < sortedRanks!.length; i++) {
+        for (let j = 0; j < sortedRanks![i].length; j++) {
+            combinedArray.push(sortedRanks![i][j])
+        }
+    }
 
+  let winnerParents = this.winnerParents(combinedArray, sortedRanks)
+    console.log("winnerParentsssssssss", winnerParents);
+    let unique = [...new Set(winnerParents)];
+console.log("unique", unique.sort(function(a, b){return a-b}));
+
+    // console.log(this.check(5,8, sortedRanks!));
+     
+
+
+    // for (let i = 0; i < sortedRanks!.length; i++) {
+    //     for (let j = 0; j < sortedRanks![i].length; j++) {
+    //         this.population[sortedRanks![i][j]].rank = i
+    //     }
     // }
-    generate() {
-        for (let i = 0; i < this.population.length; i++) {
-            let a = Math.floor(Math.random() * Math.floor(this.matingPool.length));
-            let b = Math.floor(Math.random() * Math.floor(this.matingPool.length));
-            let partnerA = this.matingPool[a];
-            let partnerB = this.matingPool[b];
-            // console.log("partner A",partnerA);
-            // console.log("partner B", partnerB);
+    // console.log("this popu in natural selection", this.population);
+
+    // console.log("this is natureal seletion popu", this.population);
+
+    this.matingPool = [];
+    // let maxFitness: number = 0;
+    // for (let i = 0; i < this.population.length; i++) {
+    //     if (this.population[i].fitness > maxFitness) {
+    //         maxFitness = this.population[i].fitness;
+    //     }
+    // }
+    let totalFitness: number = 0;
+    // console.log(this.population);
 
 
-            let child = partnerA.crossover(partnerB);
-            // console.log("Before mutation", child)
-            child.mutate(this.mutationRate)
-            // console.log("after mutation",mutateChild)
-            this.population[i] = child
-        }
-        this.generations++
+    for (let i = 0; i < this.population.length; i++) {
+        // console.log(this.population[i].fitness);
+
+        totalFitness += this.population[i].fitness
     }
+    this.averageFitness = totalFitness / this.population.length
+    // console.log("this is average firtness", this.averageFitness);
 
-    evaluate() {
 
-        let worldrecord = 1000000000000000000;
-        let index = 0;
-        for (let i = 0; i < this.population.length; i++) {
-            // console.log("evalutate is called", this.population[i].fitness );
+    for (let i = 0; i < this.population.length; i++) {
+        //   let fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
+        // let n = Math.floor(this.population[i].fitness * 100); // Arbitrary multiplier, we can also use monte carlo method
+        // console.log("thisis m",n);
+        // console.log("this is population fitness", this.population[i].fitness);
 
-            if (this.population[i].fitness < worldrecord) {
+        // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
+        //     this.matingPool.push(this.population[i]);
+        // }
+        if (this.population[i].fitness <= this.averageFitness) {
+            this.matingPool.push(this.population[i]);
+        }
+    }
+    // console.log(this.matingPool);
+}
 
-                index = i;
-                worldrecord = this.population[i].fitness;
-                // console.log("orldRecord",this.population[i].fitness);
-
+winnerParents(combinedArray: any[], sortedRanks: string | any[] | undefined){
+    let finalParents = []
+    for (let i = 0; i < combinedArray.length; i++) {
+        for (let j = 0; j < combinedArray.length; j++) {
+            if(combinedArray[i]==combinedArray[j]){
+                continue;
             }
+            if(combinedArray[i] != combinedArray[j]){
+               let outcome = this.check(combinedArray[i], combinedArray[j], sortedRanks!)
+               if(outcome){
+                   let subArrayOfTwo = []
+                   subArrayOfTwo.push(combinedArray[i])
+                   subArrayOfTwo.push(combinedArray[j])
+                let winnerParent = this.doCrowdingDistance(subArrayOfTwo, 1)
+                finalParents.push(winnerParent[0])
+                // console.log("winner parent", combinedArray[i], combinedArray[j], winnerParent);
+                
+               }else{
+                //    console.log("in false", combinedArray[i], combinedArray[j],);
+                   
+                   let winnerOfTwoDifferentRanks = this.giveBestRankSolution(combinedArray[i], combinedArray[j], sortedRanks)
+                //    console.log("winner of two dirret ranks", winnerOfTwoDifferentRanks);
+                   finalParents.push(winnerOfTwoDifferentRanks)
+                   
+               }
+                
+            }
+            
         }
+    }
+    return finalParents
+}
+giveBestRankSolution(a: number,b: number, sortedRanks: string | any[] | undefined){
+    let rankA: number 
+    let rankB: number
+    let winner
 
-        this.best = this.population[index].genes;
-        // console.log("this is best Record", worldrecord);
-        this.bestFitness = worldrecord
-
-        if (worldrecord == 0) {
-            this.finished = true;
+    for(let i=0; i<sortedRanks!.length; i++){
+        if(sortedRanks![i].includes(a)){
+            rankA = i
         }
-        // console.log("this is finished", this.finished);
-
+    }
+    
+    for(let i=0; i<sortedRanks!.length; i++){
+        if(sortedRanks![i].includes(b)){
+            rankB = i
+        }
     }
 
-    isFinished() {
 
-        return this.finished
+    // console.log("this is rankA, rankB", rankA!, rankB!);
+
+    if(rankA! < rankB!){
+        winner = a
+    }else{
+        winner = b
     }
+    return winner
+}
+// naturalSelection(){
+//     this.matingPool = [];
+
+// }
+generate() {
+    for (let i = 0; i < this.population.length; i++) {
+        let a = Math.floor(Math.random() * Math.floor(this.matingPool.length));
+        let b = Math.floor(Math.random() * Math.floor(this.matingPool.length));
+        let partnerA = this.matingPool[a];
+        let partnerB = this.matingPool[b];
+        // console.log("partner A",partnerA);
+        // console.log("partner B", partnerB);
+
+
+        let child = partnerA.crossover(partnerB);
+        // console.log("Before mutation", child)
+        child.mutate(this.mutationRate)
+        // console.log("after mutation",mutateChild)
+        this.population[i] = child
+    }
+    this.generations++
+}
+
+evaluate() {
+
+    let worldrecord = 1000000000000000000;
+    let index = 0;
+    for (let i = 0; i < this.population.length; i++) {
+        // console.log("evalutate is called", this.population[i].fitness );
+
+        if (this.population[i].fitness < worldrecord) {
+
+            index = i;
+            worldrecord = this.population[i].fitness;
+            // console.log("orldRecord",this.population[i].fitness);
+
+        }
+    }
+
+    this.best = this.population[index].genes;
+    // console.log("this is best Record", worldrecord);
+    this.bestFitness = worldrecord
+
+    if (worldrecord == 0) {
+        this.finished = true;
+    }
+    // console.log("this is finished", this.finished);
+
+}
+
+isFinished() {
+
+    return this.finished
+}
 
 
 }
