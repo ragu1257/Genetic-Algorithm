@@ -7,6 +7,7 @@ class Population {
     private population: Array<DNA> = [];
     finished = false;
     matingPool: Array<DNA> = []
+    newChild: Array<DNA> = []
     best: Array<DNA> = []
     mutationRate = 0.01
     generations = 0
@@ -44,9 +45,9 @@ class Population {
     }
 
     //NSGA-II
-    nonDominatedSorting() {
+    nonDominatedSorting(pop_size: number) {
         let finalRanks: any[] = []
-        // console.log(this.population);
+        console.log(this.population);
         if (this.population) {
 
             // console.log("popu", this.population);
@@ -108,19 +109,19 @@ class Population {
 
 
 
-        let finalSortRanks = this.crowdingDistance(finalRanks);
+        let finalSortRanks = this.crowdingDistance(finalRanks, pop_size);
         // this.assignRank(finalSortRanks);
         // console.log("this is final Ranks",  this.population);
-        console.log("finalSortRanksfinalSortRanksfinalSortRanks", finalSortRanks, this.population[finalSortRanks[0][0]]);
+        // console.log("finalSortRanksfinalSortRanksfinalSortRanks", finalSortRanks, this.population[finalSortRanks[0][0]]);
 
         return finalSortRanks
 
     }
 
-    crowdingDistance(finalRanks: any[]) {
+    crowdingDistance(finalRanks: any[], pop_size: number ) {
         let total = 0;
         let totalArray = [];
-        let parentsNeeded = Math.floor(this.population.length / 2)
+        let parentsNeeded = Math.floor(pop_size / 2)
         let giveNeededParents
         // console.log("parents needed", parentsNeeded);
 
@@ -143,7 +144,7 @@ class Population {
             }
         }
         totalArray.push(giveNeededParents)
-        // console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents);
+        console.log("returnCrowdedSortingArrayreturnCrowdedSortingArray", giveNeededParents, totalArray);
         return totalArray
         // // console.log("final array", totalArray, total);
 
@@ -282,7 +283,7 @@ class Population {
 
 //selection based on mating pool with ranking percentage
 naturalSelection(sortedRanks: any[] | undefined) {
-    console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
+    // console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
     let allParents = []
     // let array = [[0,1,2], [5,4,6,7],[8,9,10,11]];
     let combinedArray = []
@@ -293,9 +294,9 @@ naturalSelection(sortedRanks: any[] | undefined) {
     }
 
   let winnerParents = this.winnerParents(combinedArray, sortedRanks)
-    console.log("winnerParentsssssssss", winnerParents);
+    // console.log("winnerParentsssssssss", winnerParents);
     let unique = [...new Set(winnerParents)];
-console.log("unique", unique.sort(function(a, b){return a-b}));
+// console.log("unique", unique.sort(function(a, b){return a-b}));
 
     // console.log(this.check(5,8, sortedRanks!));
      
@@ -310,39 +311,54 @@ console.log("unique", unique.sort(function(a, b){return a-b}));
 
     // console.log("this is natureal seletion popu", this.population);
 
+
+     
+    // var results = [];
+
+    // // Since you only want pairs, there's no reason
+    // // to iterate over the last element directly
+    // for (var i = 0; i < unique.length - 1; i++) {
+    //   // This is where you'll capture that last value
+    //   for (var j = i + 1; j < unique.length; j++) {
+    //     results.push(unique[i] + ' ' + unique[j]);
+    //   }
+    // }
+    
+    // console.log(results);
+
     this.matingPool = [];
     // let maxFitness: number = 0;
-    // for (let i = 0; i < this.population.length; i++) {
-    //     if (this.population[i].fitness > maxFitness) {
-    //         maxFitness = this.population[i].fitness;
-    //     }
-    // }
-    let totalFitness: number = 0;
-    // console.log(this.population);
-
-
-    for (let i = 0; i < this.population.length; i++) {
-        // console.log(this.population[i].fitness);
-
-        totalFitness += this.population[i].fitness
+    for (let i = 0; i < unique.length; i++) {        
+        this.matingPool.push(this.population[unique[i]])
     }
-    this.averageFitness = totalFitness / this.population.length
+    // console.log("mating pool gente", this.matingPool, this.population);
+    
+    // let totalFitness: number = 0;
+    // // console.log(this.population);
+
+
+    // for (let i = 0; i < this.population.length; i++) {
+    //     // console.log(this.population[i].fitness);
+
+    //     totalFitness += this.population[i].fitness
+    // }
+    // this.averageFitness = totalFitness / this.population.length
     // console.log("this is average firtness", this.averageFitness);
 
 
-    for (let i = 0; i < this.population.length; i++) {
-        //   let fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
-        // let n = Math.floor(this.population[i].fitness * 100); // Arbitrary multiplier, we can also use monte carlo method
-        // console.log("thisis m",n);
-        // console.log("this is population fitness", this.population[i].fitness);
+    // for (let i = 0; i < this.population.length; i++) {
+    //     //   let fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
+    //     // let n = Math.floor(this.population[i].fitness * 100); // Arbitrary multiplier, we can also use monte carlo method
+    //     // console.log("thisis m",n);
+    //     // console.log("this is population fitness", this.population[i].fitness);
 
-        // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
-        //     this.matingPool.push(this.population[i]);
-        // }
-        if (this.population[i].fitness <= this.averageFitness) {
-            this.matingPool.push(this.population[i]);
-        }
-    }
+    //     // for (let j = 0; j < this.population[i].fitness; j++) { // and pick two random numbers
+    //     //     this.matingPool.push(this.population[i]);
+    //     // }
+    //     if (this.population[i].fitness <= this.averageFitness) {
+    //         this.matingPool.push(this.population[i]);
+    //     }
+    // }
     // console.log(this.matingPool);
 }
 
@@ -410,22 +426,55 @@ giveBestRankSolution(a: number,b: number, sortedRanks: string | any[] | undefine
 
 // }
 generate() {
-    for (let i = 0; i < this.population.length; i++) {
-        let a = Math.floor(Math.random() * Math.floor(this.matingPool.length));
-        let b = Math.floor(Math.random() * Math.floor(this.matingPool.length));
-        let partnerA = this.matingPool[a];
-        let partnerB = this.matingPool[b];
-        // console.log("partner A",partnerA);
-        // console.log("partner B", partnerB);
+    // console.log("in genreate this mating pool", this.matingPool, this.population);
 
+    this.newChild = []
+         
+    // var results = [];
 
-        let child = partnerA.crossover(partnerB);
-        // console.log("Before mutation", child)
-        child.mutate(this.mutationRate)
-        // console.log("after mutation",mutateChild)
-        this.population[i] = child
+    // // Since you only want pairs, there's no reason
+    // // to iterate over the last element directly
+    // for (var i = 0; i < unique.length - 1; i++) {
+    //   // This is where you'll capture that last value
+    //   for (var j = i + 1; j < unique.length; j++) {
+    //     results.push(unique[i] + ' ' + unique[j]);
+    //   }
+    // }
+    
+    // console.log(results);
+    
+    for(let i=0; i<this.matingPool.length; i++){
+        for(let j=0; j< this.matingPool.length; j++){
+            if(i==j){
+                continue;
+            }
+            if(i!=j){
+                let partnerA = this.matingPool[i];
+                let partnerB = this.matingPool[j];
+                let child = partnerA.crossover(partnerB);
+                this.population.push(child)
+                
+            }
+        }
     }
-    this.generations++
+    
+    console.log("new child - total popu", this.population);
+    // for (let i = 0; i < this.population.length; i++) {
+    //     let a = Math.floor(Math.random() * Math.floor(this.matingPool.length));
+    //     let b = Math.floor(Math.random() * Math.floor(this.matingPool.length));
+    //     let partnerA = this.matingPool[a];
+    //     let partnerB = this.matingPool[b];
+    //     // console.log("partner A",partnerA);
+    //     // console.log("partner B", partnerB);
+
+
+    //     let child = partnerA.crossover(partnerB);
+    //     // console.log("Before mutation", child)
+    //     child.mutate(this.mutationRate)
+    //     // console.log("after mutation",mutateChild)
+    //     this.population[i] = child
+    // }
+    // this.generations++
 }
 
 evaluate() {
