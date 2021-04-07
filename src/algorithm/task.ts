@@ -596,7 +596,7 @@ export function task() {
   // console.log("generattion_arraygenerattion_arraygenerattion_arraygenerattion_array", generattion_array);
 
 
-  console.log("shift", shift,workArea);
+  // console.log("shift", shift,workArea);
   
 
   return { officeOpenTimings, demand, shift, workArea, stuffingFinal,generattion_array,best_pop_array }

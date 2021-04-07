@@ -17,14 +17,15 @@ class DNA {
     rank: number | undefined;
     // numberOfEmployees: number
     constructor() {
-        this.genes = this.generateDNA()
+        // this.genes = this.generateDNASequence()
+        this.genes = this.generateDNARandom()
         this.fitness = 0;
         this.staffing = 0;
         this.staffTime = 0;
         // this.numberOfEmployees = 10
     }
 
-    generateDNA() {
+    generateDNASequence() {
         const result: any[] = new Array(10);
 
         for (let i = 0; i < result.length; i++) {
@@ -32,9 +33,6 @@ class DNA {
         }
 
         for (let i = 0; i < 10; i++) {
-            // for (let j = 6; j < 18; j++) {
-            //     result[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            // }
 
             let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
             for (let j = 6; j < 10; j++) {
@@ -69,6 +67,20 @@ class DNA {
         return result
     }
 
+    generateDNARandom() {
+        const result: any[] = new Array(10);
+        for (let i = 0; i < result.length; i++) {
+            result[i] = [];
+        }
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 6; j < 18; j++) {
+                result[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            }
+        }
+        return result
+    }
+
     calcStaffing() {
         // console.log("this is genes", this.genes);
 
@@ -77,21 +89,21 @@ class DNA {
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score = 0;
-        score = finalOverstuffing + finalUnderStuffing        
+        score = finalOverstuffing + finalUnderStuffing
         this.staffing = score;
     }
-    calcStaffTiming(){
-                // console.log("this is genes", this.genes);
+    calcStaffTiming() {
+        // console.log("this is genes", this.genes);
 
-                const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
-                // console.log("this is overstuffing in each loop", overStuffing);
-                // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
-        
-                let score = 0;
-                score = finalUnderTime + finalOverTime                
-                this.staffTime = score;
+        const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
+        // console.log("this is overstuffing in each loop", overStuffing);
+        // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
+
+        let score = 0;
+        score = finalUnderTime + finalOverTime
+        this.staffTime = score;
     }
-    calcFitness(){        
+    calcFitness() {
         this.fitness = this.staffTime + this.staffing
     }
 
@@ -659,12 +671,12 @@ class DNA {
         // console.log("all genes");
         // console.log("child.genes", child.genes);
         // console.log("this.genes",this.genes);
-        
+
         // console.log("partner.genes", partner.genes);
-        
-        
-        
-        
+
+
+
+
 
         for (let i = 0; i < this.genes.length; i++) {
             for (let j = 6; j < this.genes[i].length; j++) {
@@ -676,9 +688,9 @@ class DNA {
             }
         }
         // console.log("midpoint", midpoint);
-        
+
         // console.log("child", child);
-        
+
         return child;
     }
 
