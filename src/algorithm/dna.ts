@@ -32,36 +32,39 @@ class DNA {
         }
 
         for (let i = 0; i < 10; i++) {
-
-            let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            for (let j = 6; j < 10; j++) {
-
-                if (j == 0) {
-                    result[i][j] = i + 1;
-                } else {
-                    result[i][j] = number;
-                }
-
+            for (let j = 6; j < 18; j++) {
+                result[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))]
             }
-            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            for (let j = 10; j < 14; j++) {
 
-                if (j == 0) {
-                    result[i][j] = i + 1;
-                } else {
-                    result[i][j] = number;
-                }
+            // let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            // for (let j = 6; j < 10; j++) {
 
-            }
-            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            for (let j = 14; j < 18; j++) {
-                if (j == 0) {
-                    result[i][j] = i + 1;
-                } else {
-                    result[i][j] = number;
-                }
+            //     if (j == 0) {
+            //         result[i][j] = i + 1;
+            //     } else {
+            //         result[i][j] = number;
+            //     }
 
-            }
+            // }
+            // number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            // for (let j = 10; j < 14; j++) {
+
+            //     if (j == 0) {
+            //         result[i][j] = i + 1;
+            //     } else {
+            //         result[i][j] = number;
+            //     }
+
+            // }
+            // number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            // for (let j = 14; j < 18; j++) {
+            //     if (j == 0) {
+            //         result[i][j] = i + 1;
+            //     } else {
+            //         result[i][j] = number;
+            //     }
+
+            // }
         }
         return result
     }

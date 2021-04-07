@@ -3,8 +3,8 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 100;
-const population_number = 1000;
+const pop_size: number = 20;
+const population_number = 100;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
@@ -295,7 +295,7 @@ export function task() {
     for (let i = 0; i < employee.length; i++) {
       let rangeArray = []
       for (let j = 0; j < shift.length; j++) {
-        if (employee[i].empId == shift[j].employeeId) {
+        if (employee[i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
           for (let k = shift[j].startTime!; k < shift[j].endTime!; k++) {
             rangeArray.push(k)
           }
@@ -350,6 +350,8 @@ export function task() {
       let singleEmployee = employee.filter(item =>
         item.empId == shift[i].employeeId
       )
+      console.log("single empl;oyee", singleEmployee);
+      
       shift[i].totalTime = singleEmployee[0 as any].timeRange?.length
     }
   }
@@ -594,7 +596,8 @@ export function task() {
   // console.log("generattion_arraygenerattion_arraygenerattion_arraygenerattion_array", generattion_array);
 
 
-
+  console.log("shift", shift,workArea);
+  
 
   return { officeOpenTimings, demand, shift, workArea, stuffingFinal,generattion_array,best_pop_array }
   // }
