@@ -3,7 +3,7 @@ import DNA from './dna'
 import Population from './population'
 
 
-const pop_size: number = 20;
+const pop_size: number = 100;
 const population_number = 100;
 
 const pop = new Population(pop_size);
@@ -350,7 +350,7 @@ export function task() {
       let singleEmployee = employee.filter(item =>
         item.empId == shift[i].employeeId
       )
-      console.log("single empl;oyee", singleEmployee);
+      // console.log("single empl;oyee", singleEmployee);
       
       shift[i].totalTime = singleEmployee[0 as any].timeRange?.length
     }

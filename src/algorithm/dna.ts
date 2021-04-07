@@ -32,39 +32,39 @@ class DNA {
         }
 
         for (let i = 0; i < 10; i++) {
-            for (let j = 6; j < 18; j++) {
-                result[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            // for (let j = 6; j < 18; j++) {
+            //     result[i][j] = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            // }
+
+            let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            for (let j = 6; j < 10; j++) {
+
+                if (j == 0) {
+                    result[i][j] = i + 1;
+                } else {
+                    result[i][j] = number;
+                }
+
             }
+            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            for (let j = 10; j < 14; j++) {
 
-            // let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            // for (let j = 6; j < 10; j++) {
+                if (j == 0) {
+                    result[i][j] = i + 1;
+                } else {
+                    result[i][j] = number;
+                }
 
-            //     if (j == 0) {
-            //         result[i][j] = i + 1;
-            //     } else {
-            //         result[i][j] = number;
-            //     }
+            }
+            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            for (let j = 14; j < 18; j++) {
+                if (j == 0) {
+                    result[i][j] = i + 1;
+                } else {
+                    result[i][j] = number;
+                }
 
-            // }
-            // number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            // for (let j = 10; j < 14; j++) {
-
-            //     if (j == 0) {
-            //         result[i][j] = i + 1;
-            //     } else {
-            //         result[i][j] = number;
-            //     }
-
-            // }
-            // number = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            // for (let j = 14; j < 18; j++) {
-            //     if (j == 0) {
-            //         result[i][j] = i + 1;
-            //     } else {
-            //         result[i][j] = number;
-            //     }
-
-            // }
+            }
         }
         return result
     }
@@ -332,7 +332,7 @@ class DNA {
             for (let i = 0; i < employee.length; i++) {
                 let rangeArray = []
                 for (let j = 0; j < shift.length; j++) {
-                    if (employee[i].empId == shift[j].employeeId) {
+                    if (employee[i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
                         for (let k = shift[j].startTime!; k < shift[j].endTime!; k++) {
                             rangeArray.push(k)
                         }
