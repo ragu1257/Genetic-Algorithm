@@ -34,11 +34,17 @@ class Population {
             this.population[i].calcStaffTiming();
         }
     }
+    calcFairness(){
+        for (let i = 0; i < this.population.length; i++) {
+            this.population[i].calcFairness();
+        }
+    }
 
     calcFitness() {
         this.calcStaffing();
         // console.log("it kkis population", this.population);
         this.calcStaffTiming();
+        this.calcFairness()
         for (let i = 0; i < this.population.length; i++) {
             this.population[i].calcFitness()
         }

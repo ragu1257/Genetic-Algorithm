@@ -230,6 +230,10 @@
             <td>overtime</td>
             <td colspan="12" class="bg-orange-700">{{ staffing.overtime }}</td>
           </tr>
+          <tr v-if="workArea.workAreaId == staffing.workAreaId">
+            <td>Wish Fulfilled</td>
+            <td colspan="12" class="bg-green-400">{{ ((((staffing.absenceWish + staffing.wishNegative+staffing.wishPositive))/(staffing.totalAbsence + staffing.totalNegativeWish+staffing.totalPositiveWish)) * 100).toFixed(2)  }}%</td>
+          </tr>
         </template>
       </tbody>
     </table>
