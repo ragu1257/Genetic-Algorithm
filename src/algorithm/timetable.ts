@@ -1,6 +1,9 @@
 /* eslint-disable */
 
-export function timetable(shiftArray: any[]) {
+export function timetable(shiftArray: any[], click=0) {
+    // if(click==2){
+    //     console.log("click",shiftArray);
+    // }
 
     // const shiftTestArray = shiftTestArrayTest
     // console.log("this is shiftArray", shiftTestArray);

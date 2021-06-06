@@ -4,7 +4,7 @@ import DNA from './dna'
 
 class Population {
 
-    private population: Array<DNA> = [];
+    population: Array<DNA> = [];
     finished = false;
     matingPool: Array<DNA> = []
     newChild: Array<DNA> = []
@@ -34,7 +34,7 @@ class Population {
             this.population[i].calcStaffTiming();
         }
     }
-    calcFairness(){
+    calcFairness() {
         for (let i = 0; i < this.population.length; i++) {
             this.population[i].calcFairness();
         }
@@ -166,11 +166,12 @@ class Population {
             crowdingDistance?: number,
             staff?: number,
             time?: number,
+            fairness?: number
         }
         let objInfo: objArray[] = []
 
         for (let i = 0; i < rankArray.length; i++) {
-            objInfo.push({ popnumber: rankArray[i], staff: this.population[rankArray[i]].staffing, time: this.population[rankArray[i]].staffTime })
+            objInfo.push({ popnumber: rankArray[i], staff: this.population[rankArray[i]].staffing, fairness: this.population[rankArray[i]].fairness })
 
         }
 
@@ -183,21 +184,21 @@ class Population {
         sortStaff[sortStaff.length - 1].crowdingDistance = Infinity
 
 
-        let sortTime: any[] = []
-        objInfo.forEach(val => sortTime.push(Object.assign({}, val)));
-        sortTime = sortTime.sort((a, b) => (a.time! < b.time! ? -1 : 1));
-        sortTime[0].crowdingDistance = Infinity
-        sortTime[sortTime.length - 1].crowdingDistance = Infinity
+        let sortFairness: any[] = []
+        objInfo.forEach(val => sortFairness.push(Object.assign({}, val)));
+        sortFairness = sortFairness.sort((a, b) => (a.fairness! < b.fairness! ? -1 : 1));
+        sortFairness[0].crowdingDistance = Infinity
+        sortFairness[sortFairness.length - 1].crowdingDistance = Infinity
 
         // console.log("finally", sortStaff,sortTime);
         // // console.log("this pop", this.population);
 
         let maxStaffing = Math.max.apply(Math, this.population.map(function (o) { return o.staffing; }))
-        let maxTiming = Math.max.apply(Math, this.population.map(function (o) { return o.staffTime; }))
+        let maxFairness = Math.max.apply(Math, this.population.map(function (o) { return o.fairness; }))
         // let minStaffing = Math.min.apply(Math, this.population.map(function (o) { return o.staffing; }))
         // let minTiming = Math.min.apply(Math, this.population.map(function (o) { return o.staffTime; }))
         let minStaffing = 0
-        let minTiming = 0
+        let minFairness = 0
         // // console.log("max", maxStaffing, maxTiming, minStaffing, minTiming);
         let newsortStaff: any[] = []
         sortStaff.forEach(val => newsortStaff.push(Object.assign({}, val)));
@@ -205,16 +206,16 @@ class Population {
         for (let i = 1; i < newsortStaff.length - 1; i++) {
             newsortStaff[i].crowdingDistance = ((newsortStaff[i + 1].staff! - newsortStaff[i - 1].staff!) / (maxStaffing - minStaffing))
         }
-        let newsortTime: any[] = []
-        sortTime.forEach(val => newsortTime.push(Object.assign({}, val)));
-        for (let i = 1; i < newsortTime.length - 1; i++) {
-            newsortTime[i].crowdingDistance = ((newsortTime[i + 1].time! - newsortTime[i - 1].time!) / (maxTiming - minTiming))
+        let newsortFairness: any[] = []
+        sortFairness.forEach(val => newsortFairness.push(Object.assign({}, val)));
+        for (let i = 1; i < newsortFairness.length - 1; i++) {
+            newsortFairness[i].crowdingDistance = ((newsortFairness[i + 1].fairness! - newsortFairness[i - 1].fairness!) / (maxFairness - minFairness))
         }
 
         // console.log("final ---", newsortStaff, newsortTime);
 
         let combinedArrayPop: any[] = []
-        newsortTime.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
+        newsortFairness.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
         newsortStaff.forEach(val => combinedArrayPop.push(Object.assign({}, val)));
 
         const result = [...combinedArrayPop.reduce((r, o) => {
@@ -268,8 +269,8 @@ class Population {
     nonDominatedSolution(i: number, j: number) {
         // console.log(this.population[i], this.population[j]);
 
-        if (this.population[i].staffing >= this.population[j].staffing && this.population[i].staffTime >= this.population[j].staffTime) {
-            if (this.population[i].staffing > this.population[j].staffing || this.population[i].staffTime > this.population[j].staffTime) {
+        if (this.population[i].staffing >= this.population[j].staffing && this.population[i].fairness >= this.population[j].fairness) {
+            if (this.population[i].staffing > this.population[j].staffing || this.population[i].fairness > this.population[j].fairness) {
                 return true
             }
         } else {
@@ -294,6 +295,8 @@ class Population {
         // console.log("natural selection sortedRanks", sortedRanks, this.population[sortedRanks![0][0]]);
         let allParents = []
         // let array = [[0,1,2], [5,4,6,7],[8,9,10,11]];
+
+        //combined all subArray of sortedRanks into single array
         let combinedArray = []
         for (let i = 0; i < sortedRanks!.length; i++) {
             for (let j = 0; j < sortedRanks![i].length; j++) {
@@ -301,6 +304,7 @@ class Population {
             }
         }
 
+        //return winner parents array
         let winnerParents = this.winnerParents(combinedArray, sortedRanks)
         // console.log("winnerParentsssssssss", winnerParents);
         let unique = [...new Set(winnerParents)];
@@ -379,6 +383,7 @@ class Population {
                 }
                 if (combinedArray[i] != combinedArray[j]) {
                     let outcome = this.check(combinedArray[i], combinedArray[j], sortedRanks!)
+                    //if outcome is true it means that both the index are present in same subArray of sortedRanks and hence we have to crowding distance
                     if (outcome) {
                         let subArrayOfTwo = []
                         subArrayOfTwo.push(combinedArray[i])
@@ -493,19 +498,19 @@ class Population {
     updatePopulation(sortedArray: any[]) {
         let emptyArray = []
 
-        for(let i=0; i<sortedArray.length; i++){
-            for(let j=0; j<sortedArray[i].length; j++){
+        for (let i = 0; i < sortedArray.length; i++) {
+            for (let j = 0; j < sortedArray[i].length; j++) {
                 emptyArray.push(this.population[sortedArray[i][j]])
             }
         }
         // console.log("emoty array now", emptyArray);
         this.population = emptyArray
-        
+
     }
 
     evaluate() {
         // console.log("pop in evaluation", this.population);
-        
+
         let worldrecord = 1000000000000000000;
         let index = 0;
         for (let i = 0; i < this.population.length; i++) {

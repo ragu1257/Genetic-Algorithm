@@ -3,22 +3,27 @@ import DNA from './dna'
 import Population from './population'
 import {timetable} from "./timetable"
 
-const pop_size: number = 4;
-const population_number = 1;
+const pop_size: number = 200;
+const population_number = 20;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
 let best_pop_array: number[] = []
 let shiftTestArray: any[] = []
+let final_rank_index : number[] = []
+let final_pop_population: any[] = []
 for (let i = 0; i < population_number; i++) {
   // console.log("last pop again", pop);
 
-  //NSGA-II
+  //NSGA-II -- give output of top ranks of half the popluation
   let sortedRanks = pop.nonDominatedSorting(pop_size)
   // console.log("natural selection", sortedRanks);
+
+  //this will create a mating pool based on the winner from the sortedRanks
   pop.naturalSelection(sortedRanks)
 
   // console.log("generate");
+  //creates a new population with crossover and mutation and adds it to the previous population
   pop.generate()
   // console.log("new pop", pop);
 
@@ -32,8 +37,11 @@ for (let i = 0; i < population_number; i++) {
   let newSortedPop = pop.nonDominatedSorting(pop_size)
   // console.log("new sorted half array", newSortedPop);
 
+  //new population with sorted ranks
   pop.updatePopulation(newSortedPop)
-
+// console.log("sorted new population", pop.nonDominatedSorting(pop_size),pop.nonDominatedSorting(pop_size)[0]);
+final_rank_index = (pop.nonDominatedSorting(pop_size)[0])
+final_pop_population = pop.population
   // console.log("updated popoulation", pop);
 
   // console.log("evaluate");
@@ -57,9 +65,10 @@ for (let i = 0; i < population_number; i++) {
 }
 
 export function task() {
+// console.log("final_rank_index",final_rank_index, final_pop_population);
 
   const {officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(shiftTestArray)
-  console.log("stuffingFinal", stuffingFinal);
+  // console.log("stuffingFinal", stuffingFinal);
   
   // // const shiftTestArray = shiftTestArrayTest
   // // console.log("this is shiftArray", shiftTestArray);
@@ -626,7 +635,7 @@ export function task() {
   // console.log("shift", shift);
 
 
-  return { officeOpenTimings, demand, shift, workArea, stuffingFinal, generattion_array, best_pop_array, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime }
+  return { officeOpenTimings, demand, shift, workArea, stuffingFinal, generattion_array, best_pop_array, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, final_rank_index, final_pop_population }
   // // }
 
   // // return { officeOpenTimings, demand, shift, workArea, stuffingFinal }

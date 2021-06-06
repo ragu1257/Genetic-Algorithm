@@ -118,7 +118,7 @@ class DNA {
     }
 
     calcFitness() {
-        this.fitness = this.staffTime + this.staffing + this.fairness 
+        this.fitness =  this.staffing + this.fairness 
     }
 
     calculateOverStuffing(dna: any[]) {

@@ -1,7 +1,13 @@
 <template>
   <div>
-  <chart :generattionArray="generattion_array" :bestPopArray="best_pop_array"/>
+    <chart
+      :staffingArray="staffing_array"
+      :fairnessArray="fairness_array"
+      @update-table="updateTable"
+    />
+    {{array_number}}
     <table
+      @update-table="updateTable"
       class="table-auto w-2/3 text-center"
       v-bind:style="{ display: 'inline-table' }"
     >
@@ -211,13 +217,13 @@
         </tr>
         <template v-for="(staffing, i) in stuffingFinal" :key="i">
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
-            <td>overStuffing</td>
+            <td>overStaffing</td>
             <td colspan="12" class="bg-pink-700">
               {{ staffing.overStuffing }}
             </td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
-            <td>underStuffing</td>
+            <td>underStaffing</td>
             <td colspan="12" class="bg-pink-200">
               {{ staffing.underStuffing }}
             </td>
@@ -232,7 +238,19 @@
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>Wish Fulfilled</td>
-            <td colspan="12" class="bg-green-400">{{ ((((staffing.absenceWish + staffing.wishNegative+staffing.wishPositive))/(staffing.totalAbsence + staffing.totalNegativeWish+staffing.totalPositiveWish)) * 100).toFixed(2)  }}%</td>
+            <td colspan="12" class="bg-green-400">
+              {{
+                (
+                  ((staffing.absenceWish +
+                    staffing.wishNegative +
+                    staffing.wishPositive) /
+                    (staffing.totalAbsence +
+                      staffing.totalNegativeWish +
+                      staffing.totalPositiveWish)) *
+                  100
+                ).toFixed(2)
+              }}%
+            </td>
           </tr>
         </template>
       </tbody>
@@ -263,30 +281,95 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
+import { timetable } from "./algorithm/timetable";
 
-import chart from "./chart.vue"
+import chart from "./chart.vue";
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
   components: {
-    chart
+    chart,
   },
-  setup() {
-    const {
+  setup() {    
+    // let {
+    //   officeOpenTimings,
+    //   demand,
+    //   shift,
+    //   workArea,
+    //   stuffingFinal,
+    //   generattion_array,
+    //   best_pop_array,
+    //   final_rank_index,
+    //   final_pop_population,
+    // } = task();
+    let officeOpenTimings = ref(task().officeOpenTimings)
+    let demand = ref(task().demand)
+    let shift = ref(task().shift)
+    let workArea = ref(task().workArea)
+    let stuffingFinal = ref(task().stuffingFinal)
+    let generattion_array = ref(task().generattion_array)
+    let best_pop_array = ref(task().best_pop_array)
+    let final_rank_index = ref(task().final_rank_index)
+    let final_pop_population: any = ref(task().final_pop_population)
+    let array_number = ref(1);
+    let fairness_array: any = ref([])
+    let staffing_array: any = ref([])
+    // console.log(
+    //   "this is final_rank_index",
+    //   final_rank_index.value.length,
+    //   final_rank_index.value,
+    //   final_pop_population.value
+    // );
+
+  function makeArray(){
+    for(let i=0;i<final_rank_index.value.length;i++){
+      fairness_array.value.push(final_pop_population.value[i].fairness)
+      staffing_array.value.push(final_pop_population.value[i].staffing)
+    }
+  }
+
+  makeArray()
+  // console.log("fairness array, staffing array", fairness_array.value, staffing_array.value);
+  
+
+    // timetable(final_pop_population[array_number])
+    function updateTable(e: any) {
+      // console.log("hello world", e.config);
+       array_number.value =  e.config
+       let click_callback = timetable(final_pop_population.value[array_number.value].genes,2)
+     
+        officeOpenTimings.value = click_callback.officeOpenTimings;
+        demand.value = click_callback.demand
+        shift.value = click_callback.shift
+        workArea.value = click_callback.workArea
+        stuffingFinal.value = click_callback.stuffingFinal
+        // generattion_array = click_callback.generation_array
+        // best_pop_array = click_callback.best_pop_array
+      //  console.log("click_callback",click_callback);
+       
+    }
+    // console.log("checking old and new value", stuffingFinal.value);
+    
+    return {
       officeOpenTimings,
       demand,
       shift,
       workArea,
       stuffingFinal,
       generattion_array,
-      best_pop_array
-    } = task();
-
-    // console.log("this is dna", dna);
-
-    return { officeOpenTimings, demand, shift, workArea, stuffingFinal, generattion_array, best_pop_array };
+      best_pop_array,
+      updateTable,
+      array_number,
+      fairness_array,
+      staffing_array
+    };
   },
-  
+  // methods: {
+  //   updateTable(e: any) {
+  //     this.updateTable()
+  //     console.log("hello world", e);
+  //   },
+  // },
 });
 </script>
 
