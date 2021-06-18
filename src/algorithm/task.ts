@@ -3,8 +3,8 @@ import DNA from './dna'
 import Population from './population'
 import {timetable} from "./timetable"
 
-const pop_size: number = 200;
-const population_number = 20;
+const pop_size: number = 4;
+const population_number = 1;
 
 const pop = new Population(pop_size);
 let generattion_array: number[] = []
@@ -13,7 +13,7 @@ let shiftTestArray: any[] = []
 let final_rank_index : number[] = []
 let final_pop_population: any[] = []
 for (let i = 0; i < population_number; i++) {
-  // console.log("last pop again", pop);
+  console.log("last pop again", pop);
 
   //NSGA-II -- give output of top ranks of half the popluation
   let sortedRanks = pop.nonDominatedSorting(pop_size)

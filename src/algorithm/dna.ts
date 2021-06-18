@@ -1,5 +1,10 @@
+/* eslint-disable */
+
 import { TARGET } from "./target";
-import {timetable} from "./timetable"
+import { timetable } from "./timetable"
+import * as _ from "lodash";
+
+
 /* eslint-disable */
 
 // function newChar() {
@@ -9,13 +14,135 @@ import {timetable} from "./timetable"
 
 //   return String.fromCharCode(c);
 // }
+interface demandInfo {
+    demandId: number,
+    startTime: number,
+    endTime: number,
+    amount: number,
+    workAreaId: number,
+    range?: (number | string)[],
+    totalDemand?: any[],
+    remainingHours?: number,
+    alreadyAllocatedEmp?: (number | string)[]
+}
+interface employeeInfo {
+    empId: number,
+    empName: string,
+    weeklyWorkingHours: number,
+    notAvailableEmployee?: any[],
+    timeRange?: (number | string)[],
+    absenceRange?: (number | string)[],
+    negativeWish?: (number | string)[],
+    positiveWish?: (number | string)[],
+    todayWorkingHours?: number
+}
 
+interface shift {
+    employeeId?: number,
+    workAreaId?: number,
+    startTime?: number,
+    endTime?: number,
+    range?: (number | string)[],
+    notAvailable?: (number | string)[],
+    totalTime?: number,
+    absenceRange?: (number | string)[],
+    negativeWish?: (number | string)[],
+    positiveWish?: (number | string)[],
+    weeklyWorkingHours?: number,
+    positiveWishFulfilled?: number,
+    negativeWishFulfilled?: number,
+    absenceWishFulfilled?: number
+}
+
+const employee: employeeInfo[] = [
+    { empId: 1, empName: "Rachit", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 2, empName: "Rachit1", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 3, empName: "Rachit2", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 4, empName: "Rachit3", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 5, empName: "Rachit4", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 6, empName: "Rachit5", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 7, empName: "Rachit6", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 8, empName: "Rachit7", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 9, empName: "Rachit8", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    { empId: 10, empName: "Rachit9", weeklyWorkingHours: 40, todayWorkingHours: 0 },
+    // { empId: 11, empName: "Rachit10", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 12, empName: "Rachit11", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 13, empName: "Rachit12", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 14, empName: "Rachit13", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 15, empName: "Rachit14", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 16, empName: "Rachit15", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 17, empName: "Rachit16", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 18, empName: "Rachit17", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 19, empName: "Rachit18", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 20, empName: "Rachit19", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 21, empName: "Rachit20", weeklyWorkingHours: 40, todayWorkingHours:0 },
+    // { empId: 22, empName: "Rachit21", weeklyWorkingHours: 40, todayWorkingHours:0 }
+]
+
+const demand: demandInfo[] = [
+    { demandId: 1, startTime: 6, endTime: 7, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 2, startTime: 7, endTime: 8, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 3, startTime: 8, endTime: 9, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 4, startTime: 9, endTime: 10, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+
+    { demandId: 5, startTime: 6, endTime: 7, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 6, startTime: 7, endTime: 8, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 7, startTime: 8, endTime: 9, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 8, startTime: 9, endTime: 10, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+
+    { demandId: 9, startTime: 6, endTime: 7, amount: 2, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 10, startTime: 7, endTime: 8, amount: 2, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 11, startTime: 8, endTime: 9, amount: 2, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 12, startTime: 9, endTime: 10, amount: 2, workAreaId: 3, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 13, startTime: 10, endTime: 11, amount: 3, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 14, startTime: 11, endTime: 12, amount: 3, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 15, startTime: 12, endTime: 13, amount: 3, workAreaId: 1, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 16, startTime: 10, endTime: 11, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 17, startTime: 11, endTime: 12, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 18, startTime: 12, endTime: 13, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+
+    { demandId: 19, startTime: 10, endTime: 11, amount: 3, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 19, startTime: 11, endTime: 12, amount: 3, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 20, startTime: 12, endTime: 13, amount: 3, workAreaId: 3, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 21, startTime: 13, endTime: 14, amount: 2, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 22, startTime: 14, endTime: 15, amount: 2, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 23, startTime: 15, endTime: 16, amount: 2, workAreaId: 1, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 24, startTime: 13, endTime: 14, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 25, startTime: 14, endTime: 15, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 26, startTime: 15, endTime: 16, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 27, startTime: 13, endTime: 14, amount: 4, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 28, startTime: 14, endTime: 15, amount: 4, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 29, startTime: 15, endTime: 16, amount: 4, workAreaId: 3, alreadyAllocatedEmp: [] },
+
+
+    { demandId: 30, startTime: 16, endTime: 17, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+    { demandId: 31, startTime: 17, endTime: 18, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },
+
+    { demandId: 32, startTime: 16, endTime: 17, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+    { demandId: 33, startTime: 17, endTime: 18, amount: 2, workAreaId: 2, alreadyAllocatedEmp: [] },
+
+    { demandId: 34, startTime: 16, endTime: 17, amount: 4, workAreaId: 3, alreadyAllocatedEmp: [] },
+    { demandId: 35, startTime: 17, endTime: 18, amount: 4, workAreaId: 3 }
+]
+
+const shift: shift[] = []
 class DNA {
     genes: any[] = [];
     fitness: number;
     staffing: number;
     staffTime: number;
     fairness: number;
+    randomEmployee: any[] = [];
     rank: number | undefined;
     // numberOfEmployees: number
     constructor() {
@@ -28,44 +155,207 @@ class DNA {
         // this.numberOfEmployees = 10
     }
 
-    generateDNASequence() {
-        const result: any[] = new Array(10);
 
+
+    shuffle(array: any[]) {
+        var currentIndex = array.length, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    }
+
+    generateRandomEmployees(number: number) {
+        let array = []
+        for (let i = 0; i < number; i++) {
+            array.push(i)
+        }
+        // console.log("this is i array", array);
+        this.shuffle(array)
+        // console.log("this is final array", array);
+        return array
+    }
+
+    // generateDNASequence() {
+    //     const result: any[] = new Array(employee.length);
+
+    //     for (let i = 0; i < result.length; i++) {
+    //         result[i] = [];
+    //     }
+    //     let randomEmployees = this.generateRandomEmployees(employee.length)
+    //     // console.log("this is random generated", randomEmployees, employee);
+    //     let clonedEmployee = _.cloneDeep(employee);
+    //     let clonedDemand = _.cloneDeep(demand);
+
+
+    //     for (let i = 0; i < clonedEmployee.length; i++) {
+    //         let randomDemandWorkId = TARGET[(Math.floor(Math.random() * TARGET.length))]
+    //         for (let j = 0; j < clonedDemand.length; j++) {
+    //             if (clonedDemand[j].workAreaId == randomDemandWorkId &&
+    //                 clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 &&
+    //                 clonedDemand[j].amount > 0 &&
+    //                 !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
+    //                 clonedDemand.forEach((e) => {
+    //                     if (e.startTime == clonedDemand[j].startTime) {
+    //                         // console.log("e.alreadyAllocatedEmp e.alreadyAllocatedEmp", e.alreadyAllocatedEmp);
+
+    //                         e.alreadyAllocatedEmp?.push(randomEmployees[i])
+    //                     }
+    //                 })
+
+    //                 clonedDemand[j].amount = clonedDemand[j].amount - 1
+    //                 clonedEmployee[randomEmployees[i]].todayWorkingHours = clonedEmployee[randomEmployees[i]].todayWorkingHours! + 1
+    //                 result[i][clonedDemand[j].startTime] = clonedDemand[j].workAreaId
+
+    //             } else{
+    //                 for (let k = 0; k < clonedDemand.length; k++) {
+    //                     if(clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[k].amount>0 &&
+    //                         !clonedDemand[k].alreadyAllocatedEmp?.includes(randomEmployees[i]) ){
+    //                             clonedDemand.forEach((e) => {
+    //                                 if (e.startTime == clonedDemand[k].startTime) {
+    //                                     // console.log("e.alreadyAllocatedEmp e.alreadyAllocatedEmp", e.alreadyAllocatedEmp);
+
+    //                                     e.alreadyAllocatedEmp?.push(randomEmployees[i])
+    //                                 }
+    //                             })
+
+    //                             clonedDemand[k].amount = clonedDemand[k].amount - 1
+    //                             clonedEmployee[randomEmployees[i]].todayWorkingHours = clonedEmployee[randomEmployees[i]].todayWorkingHours! + 1
+    //                             result[i][clonedDemand[j].startTime] = clonedDemand[k].workAreaId
+    //                         }
+    //                 }
+    //                 continue
+    //             }
+
+    //         }
+    //     }
+
+    //     // this.randomEmployee = randomEmployees
+
+    //     // for (let i = 0; i < randomEmployees.length; i++) {
+    //     //     for (let j = 0; j < clonedDemand.length; j++) {
+    //     //         // console.log("clonedEmployee[randomEmployees[i]].todayWorkingHours", clonedEmployee[randomEmployees[i]].todayWorkingHours);
+
+    //     //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
+
+    //     //             clonedDemand.forEach((e)=>{
+    //     //                 if(e.startTime == clonedDemand[j].startTime){
+    //     //                     // console.log("e.alreadyAllocatedEmp e.alreadyAllocatedEmp", e.alreadyAllocatedEmp);
+
+    //     //                     e.alreadyAllocatedEmp?.push(randomEmployees[i])
+    //     //                 }
+    //     //             })                  
+
+    //     //             clonedDemand[j].amount = clonedDemand[j].amount - 1
+    //     //             clonedEmployee[randomEmployees[i]].todayWorkingHours = clonedEmployee[randomEmployees[i]].todayWorkingHours! + 1
+    //     //             result[i][clonedDemand[j].startTime] = clonedDemand[j].workAreaId
+
+    //     //         }
+    //     //         else {
+    //     //             continue;
+    //     //         }
+    //     //     }
+    //     // }
+
+    //     return result
+    // }
+
+    generateDNASequence() {
+        const TARGET2: number[] = [1, 2, 3]
+        const result: any[] = new Array(employee.length);
         for (let i = 0; i < result.length; i++) {
             result[i] = [];
         }
-
-        for (let i = 0; i < 10; i++) {
-
-            let number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+        let clonedEmployee = _.cloneDeep(employee);
+        for (let i = 0; i < employee.length; i++) {
+         
+            let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
             for (let j = 6; j < 10; j++) {
+                // this.randomEmployee = randomEmployees
 
-                if (j == 0) {
-                    result[i][j] = i + 1;
+              if(clonedEmployee[i].todayWorkingHours! < 9){
+                  console.log("clonedEmployee", clonedEmployee[i]);                  
+                    result[i][j] = number1;
+                    if(number1==0){
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
+                    }else{
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
+                    }
+                    
                 } else {
-                    result[i][j] = number;
+                    break
                 }
+                // for (let i = 0; i < randomEmployees.length; i++) {
+                //     for (let j = 0; j < clonedDemand.length; j++) {
+                //         // console.log("clonedEmployee[randomEmployees[i]].todayWorkingHours", clonedEmployee[randomEmployees[i]].todayWorkingHours);
 
             }
-            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+           let number2 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+           if(number1 ==0 && number2 == 0){
+            number2 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
+           }
             for (let j = 10; j < 14; j++) {
+                //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
 
-                if (j == 0) {
-                    result[i][j] = i + 1;
+               if(clonedEmployee[i].todayWorkingHours! < 9){
+                console.log("clonedEmployee", clonedEmployee[i]); 
+                    result[i][j] = number2;
+                    if(number2==0){
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
+                    }else{
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
+                    }
                 } else {
-                    result[i][j] = number;
+                    break
                 }
+                //             clonedDemand.forEach((e)=>{
+                //                 if(e.startTime == clonedDemand[j].startTime){
+                //                     // console.log("e.alreadyAllocatedEmp e.alreadyAllocatedEmp", e.alreadyAllocatedEmp);
 
             }
-            number = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            let number3 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            if(number1 ==0 && number2 == 0 && number3 == 0){
+                number3 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
+               }
             for (let j = 14; j < 18; j++) {
-                if (j == 0) {
-                    result[i][j] = i + 1;
+              if(clonedEmployee[i].todayWorkingHours! < 9){
+                console.log("clonedEmployee", clonedEmployee[i]); 
+                    result[i][j] = number3;
+                    if(number3==0){
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
+                    }else{
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
+                    }
                 } else {
-                    result[i][j] = number;
+                    break
                 }
+                //                     e.alreadyAllocatedEmp?.push(randomEmployees[i])
+                //                 }
+                //             })                  
+
+                //             clonedDemand[j].amount = clonedDemand[j].amount - 1
+                //             clonedEmployee[randomEmployees[i]].todayWorkingHours = clonedEmployee[randomEmployees[i]].todayWorkingHours! + 1
+                //             result[i][clonedDemand[j].startTime] = clonedDemand[j].workAreaId
+
+                //         }
+                //         else {
+                //             continue;
+                //         }
+                //     }
+                // }
 
             }
+
         }
         return result
     }
@@ -107,23 +397,23 @@ class DNA {
         this.staffTime = score;
     }
 
-    calcFairness(){
-        const {finalPositiveWish, finalNegativeWish, finalAbsenceWish} = timetable(this.genes)
+    calcFairness() {
+        const { finalPositiveWish, finalNegativeWish, finalAbsenceWish } = timetable(this.genes)
 
         let score = 0;
         score = finalPositiveWish + finalNegativeWish + finalAbsenceWish
         this.fairness = score;
         // console.log("helooooooooooo", finalPositiveWish, finalNegativeWish, finalAbsenceWish);
-        
+
     }
 
     calcFitness() {
-        this.fitness =  this.staffing + this.fairness 
+        this.fitness = this.staffing + this.fairness
     }
 
     calculateOverStuffing(dna: any[]) {
 
-        const {finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna)
+        const { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna)
 
         // interface employeeInfo {
         //     empId: number,
@@ -245,7 +535,7 @@ class DNA {
 
 
         // const employee: employeeInfo[] = [
-        //     { empId: 1, empName: "Rachit", weeklyWorkingHours: 40 },
+        //     { empId: 1, empName: "Rachit", weeklyWorkingHours: 40},
         //     { empId: 2, empName: "Rachit1", weeklyWorkingHours: 40 },
         //     { empId: 3, empName: "Rachit2", weeklyWorkingHours: 40 },
         //     { empId: 4, empName: "Rachit3", weeklyWorkingHours: 40 },

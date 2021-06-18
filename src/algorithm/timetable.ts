@@ -153,59 +153,73 @@ export function timetable(shiftArray: any[], click=0) {
     ]
     //Overstaffing, understaffing, overtime, minus hours, absence, wish
     const demand: demand[] = [
-        { demandId: 1, startTime: 6, endTime: 10, amount: 3, workAreaId: 1 },
-        { demandId: 2, startTime: 10, endTime: 15, amount: 2, workAreaId: 1 },
-        { demandId: 3, startTime: 15, endTime: 18, amount: 5, workAreaId: 1 },
-        { demandId: 4, startTime: 8, endTime: 11, amount: 2, workAreaId: 2 },
-        { demandId: 5, startTime: 11, endTime: 15, amount: 5, workAreaId: 2 },
-        { demandId: 6, startTime: 15, endTime: 18, amount: 4, workAreaId: 2 },
-        { demandId: 7, startTime: 9, endTime: 12, amount: 3, workAreaId: 3 },
-        { demandId: 8, startTime: 12, endTime: 15, amount: 4, workAreaId: 3 },
-        { demandId: 9, startTime: 15, endTime: 18, amount: 2, workAreaId: 3 }
+        { demandId: 1, startTime: 6, endTime: 7, amount: 5, workAreaId: 1 },
+        { demandId: 2, startTime: 7, endTime: 8, amount: 5, workAreaId: 1 },
+        { demandId: 3, startTime: 8, endTime: 9, amount: 5, workAreaId: 1 },
+        { demandId: 4, startTime: 9, endTime: 10, amount: 5, workAreaId: 1 },
+    
+        { demandId: 5, startTime: 6, endTime: 7, amount: 2, workAreaId: 2 },
+        { demandId: 6, startTime: 7, endTime: 8, amount: 2, workAreaId: 2 },
+        { demandId: 7, startTime: 8, endTime: 9, amount: 2, workAreaId: 2 },
+        { demandId: 8, startTime: 9, endTime: 10, amount: 2, workAreaId: 2 },
+    
+        { demandId: 9, startTime: 6, endTime: 7, amount: 2, workAreaId: 3 },
+        { demandId: 10, startTime: 7, endTime: 8, amount: 2, workAreaId: 3 },
+        { demandId: 11, startTime: 8, endTime: 9, amount: 2, workAreaId: 3 },
+        { demandId: 12, startTime: 9, endTime: 10, amount: 2, workAreaId: 3 },
+    
+    
+        { demandId: 13, startTime: 10, endTime: 11, amount: 3, workAreaId: 1 },
+        { demandId: 14, startTime: 11, endTime: 12, amount: 3, workAreaId: 1 },
+        { demandId: 15, startTime: 12, endTime: 13, amount: 3, workAreaId: 1 },
+    
+    
+        { demandId: 16, startTime: 10, endTime: 11, amount: 2, workAreaId: 2 },
+        { demandId: 17, startTime: 11, endTime: 12, amount: 2, workAreaId: 2 },
+        { demandId: 18, startTime: 12, endTime: 13, amount: 2, workAreaId: 2 },
+    
+        { demandId: 19, startTime: 10, endTime: 11, amount: 3, workAreaId: 3 },
+        { demandId: 19, startTime: 11, endTime: 12, amount: 3, workAreaId: 3 },
+        { demandId: 20, startTime: 12, endTime: 13, amount: 3, workAreaId: 3 },
+    
+    
+        { demandId: 21, startTime: 13, endTime: 14, amount: 2, workAreaId: 1 },
+        { demandId: 22, startTime: 14, endTime: 15, amount: 2, workAreaId: 1 },
+        { demandId: 23, startTime: 15, endTime: 16, amount: 2, workAreaId: 1 },
+    
+    
+        { demandId: 24, startTime: 13, endTime: 14, amount: 2, workAreaId: 2 },
+        { demandId: 25, startTime: 14, endTime: 15, amount: 2, workAreaId: 2 },
+        { demandId: 26, startTime: 15, endTime: 16, amount: 2, workAreaId: 2 },
+    
+    
+        { demandId: 27, startTime: 13, endTime: 14, amount: 4, workAreaId: 3 },
+        { demandId: 28, startTime: 14, endTime: 15, amount: 4, workAreaId: 3 },
+        { demandId: 29, startTime: 15, endTime: 16, amount: 4, workAreaId: 3 },
+    
+    
+        { demandId: 30, startTime: 16, endTime: 17, amount: 5, workAreaId: 1 },
+        { demandId: 31, startTime: 17, endTime: 18, amount: 5, workAreaId: 1 },
+    
+        { demandId: 32, startTime: 16, endTime: 17, amount: 2, workAreaId: 2 },
+        { demandId: 33, startTime: 17, endTime: 18, amount: 2, workAreaId: 2 },
+    
+        { demandId: 34, startTime: 16, endTime: 17, amount: 4, workAreaId: 3 },
+        { demandId: 35, startTime: 17, endTime: 18, amount: 4, workAreaId: 3 }
     ]
 
     const shift: shift[] = []
     const officeOpenTimings: number[] = [];
     let stuffingFinal: stuffing[] = []
 
-    // if (generatedDNA !== undefined) {
-    // console.log("this is generatedDNA", generatedDNA!);
-
-
-    // const dna_new = new DNA()
-    // interface testingShift {
-    //   empId?: number,
-    //   workAreaId?: number,
-    //   startTime?: number,
-    //   endTime?: number
-    // }
-
-
-
-    // console.log("this is final result", testingShift)
-
-
-
-
-    // console.log(dna_new.generateDNA(), dna_new.generateDNA().length, dna_new.generateDNA()[0].length);
-
-    // console.log("this is dna", generatedDNA);
-    //  let starting_time 
-    //  let ending_time
-
     let workid
     let starting_time
     let ending_time: any
 
-    // console.log("new generated dna", generatedDNA);
-
-
     for (let i = 0; i < shiftArray!.length; i++) {
 
         for (let j = 6; j <= shiftArray![i].length; j++) {
-            // console.log("thi is shiftArray[i].length", shiftArray[i].length);      
-
-
+            // console.log("thi is shiftArray[i].length", shiftArray[i].length); 
             if (j === 6) {
                 // console.log(j);
 
