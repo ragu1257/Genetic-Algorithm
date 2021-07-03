@@ -20,6 +20,6 @@ export function empPower(finalTableArray: any) {
             }
         }        
     }    
-    console.log("employee", employee);
+    // console.log("employee", employee);
     
 }

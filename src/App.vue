@@ -286,6 +286,7 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
+import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
 
 import chart from "./chart.vue";
@@ -307,6 +308,8 @@ export default defineComponent({
     //   final_rank_index,
     //   final_pop_population,
     // } = task();
+    const dayOutput = days()
+    console.log(dayOutput)
     let officeOpenTimings = ref(task().officeOpenTimings)
     let demand = ref(task().demand)
     let shift = ref(task().shift)
