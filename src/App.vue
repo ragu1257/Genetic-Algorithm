@@ -19,6 +19,7 @@
           <th>Positive Wish Fulfilled / Total Positive Wish</th>
           <th>Negative Wish Fulfilled / Total Negative Wish</th>
           <th>Absence Wish Fulfilled / Total Absence</th>
+          <th>Employee Power</th>
         </tr>
       </thead>
       <tbody v-for="(workArea, i) in workArea" :key="i">
@@ -174,6 +175,10 @@
             >
               {{ item.absenceWishFulfilled }}/{{ item.absenceRange.length }}
             </td>
+            <td>
+              {{ (item.empPower).toFixed(2) }}
+            </td>
+     
           </tr>
         </template>
         <tr>
@@ -241,9 +246,9 @@
             <td colspan="12" class="bg-green-400">
               {{
                 (
-                  ((staffing.absenceWish +
-                    staffing.wishNegative +
-                    staffing.wishPositive) /
+                  ((staffing.absenceWishFulfilled +
+                    staffing.wishNegativeFulfilled +
+                    staffing.wishPositiveFulfilled) /
                     (staffing.totalAbsence +
                       staffing.totalNegativeWish +
                       staffing.totalPositiveWish)) *

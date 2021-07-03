@@ -1,23 +1,8 @@
 /* eslint-disable */
+import {employee, demand, wish, absence} from "./interface"
 
 export function timetable(shiftArray: any[], click=0) {
-    // if(click==2){
-    //     console.log("click",shiftArray);
-    // }
 
-    // const shiftTestArray = shiftTestArrayTest
-    // console.log("this is shiftArray", shiftTestArray);
-
-    interface employeeInfo {
-        empId: number,
-        empName: string,
-        weeklyWorkingHours: number,
-        notAvailableEmployee?: any[],
-        timeRange?: (number | string)[],
-        absenceRange?: (number | string)[],
-        negativeWish?: (number | string)[],
-        positiveWish?: (number | string)[]
-    }
 
     interface workArea {
         workAreaId: number,
@@ -29,16 +14,6 @@ export function timetable(shiftArray: any[], click=0) {
         //   overtime: number;
         //   workAreaId: number;
         // }>
-    }
-
-    interface demand {
-        demandId: number,
-        startTime: number,
-        endTime: number,
-        amount: number,
-        workAreaId: number,
-        range?: (number | string)[],
-        totalDemand?: any[]
     }
 
     interface shift {
@@ -55,22 +30,13 @@ export function timetable(shiftArray: any[], click=0) {
         weeklyWorkingHours?: number,
         positiveWishFulfilled?: number,
         negativeWishFulfilled?: number,
-        absenceWishFulfilled?: number
-    }
-    interface absence {
-        empId: number,
-        day: number,
-        startTime: number,
-        endTime: number
+        absenceWishFulfilled?: number,
+        empPower? : number
     }
 
-    interface wish {
-        empId: number,
-        day: number,
-        startTime: number,
-        endTime: number,
-        wantsToWork: boolean
-    }
+    const shift: shift[] = []
+
+
 
     interface stuffing {
         overStuffing?: number,
@@ -78,73 +44,15 @@ export function timetable(shiftArray: any[], click=0) {
         workAreaId?: number,
         underTime?: number,
         overtime?: number,
-        wishNegative?: number,
-        wishPositive?: number,
-        absenceWish?: number,
+        wishNegativeFulfilled?: number,
+        wishPositiveFulfilled?: number,
+        absenceWishFulfilled?: number,
         totalPositiveWish?: number,
         totalNegativeWish?: number,
         totalAbsence?: number
     }
 
-    const employee: employeeInfo[] = [
-        { empId: 1, empName: "Rachit", weeklyWorkingHours: 40 },
-        { empId: 2, empName: "Rachit1", weeklyWorkingHours: 40 },
-        { empId: 3, empName: "Rachit2", weeklyWorkingHours: 40 },
-        { empId: 4, empName: "Rachit3", weeklyWorkingHours: 40 },
-        { empId: 5, empName: "Rachit4", weeklyWorkingHours: 40 },
-        { empId: 6, empName: "Rachit5", weeklyWorkingHours: 40 },
-        { empId: 7, empName: "Rachit6", weeklyWorkingHours: 40 },
-        { empId: 8, empName: "Rachit7", weeklyWorkingHours: 40 },
-        { empId: 9, empName: "Rachit8", weeklyWorkingHours: 40 },
-        { empId: 10, empName: "Rachit9", weeklyWorkingHours: 40 },
-        { empId: 11, empName: "Rachit10", weeklyWorkingHours: 40 },
-        { empId: 12, empName: "Rachit11", weeklyWorkingHours: 40 },
-        { empId: 13, empName: "Rachit12", weeklyWorkingHours: 40 },
-        { empId: 14, empName: "Rachit13", weeklyWorkingHours: 40 },
-        { empId: 15, empName: "Rachit14", weeklyWorkingHours: 40 },
-        { empId: 16, empName: "Rachit15", weeklyWorkingHours: 40 },
-        { empId: 17, empName: "Rachit16", weeklyWorkingHours: 40 },
-        { empId: 18, empName: "Rachit17", weeklyWorkingHours: 40 },
-        { empId: 19, empName: "Rachit18", weeklyWorkingHours: 40 },
-        { empId: 20, empName: "Rachit19", weeklyWorkingHours: 40 },
-        { empId: 21, empName: "Rachit20", weeklyWorkingHours: 40 },
-        { empId: 22, empName: "Rachit21", weeklyWorkingHours: 40 }
-    ]
-
-    const absence: absence[] = [
-        { empId: 1, day: 1, startTime: 7, endTime: 8 },
-        { empId: 2, day: 1, startTime: 9, endTime: 11 },
-        { empId: 3, day: 1, startTime: 6, endTime: 8 },
-        { empId: 6, day: 1, startTime: 10, endTime: 12 },
-        { empId: 8, day: 1, startTime: 11, endTime: 12 },
-        { empId: 9, day: 1, startTime: 12, endTime: 14 },
-        { empId: 13, day: 1, startTime: 13, endTime: 14 },
-        { empId: 15, day: 1, startTime: 13, endTime: 15 },
-        { empId: 16, day: 1, startTime: 14, endTime: 15 },
-        { empId: 17, day: 1, startTime: 14, endTime: 16 },
-        { empId: 18, day: 1, startTime: 14, endTime: 15 },
-        { empId: 19, day: 1, startTime: 15, endTime: 17 },
-        { empId: 22, day: 1, startTime: 15, endTime: 17 },
-        { empId: 21, day: 1, startTime: 16, endTime: 18 },
-    ]
-
-    const wish: wish[] = [
-        { empId: 1, day: 1, startTime: 10, endTime: 11, wantsToWork: false },
-        { empId: 1, day: 1, startTime: 6, endTime: 7, wantsToWork: true },
-        { empId: 2, day: 1, startTime: 6, endTime: 9, wantsToWork: false },
-        { empId: 3, day: 1, startTime: 9, endTime: 14, wantsToWork: false },
-        { empId: 6, day: 1, startTime: 13, endTime: 15, wantsToWork: false },
-        { empId: 8, day: 1, startTime: 9, endTime: 10, wantsToWork: true },
-        { empId: 9, day: 1, startTime: 11, endTime: 12, wantsToWork: true },
-        { empId: 13, day: 1, startTime: 11, endTime: 13, wantsToWork: true },
-        { empId: 15, day: 1, startTime: 10, endTime: 13, wantsToWork: true },
-        { empId: 16, day: 1, startTime: 10, endTime: 14, wantsToWork: true },
-        { empId: 17, day: 1, startTime: 9, endTime: 14, wantsToWork: false },
-        { empId: 18, day: 1, startTime: 15, endTime: 18, wantsToWork: false },
-        { empId: 19, day: 1, startTime: 12, endTime: 15, wantsToWork: false },
-        { empId: 22, day: 1, startTime: 12, endTime: 15, wantsToWork: false },
-        { empId: 21, day: 1, startTime: 10, endTime: 17, wantsToWork: false }
-    ]
+   
 
     const workArea: workArea[] = [
         { workAreaId: 1, workAreaName: "Books" },
@@ -152,63 +60,8 @@ export function timetable(shiftArray: any[], click=0) {
         { workAreaId: 3, workAreaName: "Cleaning" }
     ]
     //Overstaffing, understaffing, overtime, minus hours, absence, wish
-    const demand: demand[] = [
-        { demandId: 1, startTime: 6, endTime: 7, amount: 5, workAreaId: 1 },
-        { demandId: 2, startTime: 7, endTime: 8, amount: 5, workAreaId: 1 },
-        { demandId: 3, startTime: 8, endTime: 9, amount: 5, workAreaId: 1 },
-        { demandId: 4, startTime: 9, endTime: 10, amount: 5, workAreaId: 1 },
     
-        { demandId: 5, startTime: 6, endTime: 7, amount: 2, workAreaId: 2 },
-        { demandId: 6, startTime: 7, endTime: 8, amount: 2, workAreaId: 2 },
-        { demandId: 7, startTime: 8, endTime: 9, amount: 2, workAreaId: 2 },
-        { demandId: 8, startTime: 9, endTime: 10, amount: 2, workAreaId: 2 },
-    
-        { demandId: 9, startTime: 6, endTime: 7, amount: 2, workAreaId: 3 },
-        { demandId: 10, startTime: 7, endTime: 8, amount: 2, workAreaId: 3 },
-        { demandId: 11, startTime: 8, endTime: 9, amount: 2, workAreaId: 3 },
-        { demandId: 12, startTime: 9, endTime: 10, amount: 2, workAreaId: 3 },
-    
-    
-        { demandId: 13, startTime: 10, endTime: 11, amount: 3, workAreaId: 1 },
-        { demandId: 14, startTime: 11, endTime: 12, amount: 3, workAreaId: 1 },
-        { demandId: 15, startTime: 12, endTime: 13, amount: 3, workAreaId: 1 },
-    
-    
-        { demandId: 16, startTime: 10, endTime: 11, amount: 2, workAreaId: 2 },
-        { demandId: 17, startTime: 11, endTime: 12, amount: 2, workAreaId: 2 },
-        { demandId: 18, startTime: 12, endTime: 13, amount: 2, workAreaId: 2 },
-    
-        { demandId: 19, startTime: 10, endTime: 11, amount: 3, workAreaId: 3 },
-        { demandId: 19, startTime: 11, endTime: 12, amount: 3, workAreaId: 3 },
-        { demandId: 20, startTime: 12, endTime: 13, amount: 3, workAreaId: 3 },
-    
-    
-        { demandId: 21, startTime: 13, endTime: 14, amount: 2, workAreaId: 1 },
-        { demandId: 22, startTime: 14, endTime: 15, amount: 2, workAreaId: 1 },
-        { demandId: 23, startTime: 15, endTime: 16, amount: 2, workAreaId: 1 },
-    
-    
-        { demandId: 24, startTime: 13, endTime: 14, amount: 2, workAreaId: 2 },
-        { demandId: 25, startTime: 14, endTime: 15, amount: 2, workAreaId: 2 },
-        { demandId: 26, startTime: 15, endTime: 16, amount: 2, workAreaId: 2 },
-    
-    
-        { demandId: 27, startTime: 13, endTime: 14, amount: 4, workAreaId: 3 },
-        { demandId: 28, startTime: 14, endTime: 15, amount: 4, workAreaId: 3 },
-        { demandId: 29, startTime: 15, endTime: 16, amount: 4, workAreaId: 3 },
-    
-    
-        { demandId: 30, startTime: 16, endTime: 17, amount: 5, workAreaId: 1 },
-        { demandId: 31, startTime: 17, endTime: 18, amount: 5, workAreaId: 1 },
-    
-        { demandId: 32, startTime: 16, endTime: 17, amount: 2, workAreaId: 2 },
-        { demandId: 33, startTime: 17, endTime: 18, amount: 2, workAreaId: 2 },
-    
-        { demandId: 34, startTime: 16, endTime: 17, amount: 4, workAreaId: 3 },
-        { demandId: 35, startTime: 17, endTime: 18, amount: 4, workAreaId: 3 }
-    ]
-
-    const shift: shift[] = []
+  
     const officeOpenTimings: number[] = [];
     let stuffingFinal: stuffing[] = []
 
@@ -256,42 +109,42 @@ export function timetable(shiftArray: any[], click=0) {
     }
 
     function calculateEmployeeWorkingHour() {
-        for (let i = 0; i < employee.length; i++) {
+        for (let i = 0; i < employee!.length; i++) {
             let rangeArray = []
             for (let j = 0; j < shift.length; j++) {
-                if (employee[i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
+                if (employee![i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
                     for (let k = shift[j].startTime!; k < shift[j].endTime!; k++) {
                         rangeArray.push(k)
                     }
                 }
             }
-            employee[i].timeRange = rangeArray;
+            employee![i].timeRange = rangeArray;
         }
     }
 
 
     //calculate the absence of each employee
     function calculateEmployeeAbsence() {
-        for (let i = 0; i < employee.length; i++) {
+        for (let i = 0; i < employee!.length; i++) {
             let rangeArray = []
             for (let j = 0; j < absence.length; j++) {
-                if (employee[i].empId == absence[j].empId) {
+                if (employee![i].empId == absence[j].empId) {
                     for (let k = absence[j].startTime; k < absence[j].endTime; k++) {
                         rangeArray.push(k)
                     }
                 }
             }
-            employee[i].absenceRange = rangeArray;
+            employee![i].absenceRange = rangeArray;
         }
     }
 
-    //calculate wish for each employee
+    //calculate wish for each employee!
     function calculateEmployeeWish() {
-        for (let i = 0; i < employee.length; i++) {
+        for (let i = 0; i < employee!.length; i++) {
             let negativeWish = []
             let positiveWish = []
             for (let j = 0; j < wish.length; j++) {
-                if (employee[i].empId == wish[j].empId) {
+                if (employee![i].empId == wish[j].empId) {
                     for (let k = wish[j].startTime; k < wish[j].endTime; k++) {
                         if (wish[j].wantsToWork) {
                             positiveWish.push(k)
@@ -302,16 +155,16 @@ export function timetable(shiftArray: any[], click=0) {
                     }
                 }
             }
-            employee[i].negativeWish = negativeWish;
-            employee[i].positiveWish = positiveWish;
+            employee![i].negativeWish = negativeWish;
+            employee![i].positiveWish = positiveWish;
         }
     }
 
 
-    // console.log("this is totalTime in emp", employee);
+    // console.log("this is totalTime in emp", employee!);
     function updateShiftWithTotalTimeOfEmployee() {
         for (let i = 0; i < shift.length; i++) {
-            let singleEmployee = employee.filter(item =>
+            let singleEmployee = employee!.filter(item =>
                 item.empId == shift[i].employeeId
             )
             // console.log("single empl;oyee", singleEmployee);
@@ -424,12 +277,12 @@ export function timetable(shiftArray: any[], click=0) {
 
     for (let i = 0; i < shift.length; i++) {
         // let totalNotAvailableTime = []
-        for (let j = 0; j < employee.length; j++) {
-            if (employee[j].empId == shift[i].employeeId) {
-                shift[i].absenceRange = employee[j].absenceRange
-                shift[i].negativeWish = employee[j].negativeWish
-                shift[i].positiveWish = employee[j].positiveWish
-                shift[i].weeklyWorkingHours = employee[j].weeklyWorkingHours
+        for (let j = 0; j < employee!.length; j++) {
+            if (employee![j].empId == shift[i].employeeId) {
+                shift[i].absenceRange = employee![j].absenceRange
+                shift[i].negativeWish = employee![j].negativeWish
+                shift[i].positiveWish = employee![j].positiveWish
+                shift[i].weeklyWorkingHours = employee![j].weeklyWorkingHours
             }
         }
     }
@@ -550,9 +403,9 @@ export function timetable(shiftArray: any[], click=0) {
 
         stuffingFinal[i].underTime = underTime
         stuffingFinal[i].overtime = overTime
-        stuffingFinal[i].wishNegative = negativeWishFulfilled
-        stuffingFinal[i].wishPositive = positiveWishFulfilled
-        stuffingFinal[i].absenceWish = absenceWishFulfilled
+        stuffingFinal[i].wishNegativeFulfilled = negativeWishFulfilled
+        stuffingFinal[i].wishPositiveFulfilled = positiveWishFulfilled
+        stuffingFinal[i].absenceWishFulfilled = absenceWishFulfilled
         stuffingFinal[i].totalPositiveWish = totalPositiveWish
         stuffingFinal[i].totalNegativeWish = totalNegativeWish
         stuffingFinal[i].totalAbsence = totalAbsence
@@ -563,40 +416,32 @@ export function timetable(shiftArray: any[], click=0) {
     let finalUnderStuffing: number = 0
     let finalOverTime: number = 0
     let finalUnderTime: number = 0
-    let finalPositiveWish: number = 0
-    let finalNegativeWish: number = 0
-    let finalAbsenceWish: number = 0
+    let totalPositiveWishNotFulfilled: number = 0
+    let totalNegativeWishNotFulfilled: number = 0
+    let totalAbsenceWishNotFulfilled: number = 0
 
+    // console.log("this is stuffing final", stuffingFinal)
     for (let i = 0; i < stuffingFinal.length; i++) {
         finalOverstuffing += stuffingFinal[i].overStuffing!
         finalUnderStuffing += stuffingFinal[i].underStuffing!
         finalOverTime += stuffingFinal[i].overtime!
         finalUnderTime += stuffingFinal[i].underTime!
-        finalPositiveWish += stuffingFinal[i].totalPositiveWish!
-        finalNegativeWish += stuffingFinal[i].totalNegativeWish!
-        finalAbsenceWish += stuffingFinal[i].totalAbsence!
+        totalPositiveWishNotFulfilled += (stuffingFinal[i].totalPositiveWish! - stuffingFinal[i].wishPositiveFulfilled!)
+        totalNegativeWishNotFulfilled += (stuffingFinal[i].totalNegativeWish! - stuffingFinal[i].wishNegativeFulfilled!)
+        totalAbsenceWishNotFulfilled += (stuffingFinal[i].totalAbsence! - stuffingFinal[i].absenceWishFulfilled!)
 
     }
 
-    // console.log("this is sktuffingFinal", stuffingFinal);
+    for(let i=0; i< employee.length; i++){
+        for(let j=0; j<shift.length; j++){
+            if(shift[j].employeeId == employee[i].empId){
+                shift[j].empPower = employee[i].empPower
+            }
+        }
+    }
 
 
-    // console.log("workarea", workArea);
-    // console.log("stuffingFinal", stuffingFinal, finalOverstuffing, finalUnderStuffing);
 
-    // console.log("this is emp", demand);
-
-    // console.log("generattion_arraygenerattion_arraygenerattion_arraygenerattion_array", generattion_array);
-
-
-    // console.log("shift", shift);
-
-
-    return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, finalPositiveWish, finalNegativeWish, finalAbsenceWish }
-    // }
-
-    // return { officeOpenTimings, demand, shift, workArea, stuffingFinal }
-
-
+    return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
 
 }
