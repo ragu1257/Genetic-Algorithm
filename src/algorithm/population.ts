@@ -509,31 +509,13 @@ class Population {
     }
 
     evaluate() {
-        // console.log("pop in evaluation", this.population);
-
-        let worldrecord = 1000000000000000000;
-        let index = 0;
         for (let i = 0; i < this.population.length; i++) {
-            // console.log("evalutate is called", this.population[i].fitness );
-
-            if (this.population[i].fitness < worldrecord) {
-
-                index = i;
-                worldrecord = this.population[i].fitness;
-                // console.log("orldRecord",this.population[i].fitness);
-
+            if (this.population[i].fairness == 0 && this.population[i].staffing == 0) {
+                this.best = this.population[i].genes;
+                this.finished = true;
+                break;
             }
         }
-
-        this.best = this.population[index].genes;
-        // console.log("this is best Record", worldrecord);
-        this.bestFitness = worldrecord
-
-        if (worldrecord == 0) {
-            this.finished = true;
-        }
-        // console.log("this is finished", this.finished);
-
     }
 
     isFinished() {

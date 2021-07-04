@@ -1,7 +1,7 @@
 /* eslint-disable */
-import {employee, demand, wish, absence} from "./interface"
+import { demand, wish, absence} from "./interface"
 
-export function timetable(shiftArray: any[], click=0) {
+export function timetable(shiftArray: any[], employee: any[], click=0) {
 
 
     interface workArea {

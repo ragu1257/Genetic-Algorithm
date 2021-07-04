@@ -2,7 +2,7 @@
 
 import { task } from "./task"
 
-const numberOfDays = 5
+const numberOfDays = 1
 
 let taskArray: any = []
 

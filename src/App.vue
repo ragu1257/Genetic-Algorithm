@@ -5,7 +5,7 @@
       :fairnessArray="fairness_array"
       @update-table="updateTable"
     />
-    {{array_number}}
+    {{ array_number }}
     <table
       @update-table="updateTable"
       class="table-auto w-2/3 text-center"
@@ -176,9 +176,8 @@
               {{ item.absenceWishFulfilled }}/{{ item.absenceRange.length }}
             </td>
             <td>
-              {{ (item.empPower).toFixed(2) }}
+              {{ item.empPower.toFixed(2) }}
             </td>
-     
           </tr>
         </template>
         <tr>
@@ -288,6 +287,8 @@ import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
 import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
+import { empPower } from "./algorithm/empPower";
+import { employee } from "./algorithm/interface";
 
 import chart from "./chart.vue";
 // import dna from "./algorithm/dna";
@@ -296,7 +297,7 @@ export default defineComponent({
   components: {
     chart,
   },
-  setup() {    
+  setup() {
     // let {
     //   officeOpenTimings,
     //   demand,
@@ -308,20 +309,19 @@ export default defineComponent({
     //   final_rank_index,
     //   final_pop_population,
     // } = task();
-    const dayOutput = days()
-    console.log(dayOutput)
-    let officeOpenTimings = ref(task().officeOpenTimings)
-    let demand = ref(task().demand)
-    let shift = ref(task().shift)
-    let workArea = ref(task().workArea)
-    let stuffingFinal = ref(task().stuffingFinal)
-    let generattion_array = ref(task().generattion_array)
-    let best_pop_array = ref(task().best_pop_array)
-    let final_rank_index = ref(task().final_rank_index)
-    let final_pop_population: any = ref(task().final_pop_population)
+    const dayOutput = days();
+    console.log(dayOutput);
+    let officeOpenTimings = ref(task().officeOpenTimings);
+    let demand = ref(task().demand);
+    let shift = ref(task().shift);
+    let workArea = ref(task().workArea);
+    let stuffingFinal = ref(task().stuffingFinal);
+    let best_pop_array = ref(task().best_pop_array);
+    let final_rank_index = ref(task().final_rank_index);
+    let final_pop_population: any = ref(task().final_pop_population);
     let array_number = ref(1);
-    let fairness_array: any = ref([])
-    let staffing_array: any = ref([])
+    let fairness_array: any = ref([]);
+    let staffing_array: any = ref([]);
     // console.log(
     //   "this is final_rank_index",
     //   final_rank_index.value.length,
@@ -329,47 +329,64 @@ export default defineComponent({
     //   final_pop_population.value
     // );
 
-  function makeArray(){
-    for(let i=0;i<final_rank_index.value.length;i++){
-      fairness_array.value.push(final_pop_population.value[i].fairness)
-      staffing_array.value.push(final_pop_population.value[i].staffing)
+    function makeArray() {
+      for (let i = 0; i < final_rank_index.value.length; i++) {
+        fairness_array.value.push(final_pop_population.value[i].fairness);
+        staffing_array.value.push(final_pop_population.value[i].staffing);
+      }
     }
-  }
 
-  makeArray()
-  // console.log("fairness array, staffing array", fairness_array.value, staffing_array.value);
-  
+    makeArray();
+    // console.log("fairness array, staffing array", fairness_array.value, staffing_array.value);
+    console.log("employee on load", employee)
+    let employeeObjectForThisTimetable = empPower(
+      final_pop_population.value[0].genes
+    );
 
+    //setting the table for the first DNA/timetable in set of population/timetable
+    let setInitialShift = timetable(
+      final_pop_population.value[0].genes,
+      employeeObjectForThisTimetable
+    );
+    shift.value = setInitialShift.shift;
     // timetable(final_pop_population[array_number])
     function updateTable(e: any) {
       // console.log("hello world", e.config);
-       array_number.value =  e.config
-       let click_callback = timetable(final_pop_population.value[array_number.value].genes,2)
-     
-        officeOpenTimings.value = click_callback.officeOpenTimings;
-        demand.value = click_callback.demand
-        shift.value = click_callback.shift
-        workArea.value = click_callback.workArea
-        stuffingFinal.value = click_callback.stuffingFinal
-        // generattion_array = click_callback.generation_array
-        // best_pop_array = click_callback.best_pop_array
+      console.log("employee after click ", employee)
+      array_number.value = e.config;
+       employeeObjectForThisTimetable = empPower(
+      final_pop_population.value[array_number.value].genes
+    );
+      let click_callback = timetable(
+        final_pop_population.value[array_number.value].genes,
+        employeeObjectForThisTimetable,
+        2
+      );
+
+      officeOpenTimings.value = click_callback.officeOpenTimings;
+      demand.value = click_callback.demand;
+      shift.value = click_callback.shift;
+      workArea.value = click_callback.workArea;
+      stuffingFinal.value = click_callback.stuffingFinal;
+      // generattion_array = click_callback.generation_array
+      // best_pop_array = click_callback.best_pop_array
       //  console.log("click_callback",click_callback);
-       
+      console.log("this is employee in vue", employee);
     }
     // console.log("checking old and new value", stuffingFinal.value);
-    
+    // console.log("this is shift in app.vue", shift);
+
     return {
       officeOpenTimings,
       demand,
       shift,
       workArea,
       stuffingFinal,
-      generattion_array,
       best_pop_array,
       updateTable,
       array_number,
       fairness_array,
-      staffing_array
+      staffing_array,
     };
   },
   // methods: {

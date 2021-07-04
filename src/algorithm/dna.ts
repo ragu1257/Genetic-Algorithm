@@ -177,7 +177,7 @@ class DNA {
     }
 
     calcFairness() {
-        const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes)
+        const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
 
         let score = 0;
         score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
@@ -192,7 +192,7 @@ class DNA {
 
     calculateOverStuffing(dna: any[]) {
 
-        const { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna)
+        const { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna, employee)
 
         return { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime }
 
