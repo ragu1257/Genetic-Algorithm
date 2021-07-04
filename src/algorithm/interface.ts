@@ -41,7 +41,7 @@ interface wish {
 }
 
 
-export const employee: employeeInfo[] = [
+export let employee: employeeInfo[] = [
     { empId: 1, empName: "Rachit", weeklyWorkingHours: 40, todayWorkingHours: 0, empPower: 1 },
     { empId: 2, empName: "Rachit1", weeklyWorkingHours: 40, todayWorkingHours: 0, empPower: 1 },
     { empId: 3, empName: "Rachit2", weeklyWorkingHours: 40, todayWorkingHours: 0, empPower: 1 },
@@ -66,6 +66,10 @@ export const employee: employeeInfo[] = [
     // { empId: 22, empName: "Rachit21", weeklyWorkingHours: 40, todayWorkingHours:0 }
 ]
 
+export function setNewEmployee(newValue: employeeInfo[]) {
+    employee = newValue;
+}
+// console.log("employee in interface", employee)
 
 export const demand: demandInfo[] = [
     { demandId: 1, startTime: 6, endTime: 7, amount: 5, workAreaId: 1, alreadyAllocatedEmp: [] },

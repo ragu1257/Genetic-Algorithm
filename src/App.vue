@@ -1,11 +1,16 @@
 <template>
   <div>
+    <button>Monday</button>
     <chart
       :staffingArray="staffing_array"
       :fairnessArray="fairness_array"
       @update-table="updateTable"
     />
-    {{ array_number }}
+    <!-- {{ array_number }} -->
+    <div>
+      <button>Save</button>
+      <button>Next</button>
+    </div>
     <table
       @update-table="updateTable"
       class="table-auto w-2/3 text-center"
@@ -288,7 +293,7 @@ import { task } from "./algorithm/task";
 import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
 import { empPower } from "./algorithm/empPower";
-import { employee } from "./algorithm/interface";
+import { employee, setNewEmployee } from "./algorithm/interface";
 
 import chart from "./chart.vue";
 // import dna from "./algorithm/dna";
@@ -338,7 +343,7 @@ export default defineComponent({
 
     makeArray();
     // console.log("fairness array, staffing array", fairness_array.value, staffing_array.value);
-    console.log("employee on load", employee)
+    // console.log("employee on load", employee);
     let employeeObjectForThisTimetable = empPower(
       final_pop_population.value[0].genes
     );
@@ -348,15 +353,19 @@ export default defineComponent({
       final_pop_population.value[0].genes,
       employeeObjectForThisTimetable
     );
+    // console.log("setInitialShift", setInitialShift);
     shift.value = setInitialShift.shift;
     // timetable(final_pop_population[array_number])
     function updateTable(e: any) {
       // console.log("hello world", e.config);
-      console.log("employee after click ", employee)
       array_number.value = e.config;
-       employeeObjectForThisTimetable = empPower(
-      final_pop_population.value[array_number.value].genes
-    );
+      employeeObjectForThisTimetable = empPower(
+        final_pop_population.value[array_number.value].genes
+      );
+
+      setNewEmployee(employeeObjectForThisTimetable);
+
+      console.log("employee after click ", employee);
       let click_callback = timetable(
         final_pop_population.value[array_number.value].genes,
         employeeObjectForThisTimetable,
@@ -371,7 +380,10 @@ export default defineComponent({
       // generattion_array = click_callback.generation_array
       // best_pop_array = click_callback.best_pop_array
       //  console.log("click_callback",click_callback);
-      console.log("this is employee in vue", employee);
+      console.log(
+        "this is employeeObjectForThisTimetable",
+        employeeObjectForThisTimetable
+      );
     }
     // console.log("checking old and new value", stuffingFinal.value);
     // console.log("this is shift in app.vue", shift);

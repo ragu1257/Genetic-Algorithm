@@ -45,7 +45,7 @@ function createPopulation(){
   // console.log("sorted new population", pop.nonDominatedSorting(pop_size),pop.nonDominatedSorting(pop_size)[0]);
   
   
-  //first ranking array of population
+  //first ranking array of population [[3,6,2,33,4][1,11,22,33][413,24,23412,412,4]]
   final_rank_index = (pop.nonDominatedSorting(pop_size)[0])
   // console.log("final rank index", final_rank_index);
   
