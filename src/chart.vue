@@ -1,7 +1,7 @@
 <template>
   <div id="chart">
     <apexchart
-      type="line"
+      type="scatter"
       height="350"
       :options="chartOptions"
       :series="series"
@@ -14,8 +14,7 @@
 import VueApexCharts from "vue3-apexcharts";
 export default {
   props: {
-    staffingArray: Array,
-    fairnessArray: Array,
+    staffingFairnessArray: Array,
   },
   components: {
     apexchart: VueApexCharts,
@@ -24,18 +23,14 @@ export default {
     return {
       series: [
         {
-          name: "Fairness Score",
-          data: this.fairnessArray,
-        },
-         {
-          name: "Staffing Score",
-          data: this.staffingArray,
+          name: "Fairness and Staffing",
+          data: this.staffingFairnessArray,
         },
       ],
       chartOptions: {
         chart: {
           height: 350,
-          type: "line",
+          type: "scatter",
           zoom: {
             enabled: false,
           },
@@ -54,9 +49,9 @@ export default {
             },
           },
         },
-        dataLabels: {
-          enabled: true,
-        },
+        // dataLabels: {
+        //   enabled: true,
+        // },
         stroke: {
           show: true,
           curve: "smooth",
@@ -72,46 +67,55 @@ export default {
           },
         },
         xaxis: {
-          show: false,
-          type: "category",
-          categories: this.staffingArray,
+          tickAmount: 10,
           labels: {
-            show: false,
-            rotate: -45,
-            rotateAlways: false,
-            hideOverlappingLabels: true,
-            showDuplicates: false,
-            trim: false,
-            minHeight: undefined,
-            maxHeight: 120,
-            style: {
-              colors: [],
-              fontSize: "12px",
-              fontFamily: "Helvetica, Arial, sans-serif",
-              fontWeight: 400,
-              cssClass: "apexcharts-xaxis-label",
-            },
-            offsetX: 0,
-            offsetY: 0,
-            format: undefined,
-            formatter: undefined,
-            datetimeUTC: true,
-            datetimeFormatter: {
-              year: "yyyy",
-              month: "MMM 'yy",
-              day: "dd MMM",
-              hour: "HH:mm",
+            formatter: function(val) {
+              return parseFloat(val).toFixed(1);
             },
           },
-           axisTicks: {
-          show: false,
-          borderType: 'solid',
-          color: '#78909C',
-          height: 6,
-          offsetX: 0,
-          offsetY: 0
-      },
+          //     show: false,
+          //     type: "category",
+          //     categories: this.staffingArray,
+          //     labels: {
+          //       show: false,
+          //       rotate: -45,
+          //       rotateAlways: false,
+          //       hideOverlappingLabels: true,
+          //       showDuplicates: false,
+          //       trim: false,
+          //       minHeight: undefined,
+          //       maxHeight: 120,
+          //       style: {
+          //         colors: [],
+          //         fontSize: "12px",
+          //         fontFamily: "Helvetica, Arial, sans-serif",
+          //         fontWeight: 400,
+          //         cssClass: "apexcharts-xaxis-label",
+          //       },
+          //       offsetX: 0,
+          //       offsetY: 0,
+          //       format: undefined,
+          //       formatter: undefined,
+          //       datetimeUTC: true,
+          //       datetimeFormatter: {
+          //         year: "yyyy",
+          //         month: "MMM 'yy",
+          //         day: "dd MMM",
+          //         hour: "HH:mm",
+          //       },
+          //     },
+          //      axisTicks: {
+          //     show: false,
+          //     borderType: 'solid',
+          //     color: '#78909C',
+          //     height: 6,
+          //     offsetX: 0,
+          //     offsetY: 0
+          // },
         },
+        yaxis: {
+          tickAmount: 7
+        }
       },
     };
   },

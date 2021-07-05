@@ -1,9 +1,10 @@
 /* eslint-disable */
 import { demand, wish, absence} from "./interface"
 
-export function timetable(shiftArray: any[], employee: any[], click=0) {
+export function timetable(shiftArray: any[], employee: any[], task_day=1, click=0) {
 
-
+    // console.log("new task day", task_day);
+    
     interface workArea {
         workAreaId: number,
         workAreaName: string,
@@ -124,12 +125,14 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
 
 
     //calculate the absence of each employee
-    function calculateEmployeeAbsence() {
+    function calculateEmployeeAbsence(shift_day=1) {
+
+        let absence_shift_for_day = absence.filter(item => item.day==shift_day)
         for (let i = 0; i < employee!.length; i++) {
             let rangeArray = []
-            for (let j = 0; j < absence.length; j++) {
-                if (employee![i].empId == absence[j].empId) {
-                    for (let k = absence[j].startTime; k < absence[j].endTime; k++) {
+            for (let j = 0; j < absence_shift_for_day.length; j++) {
+                if (employee![i].empId == absence_shift_for_day[j].empId) {
+                    for (let k = absence_shift_for_day[j].startTime; k < absence_shift_for_day[j].endTime; k++) {
                         rangeArray.push(k)
                     }
                 }
@@ -139,14 +142,15 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
     }
 
     //calculate wish for each employee!
-    function calculateEmployeeWish() {
+    function calculateEmployeeWish(task_day: number) {
+        let filter_wish_for_day = wish.filter(item=>item.day==task_day)
         for (let i = 0; i < employee!.length; i++) {
             let negativeWish = []
             let positiveWish = []
-            for (let j = 0; j < wish.length; j++) {
-                if (employee![i].empId == wish[j].empId) {
-                    for (let k = wish[j].startTime; k < wish[j].endTime; k++) {
-                        if (wish[j].wantsToWork) {
+            for (let j = 0; j < filter_wish_for_day.length; j++) {
+                if (employee![i].empId == filter_wish_for_day[j].empId) {
+                    for (let k = filter_wish_for_day[j].startTime; k < filter_wish_for_day[j].endTime; k++) {
+                        if (filter_wish_for_day[j].wantsToWork) {
                             positiveWish.push(k)
                         } else {
                             negativeWish.push(k)
@@ -170,6 +174,35 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
             // console.log("single empl;oyee", singleEmployee);
 
             shift[i].totalTime = singleEmployee[0 as any].timeRange?.length
+        }
+    }
+
+        function calculateTimeRangeDemand(shift: any, task_day: number) {
+            let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day==task_day)
+        for (let i = 0; i < filter_demand_for_day.length; i++) {
+            let rangeArray = []
+            for (let j = filter_demand_for_day[i].startTime; j < filter_demand_for_day[i].endTime; j++) {
+                rangeArray.push(j)
+            }
+            filter_demand_for_day[i].range = rangeArray;
+        }
+    }
+
+    function updateTimeRangeDemand(shift: any[], task_day: number) {
+        let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day==task_day)
+        for (let i = 0; i < filter_demand_for_day.length; i++) {
+            // console.log("this is emp length", filter_demand_for_day.length, filter_demand_for_day[i].range, officeOpenTimings, officeOpenTimings.length);
+            let newRange = []
+            for (let j = officeOpenTimings[0]; j <= officeOpenTimings[officeOpenTimings.length - 1]; j++) {
+                if (filter_demand_for_day[i].range?.includes(j)) {
+                    newRange.push(j)
+                } else {
+                    newRange.push(0)
+                }
+
+            }
+            // employee[i].daily_working_time = employee[i].work_end_time - employee[i].work_start_time
+            filter_demand_for_day[i].range = newRange;
         }
     }
 
@@ -208,14 +241,17 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
     }
 
 
-    function excessEmployeeInDemand() {
-        for (let i = 0; i < demand.length; i++) {
+    function excessEmployeeInDemand(task_day: number) {
+        let filter_demand_for_day = demand.filter(item => item.day==task_day)
+        // console.log("this is day 1 demands", task_day, filter_demand_for_day);
+        
+        for (let i = 0; i < filter_demand_for_day.length; i++) {
             let totalDemandNew = []
-            for (let j = demand[i].startTime; j < demand[i].endTime; j++) {
+            for (let j = filter_demand_for_day[i].startTime; j < filter_demand_for_day[i].endTime; j++) {
                 let currentlyEmployed = 0
                 let demandObject: any = {}
                 for (let k = 0; k < shift.length; k++) {
-                    if (shift[k].range?.includes(j) && demand[i].workAreaId == shift[k].workAreaId && !shift[k].absenceRange?.includes(j)) {
+                    if (shift[k].range?.includes(j) && filter_demand_for_day[i].workAreaId == shift[k].workAreaId && !shift[k].absenceRange?.includes(j)) {
                         // console.log("it is entered for", shift[k].range,shift[k].absenceRange);
 
                         currentlyEmployed = currentlyEmployed + 1
@@ -227,10 +263,10 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
                 // currentlyEmployed = currentlyEmployed - demand[i].amount
                 demandObject.time = j
                 demandObject.currentlyEmployed = currentlyEmployed
-                demandObject.employeeNeeded = demand[i].amount
+                demandObject.employeeNeeded = filter_demand_for_day[i].amount
                 totalDemandNew.push(demandObject)
             }
-            demand[i].totalDemand = totalDemandNew
+            filter_demand_for_day[i].totalDemand = totalDemandNew
         }
     }
 
@@ -247,15 +283,15 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
     calculateEmployeeAbsence()
 
     //calculate the wish for each employee
-    calculateEmployeeWish()
+    calculateEmployeeWish(task_day)
 
     // update the shift table with new key totalEmployee time
     updateShiftWithTotalTimeOfEmployee()
 
     // put the working time in range eg. Emp1 [6,7.....13]
-    calculateTimeRange(demand)
+    calculateTimeRangeDemand(demand, task_day)
     // put 0 at the places where the emp is not working for the ease to make table eg Emp1 [6,7...13,0,0,0,0,0]
-    updateTimeRange(demand)
+    updateTimeRangeDemand(demand, task_day)
 
     // put the working time in range eg. Emp1 [6,7.....13]
     calculateTimeRange(shift)
@@ -288,29 +324,30 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
     }
 
     // adding a new array object in demand that shows excessEmployee for each time(hour) eg. [{time:6, excessEmployee:2}, {time:7, excessEmployee:4}]
-    excessEmployeeInDemand()
+    excessEmployeeInDemand(task_day)
 
 
 
-    function overstuffing() {
+    function overstuffing(task_day: number) {
+      let  filter_demand_for_day = demand.filter(item => item.day == task_day)
         for (let i = 0; i < workArea.length; i++) {
             let trailStuffing: stuffing = {}
             let overStuffingEmployee = 0
             let underStuffingEmployee = 0
-            for (let j = 0; j < demand.length; j++) {
-                if (workArea[i].workAreaId == demand[j].workAreaId) {
+            for (let j = 0; j < filter_demand_for_day.length; j++) {
+                if (workArea[i].workAreaId == filter_demand_for_day[j].workAreaId) {
                     // console.log("this is is workarea ID", workArea[i].workAreaId, underStuffingEmployee, overStuffingEmployee);
 
-                    for (let k = 0; k < demand[j].totalDemand!.length; k++) {
-                        // console.log(demand[j].totalDemand![k].employeeNeeded);
+                    for (let k = 0; k < filter_demand_for_day[j].totalDemand!.length; k++) {
+                        // console.log(filter_demand_for_day[j].totalDemand![k].employeeNeeded);
 
-                        if (demand[j].totalDemand![k].currentlyEmployed > demand[j].totalDemand![k].employeeNeeded) {
-                            // console.log(demand[j].totalDemand![k].currentlyEmployed, demand[j].totalDemand![k].employeeNeeded);
+                        if (filter_demand_for_day[j].totalDemand![k].currentlyEmployed > filter_demand_for_day[j].totalDemand![k].employeeNeeded) {
+                            // console.log(filter_demand_for_day[j].totalDemand![k].currentlyEmployed, filter_demand_for_day[j].totalDemand![k].employeeNeeded);
 
-                            overStuffingEmployee += (demand[j].totalDemand![k].currentlyEmployed - demand[j].totalDemand![k].employeeNeeded)
+                            overStuffingEmployee += (filter_demand_for_day[j].totalDemand![k].currentlyEmployed - filter_demand_for_day[j].totalDemand![k].employeeNeeded)
                             // console.log("it is overstuffing", overStuffingEmployee);            
-                        } else if (demand[j].totalDemand![k].currentlyEmployed < demand[j].totalDemand![k].employeeNeeded) {
-                            underStuffingEmployee += (demand[j].totalDemand![k].employeeNeeded - demand[j].totalDemand![k].currentlyEmployed)
+                        } else if (filter_demand_for_day[j].totalDemand![k].currentlyEmployed < filter_demand_for_day[j].totalDemand![k].employeeNeeded) {
+                            underStuffingEmployee += (filter_demand_for_day[j].totalDemand![k].employeeNeeded - filter_demand_for_day[j].totalDemand![k].currentlyEmployed)
                             // console.log("it is understuffing", underStuffingEmployee);            
                         }
                     }
@@ -322,7 +359,7 @@ export function timetable(shiftArray: any[], employee: any[], click=0) {
             stuffingFinal.push(trailStuffing)
         }
     }
-    overstuffing()
+    overstuffing(task_day)
     // console.log("this is shift", shift);
 
     for (let i = 0; i < workArea.length; i++) {

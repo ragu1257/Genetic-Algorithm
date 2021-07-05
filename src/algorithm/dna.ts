@@ -176,7 +176,7 @@ class DNA {
         this.staffTime = score;
     }
 
-    calcFairness() {
+    calcFairness(next_day: number) {
         const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
 
         let score = 0;

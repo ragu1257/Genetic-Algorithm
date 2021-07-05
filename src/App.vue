@@ -2,14 +2,13 @@
   <div>
     <button>Monday</button>
     <chart
-      :staffingArray="staffing_array"
-      :fairnessArray="fairness_array"
+      :staffingFairnessArray="fairness_staffing_array"
       @update-table="updateTable"
     />
     <!-- {{ array_number }} -->
     <div>
       <button>Save</button>
-      <button>Next</button>
+      <button @click="updateDayTable">Next</button>
     </div>
     <table
       @update-table="updateTable"
@@ -290,7 +289,7 @@
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
 import { task } from "./algorithm/task";
-import { days } from "./algorithm/days";
+// import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
 import { empPower } from "./algorithm/empPower";
 import { employee, setNewEmployee } from "./algorithm/interface";
@@ -314,30 +313,39 @@ export default defineComponent({
     //   final_rank_index,
     //   final_pop_population,
     // } = task();
-    const dayOutput = days();
-    console.log(dayOutput);
+    // const dayOutput = days();
+    // console.log(dayOutput);
     let officeOpenTimings = ref(task().officeOpenTimings);
     let demand = ref(task().demand);
     let shift = ref(task().shift);
     let workArea = ref(task().workArea);
     let stuffingFinal = ref(task().stuffingFinal);
-    let best_pop_array = ref(task().best_pop_array);
+    // let best_pop_array = ref(task().best_pop_array);
     let final_rank_index = ref(task().final_rank_index);
     let final_pop_population: any = ref(task().final_pop_population);
     let array_number = ref(1);
-    let fairness_array: any = ref([]);
-    let staffing_array: any = ref([]);
+    let fairness_staffing_array: any = ref([]);
+    let days = ref(["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday"]);
+    let complete_log_of_everyday_timetable: any = ref([]);
+    let next_day = ref(0);
+    // let staffing_array: any = ref([]);
     // console.log(
     //   "this is final_rank_index",
     //   final_rank_index.value.length,
     //   final_rank_index.value,
     //   final_pop_population.value
     // );
-
     function makeArray() {
       for (let i = 0; i < final_rank_index.value.length; i++) {
-        fairness_array.value.push(final_pop_population.value[i].fairness);
-        staffing_array.value.push(final_pop_population.value[i].staffing);
+        fairness_staffing_array.value.push([
+          final_pop_population.value[final_rank_index.value[i]].fairness,
+          final_pop_population.value[final_rank_index.value[i]].staffing,
+        ]);
+        // console.log(
+        //   "this is fairness_staffing_array ",
+        //   fairness_staffing_array
+        // );
+        // staffing_array.value.push(final_pop_population.value[final_rank_index.value[i]].staffing);
       }
     }
 
@@ -357,15 +365,28 @@ export default defineComponent({
     shift.value = setInitialShift.shift;
     // timetable(final_pop_population[array_number])
     function updateTable(e: any) {
-      // console.log("hello world", e.config);
+      // console.log(
+      //   "this is fairness_staffing_array ",
+      //   fairness_staffing_array.value
+      // );
+      // console.log(
+      //   "hello world",
+      //   e.config,
+      //   final_pop_population.value[e.config]
+      // );
       array_number.value = e.config;
+      console.log(
+        "hello world 2",
+        e.config,
+        final_pop_population.value[array_number.value]
+      );
       employeeObjectForThisTimetable = empPower(
         final_pop_population.value[array_number.value].genes
       );
 
       setNewEmployee(employeeObjectForThisTimetable);
 
-      console.log("employee after click ", employee);
+      // console.log("employee after click ", employee);
       let click_callback = timetable(
         final_pop_population.value[array_number.value].genes,
         employeeObjectForThisTimetable,
@@ -380,10 +401,35 @@ export default defineComponent({
       // generattion_array = click_callback.generation_array
       // best_pop_array = click_callback.best_pop_array
       //  console.log("click_callback",click_callback);
-      console.log(
-        "this is employeeObjectForThisTimetable",
-        employeeObjectForThisTimetable
-      );
+      // console.log(
+      //   "this is employeeObjectForThisTimetable",
+      //   employeeObjectForThisTimetable
+      // );
+    }
+
+    function updateDayTable() {
+      // console.log("final population on this day", final_pop_population.value);
+      // console.log("final rank index this day", final_rank_index.value);
+      // console.log("selected score", array_number.value);
+      // console.log(
+      //   "fairness staffing score array",
+      //   fairness_staffing_array.value
+      // );
+      // console.log("this is selected shift of this day", shift.value);
+      let day_object = {
+        day: days.value[next_day.value],
+        final_pop_population: final_pop_population.value,
+        final_rank_index: final_rank_index.value,
+        selected_score: array_number.value,
+        fairness_staffing_array: fairness_staffing_array.value,
+        shift: shift.value
+      };
+      // console.log("this is day object", day_object);
+      complete_log_of_everyday_timetable.value.push(day_object)
+      // console.log("this is complete_log_of_everyday_timetable", complete_log_of_everyday_timetable.value)
+
+      next_day.value += 1;
+      task(next_day.value+1)
     }
     // console.log("checking old and new value", stuffingFinal.value);
     // console.log("this is shift in app.vue", shift);
@@ -394,11 +440,12 @@ export default defineComponent({
       shift,
       workArea,
       stuffingFinal,
-      best_pop_array,
       updateTable,
       array_number,
-      fairness_array,
-      staffing_array,
+      fairness_staffing_array,
+      updateDayTable,
+      // fairness_array,
+      // staffing_array,
     };
   },
   // methods: {
