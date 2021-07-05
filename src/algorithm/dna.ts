@@ -3,7 +3,7 @@
 import { TARGET } from "./target";
 import { timetable } from "./timetable"
 import * as _ from "lodash";
-import {employee} from "./interface"
+import { employee, lastEmployeeInfo } from "./interface"
 
 /* eslint-disable */
 
@@ -75,38 +75,38 @@ class DNA {
         }
         let clonedEmployee = _.cloneDeep(employee);
         for (let i = 0; i < employee.length; i++) {
-         
+
             let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
             for (let j = 6; j < 10; j++) {
                 // this.randomEmployee = randomEmployees
 
-              if(clonedEmployee[i].todayWorkingHours! < 9){
-                //   console.log("clonedEmployee", clonedEmployee[i]);                  
+                if (clonedEmployee[i].todayWorkingHours! < 9) {
+                    //   console.log("clonedEmployee", clonedEmployee[i]);                  
                     result[i][j] = number1;
-                    if(number1==0){
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
-                    }else{
+                    if (number1 == 0) {
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
+                    } else {
                         clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
                     }
-                    
+
                 } else {
                     break
                 }
 
             }
-           let number2 = TARGET[(Math.floor(Math.random() * TARGET.length))]
-           if(number1 ==0 && number2 == 0){
-            number2 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
-           }
+            let number2 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+            if (number1 == 0 && number2 == 0) {
+                number2 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
+            }
             for (let j = 10; j < 14; j++) {
                 //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
 
-               if(clonedEmployee[i].todayWorkingHours! < 9){
-                // console.log("clonedEmployee", clonedEmployee[i]); 
+                if (clonedEmployee[i].todayWorkingHours! < 9) {
+                    // console.log("clonedEmployee", clonedEmployee[i]); 
                     result[i][j] = number2;
-                    if(number2==0){
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
-                    }else{
+                    if (number2 == 0) {
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
+                    } else {
                         clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
                     }
                 } else {
@@ -115,16 +115,16 @@ class DNA {
 
             }
             let number3 = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            if(number1 ==0 && number2 == 0 && number3 == 0){
+            if (number1 == 0 && number2 == 0 && number3 == 0) {
                 number3 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
-               }
+            }
             for (let j = 14; j < 18; j++) {
-              if(clonedEmployee[i].todayWorkingHours! < 9){
-                // console.log("clonedEmployee", clonedEmployee[i]); 
+                if (clonedEmployee[i].todayWorkingHours! < 9) {
+                    // console.log("clonedEmployee", clonedEmployee[i]); 
                     result[i][j] = number3;
-                    if(number3==0){
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! 
-                    }else{
+                    if (number3 == 0) {
+                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
+                    } else {
                         clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
                     }
                 } else {
@@ -135,7 +135,7 @@ class DNA {
 
         }
         // console.log("this is result", result);
-        
+
         return result
     }
 
@@ -176,14 +176,31 @@ class DNA {
         this.staffTime = score;
     }
 
-    calcFairness(next_day: number) {
-        const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
 
-        let score = 0;
-        score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
-        this.fairness = score;
-        // console.log("helooooooooooo", finalPositiveWish, finalNegativeWish, finalAbsenceWish);
 
+
+
+    calcFairness(task_day: number) {
+        // console.log("cal fairness", task_day);
+        if (task_day != 1) {
+            // console.log("this is previous selected employee object", lastEmployeeInfo);
+            
+            // let sortingEmployee = employee
+            lastEmployeeInfo.sort((a,b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
+            console.log("sorted array employee", lastEmployeeInfo);
+            console.log("this is current employee before", employee);
+            timetable(this.genes, employee)
+            console.log("this is current employee affter", employee);
+            
+            // let clonedEmployee = _.cloneDeep(employee);
+            // console.log("ye rahi clonedEmployee", employee);
+        } else {
+            const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
+
+            let score = 0;
+            score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+            this.fairness = score;
+        }
     }
 
     calcFitness() {

@@ -15,13 +15,13 @@ class Population {
     perfectScore = 1
     averageFitness = 0
     bestFitness!: number;
-    constructor(popSize: number, next_day: number) {
+    constructor(popSize: number, task_day: number) {
         for (let i = 0; i < popSize; i++) {
             this.population.push(new DNA())
         }
 
 
-        this.calcFitness(next_day)
+        this.calcFitness(task_day)
 
     }
     calcStaffing() {
@@ -34,17 +34,17 @@ class Population {
             this.population[i].calcStaffTiming();
         }
     }
-    calcFairness(next_day: number) {
+    calcFairness(task_day: number) {
         for (let i = 0; i < this.population.length; i++) {
-            this.population[i].calcFairness(next_day);
+            this.population[i].calcFairness(task_day);
         }
     }
 
-    calcFitness(next_day: number) {
+    calcFitness(task_day: number) {
         this.calcStaffing();
         // console.log("it kkis population", this.population);
         this.calcStaffTiming();
-        this.calcFairness(next_day)
+        this.calcFairness(task_day)
         for (let i = 0; i < this.population.length; i++) {
             this.population[i].calcFitness()
         }

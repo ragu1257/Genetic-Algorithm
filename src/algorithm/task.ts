@@ -6,8 +6,8 @@ import { employee } from "./interface"
 import { empPower } from "./empPower"
 
 function createPopulation(task_day: number) {
-  const pop_size: number = 30;
-  const population_number = 10;
+  const pop_size: number = 4;
+  const population_number = 1;
 
   const pop = new Population(pop_size, task_day);
   let generattion_array: number[] = []
@@ -87,17 +87,15 @@ function createPopulation(task_day: number) {
 }
 
 export function task(task_day=1) {
-  console.log("this is next day task", task_day);
   
   // console.log("final_rank_index",final_rank_index, final_pop_population);
   // let {firstIndexShiftArray, final_rank_index, final_pop_population,generattion_array, best_pop_array}=population()
   // console.log("this is task");  
 
   let { firstIndexShiftArray, best_pop_array, final_rank_index, final_pop_population } = createPopulation(task_day)
-  const { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(firstIndexShiftArray, employee, task_day)
+  let { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(firstIndexShiftArray, employee, task_day)
 
-console.log("demand demand demand demand ", demand);
-
+  demand = demand.filter(item=>item.day==task_day)
   // console.log("shift",shift);
   // console.log("final_rank_index in task function", final_rank_index);
 

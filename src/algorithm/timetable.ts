@@ -1,10 +1,12 @@
 /* eslint-disable */
-import { demand, wish, absence} from "./interface"
+import { demand, wish, absence, setNewEmployee } from "./interface"
+import * as _ from "lodash";
 
-export function timetable(shiftArray: any[], employee: any[], task_day=1, click=0) {
+export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
 
+    let clonedEmployee = _.cloneDeep(employee);
     // console.log("new task day", task_day);
-    
+
     interface workArea {
         workAreaId: number,
         workAreaName: string,
@@ -32,7 +34,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
         positiveWishFulfilled?: number,
         negativeWishFulfilled?: number,
         absenceWishFulfilled?: number,
-        empPower? : number
+        empPower?: number
     }
 
     const shift: shift[] = []
@@ -53,7 +55,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
         totalAbsence?: number
     }
 
-   
+
 
     const workArea: workArea[] = [
         { workAreaId: 1, workAreaName: "Books" },
@@ -61,8 +63,8 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
         { workAreaId: 3, workAreaName: "Cleaning" }
     ]
     //Overstaffing, understaffing, overtime, minus hours, absence, wish
-    
-  
+
+
     const officeOpenTimings: number[] = [];
     let stuffingFinal: stuffing[] = []
 
@@ -110,45 +112,45 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
     }
 
     function calculateEmployeeWorkingHour() {
-        for (let i = 0; i < employee!.length; i++) {
+        for (let i = 0; i < clonedEmployee!.length; i++) {
             let rangeArray = []
             for (let j = 0; j < shift.length; j++) {
-                if (employee![i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
+                if (clonedEmployee![i].empId == shift[j].employeeId && shift[j].workAreaId != 0) {
                     for (let k = shift[j].startTime!; k < shift[j].endTime!; k++) {
                         rangeArray.push(k)
                     }
                 }
             }
-            employee![i].timeRange = rangeArray;
+            clonedEmployee![i].timeRange = rangeArray;
         }
     }
 
 
     //calculate the absence of each employee
-    function calculateEmployeeAbsence(shift_day=1) {
+    function calculateEmployeeAbsence(task_day: number) {
 
-        let absence_shift_for_day = absence.filter(item => item.day==shift_day)
-        for (let i = 0; i < employee!.length; i++) {
+        let absence_shift_for_day = absence.filter(item => item.day == task_day)
+        for (let i = 0; i < clonedEmployee!.length; i++) {
             let rangeArray = []
             for (let j = 0; j < absence_shift_for_day.length; j++) {
-                if (employee![i].empId == absence_shift_for_day[j].empId) {
+                if (clonedEmployee![i].empId == absence_shift_for_day[j].empId) {
                     for (let k = absence_shift_for_day[j].startTime; k < absence_shift_for_day[j].endTime; k++) {
                         rangeArray.push(k)
                     }
                 }
             }
-            employee![i].absenceRange = rangeArray;
+            clonedEmployee![i].absenceRange = rangeArray;
         }
     }
 
     //calculate wish for each employee!
     function calculateEmployeeWish(task_day: number) {
-        let filter_wish_for_day = wish.filter(item=>item.day==task_day)
-        for (let i = 0; i < employee!.length; i++) {
+        let filter_wish_for_day = wish.filter(item => item.day == task_day)
+        for (let i = 0; i < clonedEmployee!.length; i++) {
             let negativeWish = []
             let positiveWish = []
             for (let j = 0; j < filter_wish_for_day.length; j++) {
-                if (employee![i].empId == filter_wish_for_day[j].empId) {
+                if (clonedEmployee![i].empId == filter_wish_for_day[j].empId) {
                     for (let k = filter_wish_for_day[j].startTime; k < filter_wish_for_day[j].endTime; k++) {
                         if (filter_wish_for_day[j].wantsToWork) {
                             positiveWish.push(k)
@@ -159,8 +161,8 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
                     }
                 }
             }
-            employee![i].negativeWish = negativeWish;
-            employee![i].positiveWish = positiveWish;
+            clonedEmployee![i].negativeWish = negativeWish;
+            clonedEmployee![i].positiveWish = positiveWish;
         }
     }
 
@@ -168,7 +170,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
     // console.log("this is totalTime in emp", employee!);
     function updateShiftWithTotalTimeOfEmployee() {
         for (let i = 0; i < shift.length; i++) {
-            let singleEmployee = employee!.filter(item =>
+            let singleEmployee = clonedEmployee!.filter(item =>
                 item.empId == shift[i].employeeId
             )
             // console.log("single empl;oyee", singleEmployee);
@@ -177,8 +179,8 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
         }
     }
 
-        function calculateTimeRangeDemand(shift: any, task_day: number) {
-            let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day==task_day)
+    function calculateTimeRangeDemand(shift: any, task_day: number) {
+        let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day == task_day)
         for (let i = 0; i < filter_demand_for_day.length; i++) {
             let rangeArray = []
             for (let j = filter_demand_for_day[i].startTime; j < filter_demand_for_day[i].endTime; j++) {
@@ -189,7 +191,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
     }
 
     function updateTimeRangeDemand(shift: any[], task_day: number) {
-        let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day==task_day)
+        let filter_demand_for_day = shift.filter((item: { day: number; }) => item.day == task_day)
         for (let i = 0; i < filter_demand_for_day.length; i++) {
             // console.log("this is emp length", filter_demand_for_day.length, filter_demand_for_day[i].range, officeOpenTimings, officeOpenTimings.length);
             let newRange = []
@@ -242,9 +244,9 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
 
 
     function excessEmployeeInDemand(task_day: number) {
-        let filter_demand_for_day = demand.filter(item => item.day==task_day)
+        let filter_demand_for_day = demand.filter(item => item.day == task_day)
         // console.log("this is day 1 demands", task_day, filter_demand_for_day);
-        
+
         for (let i = 0; i < filter_demand_for_day.length; i++) {
             let totalDemandNew = []
             for (let j = filter_demand_for_day[i].startTime; j < filter_demand_for_day[i].endTime; j++) {
@@ -280,7 +282,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
     calculateEmployeeWorkingHour()
 
     //calculate the absence of each employee
-    calculateEmployeeAbsence()
+    calculateEmployeeAbsence(task_day)
 
     //calculate the wish for each employee
     calculateEmployeeWish(task_day)
@@ -313,12 +315,12 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
 
     for (let i = 0; i < shift.length; i++) {
         // let totalNotAvailableTime = []
-        for (let j = 0; j < employee!.length; j++) {
-            if (employee![j].empId == shift[i].employeeId) {
-                shift[i].absenceRange = employee![j].absenceRange
-                shift[i].negativeWish = employee![j].negativeWish
-                shift[i].positiveWish = employee![j].positiveWish
-                shift[i].weeklyWorkingHours = employee![j].weeklyWorkingHours
+        for (let j = 0; j < clonedEmployee!.length; j++) {
+            if (clonedEmployee![j].empId == shift[i].employeeId) {
+                shift[i].absenceRange = clonedEmployee![j].absenceRange
+                shift[i].negativeWish = clonedEmployee![j].negativeWish
+                shift[i].positiveWish = clonedEmployee![j].positiveWish
+                shift[i].weeklyWorkingHours = clonedEmployee![j].weeklyWorkingHours
             }
         }
     }
@@ -329,7 +331,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
 
 
     function overstuffing(task_day: number) {
-      let  filter_demand_for_day = demand.filter(item => item.day == task_day)
+        let filter_demand_for_day = demand.filter(item => item.day == task_day)
         for (let i = 0; i < workArea.length; i++) {
             let trailStuffing: stuffing = {}
             let overStuffingEmployee = 0
@@ -469,15 +471,16 @@ export function timetable(shiftArray: any[], employee: any[], task_day=1, click=
 
     }
 
-    for(let i=0; i< employee.length; i++){
-        for(let j=0; j<shift.length; j++){
-            if(shift[j].employeeId == employee[i].empId){
-                shift[j].empPower = employee[i].empPower
+    for (let i = 0; i < clonedEmployee.length; i++) {
+        for (let j = 0; j < shift.length; j++) {
+            if (shift[j].employeeId == clonedEmployee[i].empId) {
+                shift[j].empPower = clonedEmployee[i].empPower
             }
         }
     }
 
-
+    // console.log("this is in table function", clonedEmployee);
+    setNewEmployee(clonedEmployee)
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
 

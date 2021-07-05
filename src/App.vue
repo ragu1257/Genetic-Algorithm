@@ -292,7 +292,7 @@ import { task } from "./algorithm/task";
 // import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
 import { empPower } from "./algorithm/empPower";
-import { employee, setNewEmployee } from "./algorithm/interface";
+import { employee, setLastEmployeeInfo } from "./algorithm/interface";
 
 import chart from "./chart.vue";
 // import dna from "./algorithm/dna";
@@ -315,82 +315,92 @@ export default defineComponent({
     // } = task();
     // const dayOutput = days();
     // console.log(dayOutput);
-    let officeOpenTimings = ref(task().officeOpenTimings);
-    let demand = ref(task().demand);
-    let shift = ref(task().shift);
-    let workArea = ref(task().workArea);
-    let stuffingFinal = ref(task().stuffingFinal);
+    let officeOpenTimings = ref();
+    let demand = ref();
+    let shift = ref();
+    let workArea = ref();
+    let stuffingFinal = ref();
     // let best_pop_array = ref(task().best_pop_array);
-    let final_rank_index = ref(task().final_rank_index);
-    let final_pop_population: any = ref(task().final_pop_population);
+    let final_rank_index = ref();
+    let final_pop_population: any = ref();
     let array_number = ref(1);
     let fairness_staffing_array: any = ref([]);
     let days = ref(["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday"]);
     let complete_log_of_everyday_timetable: any = ref([]);
     let next_day = ref(0);
-    // let staffing_array: any = ref([]);
-    // console.log(
-    //   "this is final_rank_index",
-    //   final_rank_index.value.length,
-    //   final_rank_index.value,
-    //   final_pop_population.value
-    // );
+
+    let fetchTask = task(1);
+    console.log(fetchTask);
+    function setTaskData(fetchTask: {
+      officeOpenTimings: any;
+      demand: any;
+      shift: any;
+      workArea: any;
+      stuffingFinal: any;
+      best_pop_array?: number[];
+      finalOverstuffing?: number;
+      finalUnderStuffing?: number;
+      finalUnderTime?: number;
+      finalOverTime?: number;
+      final_rank_index: any;
+      final_pop_population: any;
+    }) {
+      officeOpenTimings.value = fetchTask.officeOpenTimings;
+      demand.value = fetchTask.demand;
+      shift.value = fetchTask.shift;
+      workArea.value = fetchTask.workArea;
+      stuffingFinal.value = fetchTask.stuffingFinal;
+      final_rank_index.value = fetchTask.final_rank_index;
+      final_pop_population.value = fetchTask.final_pop_population;
+    }
+
+    setTaskData(fetchTask);
+
     function makeArray() {
+      fairness_staffing_array.value = [];
       for (let i = 0; i < final_rank_index.value.length; i++) {
         fairness_staffing_array.value.push([
           final_pop_population.value[final_rank_index.value[i]].fairness,
           final_pop_population.value[final_rank_index.value[i]].staffing,
         ]);
-        // console.log(
-        //   "this is fairness_staffing_array ",
-        //   fairness_staffing_array
-        // );
-        // staffing_array.value.push(final_pop_population.value[final_rank_index.value[i]].staffing);
       }
+
+      // console.log("fairness_staffing_array", fairness_staffing_array.value);
     }
 
     makeArray();
-    // console.log("fairness array, staffing array", fairness_array.value, staffing_array.value);
-    // console.log("employee on load", employee);
+
+    // return a new employee object with updated EP power
     let employeeObjectForThisTimetable = empPower(
-      final_pop_population.value[0].genes
+      final_pop_population.value[final_rank_index.value[0]].genes
     );
 
-    //setting the table for the first DNA/timetable in set of population/timetable
+    // setNewEmployee(employeeObjectForThisTimetable);
+
+    //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
     let setInitialShift = timetable(
       final_pop_population.value[0].genes,
       employeeObjectForThisTimetable
     );
-    // console.log("setInitialShift", setInitialShift);
+    //setting shift to a updated shift and all other return values respectively
+
+    officeOpenTimings.value = setInitialShift.officeOpenTimings;
+    demand.value = setInitialShift.demand;
     shift.value = setInitialShift.shift;
-    // timetable(final_pop_population[array_number])
+    workArea.value = setInitialShift.workArea;
+    stuffingFinal.value = setInitialShift.stuffingFinal;
+
     function updateTable(e: any) {
-      // console.log(
-      //   "this is fairness_staffing_array ",
-      //   fairness_staffing_array.value
-      // );
-      // console.log(
-      //   "hello world",
-      //   e.config,
-      //   final_pop_population.value[e.config]
-      // );
       array_number.value = e.config;
-      console.log(
-        "hello world 2",
-        e.config,
-        final_pop_population.value[array_number.value]
-      );
       employeeObjectForThisTimetable = empPower(
         final_pop_population.value[array_number.value].genes
       );
 
-      setNewEmployee(employeeObjectForThisTimetable);
+      // setNewEmployee(employeeObjectForThisTimetable);
 
-      // console.log("employee after click ", employee);
       let click_callback = timetable(
         final_pop_population.value[array_number.value].genes,
-        employeeObjectForThisTimetable,
-        2
+        employeeObjectForThisTimetable
       );
 
       officeOpenTimings.value = click_callback.officeOpenTimings;
@@ -398,38 +408,46 @@ export default defineComponent({
       shift.value = click_callback.shift;
       workArea.value = click_callback.workArea;
       stuffingFinal.value = click_callback.stuffingFinal;
-      // generattion_array = click_callback.generation_array
-      // best_pop_array = click_callback.best_pop_array
-      //  console.log("click_callback",click_callback);
-      // console.log(
-      //   "this is employeeObjectForThisTimetable",
-      //   employeeObjectForThisTimetable
-      // );
     }
 
     function updateDayTable() {
-      // console.log("final population on this day", final_pop_population.value);
-      // console.log("final rank index this day", final_rank_index.value);
-      // console.log("selected score", array_number.value);
-      // console.log(
-      //   "fairness staffing score array",
-      //   fairness_staffing_array.value
-      // );
-      // console.log("this is selected shift of this day", shift.value);
+      setLastEmployeeInfo(employeeObjectForThisTimetable);
       let day_object = {
         day: days.value[next_day.value],
         final_pop_population: final_pop_population.value,
         final_rank_index: final_rank_index.value,
         selected_score: array_number.value,
         fairness_staffing_array: fairness_staffing_array.value,
-        shift: shift.value
+        shift: shift.value,
       };
       // console.log("this is day object", day_object);
-      complete_log_of_everyday_timetable.value.push(day_object)
+      complete_log_of_everyday_timetable.value.push(day_object);
       // console.log("this is complete_log_of_everyday_timetable", complete_log_of_everyday_timetable.value)
 
       next_day.value += 1;
-      task(next_day.value+1)
+
+      let new_day_task_return_values = task(next_day.value + 1);
+      // console.log("ep value before", employee);
+      // console.log(new_day_task_return_values);
+      setTaskData(new_day_task_return_values);
+      employeeObjectForThisTimetable = empPower(
+        final_pop_population.value[final_rank_index.value[0]].genes
+      );
+
+      //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
+      let setInitialShift = timetable(
+        final_pop_population.value[0].genes,
+        employeeObjectForThisTimetable
+      );
+      //setting shift to a updated shift and all other return values respectively
+
+      officeOpenTimings.value = setInitialShift.officeOpenTimings;
+      demand.value = setInitialShift.demand;
+      shift.value = setInitialShift.shift;
+      workArea.value = setInitialShift.workArea;
+      stuffingFinal.value = setInitialShift.stuffingFinal;
+
+      makeArray();
     }
     // console.log("checking old and new value", stuffingFinal.value);
     // console.log("this is shift in app.vue", shift);
