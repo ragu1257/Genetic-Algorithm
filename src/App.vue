@@ -7,8 +7,8 @@
     />
 
     <div v-if="makePieChart">
-      {{ wish_fulfil_not_fulfil_array }}
       <pieChart :totalWishNotFulfilled="wish_fulfil_not_fulfil_array" />
+      <sDLineChart :standardDeviationArray="standardDeviationArray" :standardDeviation="standardDeviation" />
     </div>
     <!-- {{ array_number }} -->
     <div>
@@ -301,12 +301,14 @@ import { employee, setLastEmployeeInfo } from "./algorithm/interface";
 import { std } from "mathjs";
 import chart from "./chart.vue";
 import pieChart from "./pieChart.vue";
+import sDLineChart from "./sDLineChart.vue"
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
   components: {
     chart,
     pieChart,
+    sDLineChart
   },
   setup() {
     // let {
@@ -339,6 +341,8 @@ export default defineComponent({
     let totalWeeklyWishForAllEmployees = ref(0);
     let makePieChart = ref(false);
     let wish_fulfil_not_fulfil_array = ref();
+    let standardDeviationArray = ref()
+    let standardDeviation = ref(0)
 
     let fetchTask = task(1);
     console.log(fetchTask);
@@ -509,7 +513,7 @@ export default defineComponent({
     }
 
     function calStandardDeviationOfIndividualsFairness() {
-      let standardDeviationArray = []
+      let standardDeviationArrayLocal = []
 
       for(let i=0; i<employee.length; i++){
         let currentEmployeeFairnessScore = 0
@@ -519,19 +523,23 @@ export default defineComponent({
 
         complete_log_of_everyday_timetable.value[j].employee_object_info[k].positiveWish.some((item: any) => {
             if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 0
-            }else{
                 currentEmployeeFairnessScore += 1
+            }else{
+                currentEmployeeFairnessScore += 0
             }
         });
         complete_log_of_everyday_timetable.value[j].employee_object_info[k].negativeWish.some((item: any) => {
             if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 1
+                currentEmployeeFairnessScore += 0
+            }else{
+               currentEmployeeFairnessScore += 1
             }
         });
         complete_log_of_everyday_timetable.value[j].employee_object_info[k].absenceRange.some((item: any) => {
             if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 1
+                currentEmployeeFairnessScore += 0
+            }else{
+               currentEmployeeFairnessScore += 1
             }
         });
 
@@ -539,10 +547,30 @@ export default defineComponent({
           }
         }
 
-        standardDeviationArray.push(currentEmployeeFairnessScore)
+        standardDeviationArrayLocal.push(currentEmployeeFairnessScore)
       }
 
-      console.log("complete standard deviation input", standardDeviationArray);
+      let leftArray = []
+      let rightArray = []
+
+      for(let i=0; i<standardDeviationArrayLocal.length; i++){
+        if(i<(standardDeviationArrayLocal.length/2)){
+          leftArray.push(standardDeviationArrayLocal[i])
+        }else{
+          rightArray.push(standardDeviationArrayLocal[i])
+        }
+      }
+      leftArray.sort((a, b) => a - b); 
+      rightArray.sort((a, b) => b - a);
+
+      standardDeviationArrayLocal = leftArray.concat(rightArray)
+      // console.log("standardDeviationArrayLocal, left and right",standardDeviationArrayLocal, leftArray, rightArray)
+
+      standardDeviation.value = std(standardDeviationArrayLocal)
+
+      standardDeviationArray.value = standardDeviationArrayLocal
+
+      // console.log("standardDeviation, standardDeviationArray", standardDeviation.value, standardDeviationArray.value);
       
       
       
@@ -621,6 +649,8 @@ export default defineComponent({
       updateDayTable,
       makePieChart,
       wish_fulfil_not_fulfil_array,
+      standardDeviationArray,
+      standardDeviation
       // fairness_array,
       // staffing_array,
     };
