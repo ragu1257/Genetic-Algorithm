@@ -1,5 +1,5 @@
 <template>
-  <div id="chart">
+  <div v-if="series && chartOptions" id="chart">
     <apexchart
       type="scatter"
       height="350"
@@ -7,6 +7,7 @@
       :series="series"
       @dataPointSelection="dataPointSelectionHandler"
     ></apexchart>
+    {{ category }}
   </div>
 </template>
 
@@ -21,112 +22,88 @@ export default {
   },
   data: function() {
     return {
-      series: [
-        {
-          name: "Fairness and Staffing",
-          data: this.staffingFairnessArray,
-        },
-      ],
-      chartOptions: {
-        chart: {
-          height: 350,
-          type: "scatter",
-          zoom: {
-            enabled: false,
-          },
-          events: {
-            click: (event, chartContext, config) => {
-              this.dataPointSelectionHandler(config.dataPointIndex);
-              // this.$emit('update-cart')
-              console.log("1", config.config.series[config.seriesIndex]);
-              console.log("2", config.config.series[config.seriesIndex].name);
-              console.log(
-                "3",
-                config.config.series[config.seriesIndex].data[
-                  config.dataPointIndex
-                ]
-              );
-            },
-          },
-        },
-        // dataLabels: {
-        //   enabled: true,
-        // },
-        stroke: {
-          show: true,
-          curve: "smooth",
-        },
-        title: {
-          text: "Fairness and Staffing trade-off",
-          align: "left",
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
-        },
-        xaxis: {
-          tickAmount: 10,
-          labels: {
-            formatter: function(val) {
-              return parseFloat(val).toFixed(1);
-            },
-          },
-          //     show: false,
-          //     type: "category",
-          //     categories: this.staffingArray,
-          //     labels: {
-          //       show: false,
-          //       rotate: -45,
-          //       rotateAlways: false,
-          //       hideOverlappingLabels: true,
-          //       showDuplicates: false,
-          //       trim: false,
-          //       minHeight: undefined,
-          //       maxHeight: 120,
-          //       style: {
-          //         colors: [],
-          //         fontSize: "12px",
-          //         fontFamily: "Helvetica, Arial, sans-serif",
-          //         fontWeight: 400,
-          //         cssClass: "apexcharts-xaxis-label",
-          //       },
-          //       offsetX: 0,
-          //       offsetY: 0,
-          //       format: undefined,
-          //       formatter: undefined,
-          //       datetimeUTC: true,
-          //       datetimeFormatter: {
-          //         year: "yyyy",
-          //         month: "MMM 'yy",
-          //         day: "dd MMM",
-          //         hour: "HH:mm",
-          //       },
-          //     },
-          //      axisTicks: {
-          //     show: false,
-          //     borderType: 'solid',
-          //     color: '#78909C',
-          //     height: 6,
-          //     offsetX: 0,
-          //     offsetY: 0
-          // },
-        },
-        yaxis: {
-          tickAmount: 7
-        }
-      },
+      series: null,
+      chartOptions: null,
     };
   },
   methods: {
     dataPointSelectionHandler(config) {
       this.$emit("update-table", { config });
     },
+
+    createChartData(fairnessArray) {
+      console.log("in chart data"),
+        (this.series = [
+          {
+            name: "Fairness and Staffing",
+            data: fairnessArray,
+          },
+        ]),
+        (this.chartOptions = {
+          chart: {
+            height: 350,
+            type: "scatter",
+            zoom: {
+              enabled: false,
+            },
+            events: {
+              click: (event, chartContext, config) => {
+                this.dataPointSelectionHandler(config.dataPointIndex);
+                // this.$emit('update-cart')
+                console.log("1", config.config.series[config.seriesIndex]);
+                console.log("2", config.config.series[config.seriesIndex].name);
+                console.log(
+                  "3",
+                  config.config.series[config.seriesIndex].data[
+                    config.dataPointIndex
+                  ]
+                );
+              },
+            },
+          },
+          // dataLabels: {
+          //   enabled: true,
+          // },
+          stroke: {
+            show: true,
+            curve: "smooth",
+          },
+          title: {
+            text: "Fairness and Staffing trade-off",
+            align: "left",
+          },
+          grid: {
+            row: {
+              colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+              opacity: 0.5,
+            },
+          },
+          xaxis: {
+            tickAmount: 10,
+            labels: {
+              formatter: function(val) {
+                return parseFloat(val).toFixed(1);
+              },
+            },
+          },
+          yaxis: {
+            tickAmount: 7,
+          },
+        });
+    },
   },
   created: function() {
     // `this` points to the vm instance
     // console.log("a is: " + this.staffingArray);
+  },
+  mounted: function() {
+    this.createChartData(this.staffingFairnessArray);
+  },
+  computed: {
+    category: function() {
+       this.createChartData(this.staffingFairnessArray);
+      return this.staffingFairnessArray;
+    },
   },
 };
 </script>

@@ -371,6 +371,7 @@ export default defineComponent({
 
     setTaskData(fetchTask);
     function makeArray() {
+      console.log("final_rank_index in make array", final_rank_index.value)
       fairness_staffing_array.value = [];
       for (let i = 0; i < final_rank_index.value.length; i++) {
         fairness_staffing_array.value.push([
@@ -383,7 +384,7 @@ export default defineComponent({
     }
 
     makeArray();
-
+  
     // return a new employee object with updated EP power
     let employeeObjectForThisTimetable = empPower(
       final_pop_population.value[final_rank_index.value[0]].genes
@@ -572,8 +573,6 @@ export default defineComponent({
 
       // console.log("standardDeviation, standardDeviationArray", standardDeviation.value, standardDeviationArray.value);
       
-      
-      
     }
 
     function updateDayTable() {
@@ -590,15 +589,6 @@ export default defineComponent({
         };
         // console.log("this is day object", day_object);
         complete_log_of_everyday_timetable.value.push(day_object);
-        // console.log(
-        //   "this is last employee selected info",
-        //   employeeObjectForThisTimetable
-        // );
-        // console.log(
-        //   "this is complete_log_of_everyday_timetable",
-        //   complete_log_of_everyday_timetable.value
-        // );
-
         next_day.value += 1;
 
         let new_day_task_return_values = task(next_day.value + 1);
@@ -623,19 +613,18 @@ export default defineComponent({
         stuffingFinal.value = setInitialShift.stuffingFinal;
 
         makeArray();
+        // this.$emit("new-chart-data")
       } else {
         calcTotalWishesNotFulfilledWeek();
         calStandardDeviationOfIndividualsFairness();
-        console.log(
-          "complete_log_of_everyday_timetable",
-          complete_log_of_everyday_timetable
-        );
+        // console.log(
+        //   "complete_log_of_everyday_timetable",
+        //   complete_log_of_everyday_timetable
+        // );
 
         makePieChart.value = true;
       }
     }
-    // console.log("checking old and new value", stuffingFinal.value);
-    // console.log("this is shift in app.vue", shift);
 
     return {
       officeOpenTimings,
