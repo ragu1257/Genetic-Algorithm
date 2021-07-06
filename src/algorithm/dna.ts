@@ -179,7 +179,7 @@ class DNA {
 
 
     calScore(oneEmp: any) {
-        console.log("this is oneEmp", oneEmp);
+        // console.log("this is oneEmp", oneEmp);
 
         let negativeWishNotFullfilled = 0
         let positiveWishNotFullfilled = 0
@@ -187,6 +187,8 @@ class DNA {
 
         oneEmp.positiveWish.some((item: any) => {
             if (oneEmp.timeRange.includes(item)) {
+                positiveWishNotFullfilled += 0
+            }else{
                 positiveWishNotFullfilled += 1
             }
         });

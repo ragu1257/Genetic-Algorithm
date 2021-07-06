@@ -5,6 +5,11 @@
       :staffingFairnessArray="fairness_staffing_array"
       @update-table="updateTable"
     />
+
+    <div v-if="makePieChart">
+      {{ wish_fulfil_not_fulfil_array }}
+      <pieChart :totalWishNotFulfilled="wish_fulfil_not_fulfil_array" />
+    </div>
     <!-- {{ array_number }} -->
     <div>
       <button>Save</button>
@@ -293,13 +298,15 @@ import { task } from "./algorithm/task";
 import { timetable } from "./algorithm/timetable";
 import { empPower } from "./algorithm/empPower";
 import { employee, setLastEmployeeInfo } from "./algorithm/interface";
-
+import { std } from "mathjs";
 import chart from "./chart.vue";
+import pieChart from "./pieChart.vue";
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
   components: {
     chart,
+    pieChart,
   },
   setup() {
     // let {
@@ -325,9 +332,13 @@ export default defineComponent({
     let final_pop_population: any = ref();
     let array_number = ref(1);
     let fairness_staffing_array: any = ref([]);
-    let days = ref(["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday"]);
+    let days = ref(["Monday", "Tuesday", "Wednesday"]);
     let complete_log_of_everyday_timetable: any = ref([]);
     let next_day = ref(0);
+    let totalWeeklyWishNotFulfilled = ref(0);
+    let totalWeeklyWishForAllEmployees = ref(0);
+    let makePieChart = ref(false);
+    let wish_fulfil_not_fulfil_array = ref();
 
     let fetchTask = task(1);
     console.log(fetchTask);
@@ -355,7 +366,6 @@ export default defineComponent({
     }
 
     setTaskData(fetchTask);
-
     function makeArray() {
       fairness_staffing_array.value = [];
       for (let i = 0; i < final_rank_index.value.length; i++) {
@@ -410,44 +420,191 @@ export default defineComponent({
       stuffingFinal.value = click_callback.stuffingFinal;
     }
 
+    function calcTotalWishesNotFulfilledWeek() {
+      let negativeWishNotFullfilled = 0;
+      let positiveWishNotFullfilled = 0;
+      let absenceWishNotFullfilled = 0;
+
+      let negativeWish = 0;
+      let positiveWish = 0;
+      let absenceWish = 0;
+
+      for (
+        let i = 0;
+        i < complete_log_of_everyday_timetable.value.length;
+        i++
+      ) {
+        for (
+          let j = 0;
+          j <
+          complete_log_of_everyday_timetable.value[i].employee_object_info
+            .length;
+          j++
+        ) {
+          complete_log_of_everyday_timetable.value[i].employee_object_info[
+            j
+          ].positiveWish.some((item: any) => {
+            if (
+              complete_log_of_everyday_timetable.value[i].employee_object_info[
+                j
+              ].timeRange.includes(item)
+            ) {
+              positiveWishNotFullfilled += 0;
+            } else {
+              positiveWishNotFullfilled += 1;
+            }
+          });
+          complete_log_of_everyday_timetable.value[i].employee_object_info[
+            j
+          ].negativeWish.some((item: any) => {
+            if (
+              complete_log_of_everyday_timetable.value[i].employee_object_info[
+                j
+              ].timeRange.includes(item)
+            ) {
+              negativeWishNotFullfilled += 1;
+            }
+          });
+          complete_log_of_everyday_timetable.value[i].employee_object_info[
+            j
+          ].absenceRange.some((item: any) => {
+            if (
+              complete_log_of_everyday_timetable.value[i].employee_object_info[
+                j
+              ].timeRange.includes(item)
+            ) {
+              absenceWishNotFullfilled += 1;
+            }
+          });
+
+          positiveWish +=
+            complete_log_of_everyday_timetable.value[i].employee_object_info[j]
+              .positiveWish.length;
+          negativeWish +=
+            complete_log_of_everyday_timetable.value[i].employee_object_info[j]
+              .negativeWish.length;
+          absenceWish +=
+            complete_log_of_everyday_timetable.value[i].employee_object_info[j]
+              .absenceRange.length;
+        }
+      }
+      totalWeeklyWishNotFulfilled.value =
+        negativeWishNotFullfilled +
+        positiveWishNotFullfilled +
+        absenceWishNotFullfilled;
+
+      totalWeeklyWishForAllEmployees.value =
+        negativeWish + positiveWish + absenceWish;
+
+      console.log(
+        "this is totalWeeklyWishNotFulfilled, totalWeeklyWishForAllEmployees",
+        totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishForAllEmployees.value
+      );
+      wish_fulfil_not_fulfil_array.value = [
+        totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishForAllEmployees.value -
+          totalWeeklyWishNotFulfilled.value,
+      ];
+    }
+
+    function calStandardDeviationOfIndividualsFairness() {
+      let standardDeviationArray = []
+
+      for(let i=0; i<employee.length; i++){
+        let currentEmployeeFairnessScore = 0
+        for(let j=0; j<complete_log_of_everyday_timetable.value.length; j++){
+          for(let k=0 ; k<complete_log_of_everyday_timetable.value[j].employee_object_info.length; k++){
+            if(employee[i].empId == complete_log_of_everyday_timetable.value[j].employee_object_info[k].empId){
+
+        complete_log_of_everyday_timetable.value[j].employee_object_info[k].positiveWish.some((item: any) => {
+            if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 0
+            }else{
+                currentEmployeeFairnessScore += 1
+            }
+        });
+        complete_log_of_everyday_timetable.value[j].employee_object_info[k].negativeWish.some((item: any) => {
+            if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 1
+            }
+        });
+        complete_log_of_everyday_timetable.value[j].employee_object_info[k].absenceRange.some((item: any) => {
+            if (complete_log_of_everyday_timetable.value[j].employee_object_info[k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 1
+            }
+        });
+
+            }
+          }
+        }
+
+        standardDeviationArray.push(currentEmployeeFairnessScore)
+      }
+
+      console.log("complete standard deviation input", standardDeviationArray);
+      
+      
+      
+    }
+
     function updateDayTable() {
-      setLastEmployeeInfo(employeeObjectForThisTimetable);
-      let day_object = {
-        day: days.value[next_day.value],
-        final_pop_population: final_pop_population.value,
-        final_rank_index: final_rank_index.value,
-        selected_score: array_number.value,
-        fairness_staffing_array: fairness_staffing_array.value,
-        shift: shift.value,
-      };
-      // console.log("this is day object", day_object);
-      complete_log_of_everyday_timetable.value.push(day_object);
-      // console.log("this is complete_log_of_everyday_timetable", complete_log_of_everyday_timetable.value)
+      if (next_day.value < days.value.length) {
+        setLastEmployeeInfo(employeeObjectForThisTimetable);
+        let day_object = {
+          day: days.value[next_day.value],
+          employee_object_info: employeeObjectForThisTimetable,
+          final_pop_population: final_pop_population.value,
+          final_rank_index: final_rank_index.value,
+          selected_score: array_number.value,
+          fairness_staffing_array: fairness_staffing_array.value,
+          shift: shift.value,
+        };
+        // console.log("this is day object", day_object);
+        complete_log_of_everyday_timetable.value.push(day_object);
+        // console.log(
+        //   "this is last employee selected info",
+        //   employeeObjectForThisTimetable
+        // );
+        // console.log(
+        //   "this is complete_log_of_everyday_timetable",
+        //   complete_log_of_everyday_timetable.value
+        // );
 
-      next_day.value += 1;
+        next_day.value += 1;
 
-      let new_day_task_return_values = task(next_day.value + 1);
-      // console.log("ep value before", employee);
-      // console.log(new_day_task_return_values);
-      setTaskData(new_day_task_return_values);
-      employeeObjectForThisTimetable = empPower(
-        final_pop_population.value[final_rank_index.value[0]].genes
-      );
+        let new_day_task_return_values = task(next_day.value + 1);
+        // console.log("ep value before", employee);
+        // console.log(new_day_task_return_values);
+        setTaskData(new_day_task_return_values);
+        employeeObjectForThisTimetable = empPower(
+          final_pop_population.value[final_rank_index.value[0]].genes
+        );
 
-      //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
-      let setInitialShift = timetable(
-        final_pop_population.value[0].genes,
-        employeeObjectForThisTimetable
-      );
-      //setting shift to a updated shift and all other return values respectively
+        //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
+        let setInitialShift = timetable(
+          final_pop_population.value[0].genes,
+          employeeObjectForThisTimetable
+        );
+        //setting shift to a updated shift and all other return values respectively
 
-      officeOpenTimings.value = setInitialShift.officeOpenTimings;
-      demand.value = setInitialShift.demand;
-      shift.value = setInitialShift.shift;
-      workArea.value = setInitialShift.workArea;
-      stuffingFinal.value = setInitialShift.stuffingFinal;
+        officeOpenTimings.value = setInitialShift.officeOpenTimings;
+        demand.value = setInitialShift.demand;
+        shift.value = setInitialShift.shift;
+        workArea.value = setInitialShift.workArea;
+        stuffingFinal.value = setInitialShift.stuffingFinal;
 
-      makeArray();
+        makeArray();
+      } else {
+        calcTotalWishesNotFulfilledWeek();
+        calStandardDeviationOfIndividualsFairness();
+        console.log(
+          "complete_log_of_everyday_timetable",
+          complete_log_of_everyday_timetable
+        );
+
+        makePieChart.value = true;
+      }
     }
     // console.log("checking old and new value", stuffingFinal.value);
     // console.log("this is shift in app.vue", shift);
@@ -462,6 +619,8 @@ export default defineComponent({
       array_number,
       fairness_staffing_array,
       updateDayTable,
+      makePieChart,
+      wish_fulfil_not_fulfil_array,
       // fairness_array,
       // staffing_array,
     };
