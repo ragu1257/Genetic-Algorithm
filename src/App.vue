@@ -22,13 +22,15 @@
       @update-table="updateTable"
       class="table-auto w-2/3 text-center"
       v-bind:style="{ display: 'inline-table' }"
-      v-for="(daily_shift,index) in weekly_timetable_array"
+      v-for="(daily_shift, index) in weekly_timetable_array"
       :key="index"
     >
       <thead>
         <tr>
           <th>Name</th>
-          <th v-for="item in daily_shift.officeOpenTimings" :key="item">{{ item }}</th>
+          <th v-for="item in daily_shift.officeOpenTimings" :key="item">
+            {{ item }}
+          </th>
           <!-- <th>Daily working time / Fixed Working Time</th> -->
           <th>Positive Wish Fulfilled / Total Positive Wish</th>
           <th>Negative Wish Fulfilled / Total Negative Wish</th>
@@ -198,7 +200,12 @@
           <td>demand coverage</td>
           <td v-for="number in daily_shift.officeOpenTimings" :key="number">
             <span v-for="(item, i) in daily_shift.demand" :key="i">
-              <span v-if="item.workAreaId == workArea.workAreaId && item.day == daily_shift.day_id">
+              <span
+                v-if="
+                  item.workAreaId == workArea.workAreaId &&
+                    item.day == daily_shift.day_id
+                "
+              >
                 <span v-for="(demand, i) in item.totalDemand" :key="i">
                   <span
                     v-if="demand.time == number"
@@ -302,7 +309,11 @@ import { task } from "./algorithm/task";
 // import { days } from "./algorithm/days";
 import { timetable } from "./algorithm/timetable";
 import { empPower } from "./algorithm/empPower";
-import { employee, setLastEmployeeInfo } from "./algorithm/interface";
+import {
+  employee,
+  setLastEmployeeInfo,
+  ep_powers,
+} from "./algorithm/interface";
 import { std } from "mathjs";
 import chart from "./chart.vue";
 import pieChart from "./pieChart.vue";
@@ -372,18 +383,19 @@ export default defineComponent({
         //   "default_timetable_pop.genes[i]",
         //   default_timetable_pop.genes[i]
         // );
-        let shift_for_each_day:any = {}
+        let shift_for_each_day: any = {};
         shift_for_each_day = timetable(
           default_timetable_pop.genes[i],
           employee,
           i + 1
         );
-        shift_for_each_day.day_id = i+1
+        shift_for_each_day.day_id = i + 1;
         weekly_timetable_array.value.push(shift_for_each_day);
         // console.log("shift_for_each_day", shift_for_each_day);
       }
     }
     console.log("weekly_timetable_array", weekly_timetable_array.value);
+    console.log("this is final ep powers array object", ep_powers);
     // function setTaskData(fetchTask: {
     //   officeOpenTimings: any;
     //   demand: any;
@@ -448,12 +460,12 @@ export default defineComponent({
     //     final_pop_population.value[array_number.value].genes
     //   );
 
-      // setNewEmployee(employeeObjectForThisTimetable);
+    // setNewEmployee(employeeObjectForThisTimetable);
 
-      // let click_callback = timetable(
-      //   final_pop_population.value[array_number.value].genes,
-      //   employeeObjectForThisTimetable
-      // );
+    // let click_callback = timetable(
+    //   final_pop_population.value[array_number.value].genes,
+    //   employeeObjectForThisTimetable
+    // );
 
     //   officeOpenTimings.value = click_callback.officeOpenTimings;
     //   demand.value = click_callback.demand;
@@ -707,7 +719,7 @@ export default defineComponent({
       wish_fulfil_not_fulfil_array,
       standardDeviationArray,
       standardDeviation,
-      weekly_timetable_array
+      weekly_timetable_array,
       // fairness_array,
       // staffing_array,
     };

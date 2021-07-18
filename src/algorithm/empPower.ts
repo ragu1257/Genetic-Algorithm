@@ -1,10 +1,14 @@
 /* eslint-disable */
-import {employee, demand, wish, absence} from "./interface"
+import {employee, demand, wish, absence, lastEmployeeInfo} from "./interface"
 import * as _ from "lodash";
 
 
 export function empPower(finalTableArray: any) {
-    let clonedEmployee = _.cloneDeep(employee);
+    console.log("employee in emppower.ts", employee);
+    console.log("step 4 emp power.ts received table to update the lastEmployeeInfo ep power", lastEmployeeInfo);
+    
+    
+    let clonedEmployee = _.cloneDeep(lastEmployeeInfo);
     // console.log("cloned before", clonedEmployee);
     
     for(let i=0; i<clonedEmployee.length; i++){

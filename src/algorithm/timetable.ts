@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { demand, wish, absence, setNewEmployee } from "./interface"
+import { demand, wish, absence, setNewEmployee, setLastEmployeeInfo, lastEmployeeInfo } from "./interface"
 import * as _ from "lodash";
 
 export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
@@ -480,7 +480,9 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
     }
 
     // console.log("this is in table function", clonedEmployee);
-    setNewEmployee(clonedEmployee)
+    setLastEmployeeInfo(clonedEmployee)
+    console.log("step 2- timetable calculated everything and set the value to last emp info", clonedEmployee);
+    
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
 
