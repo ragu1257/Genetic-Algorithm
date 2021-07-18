@@ -90,7 +90,7 @@ class DNA {
                     // this.randomEmployee = randomEmployees
 
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
-                        //   console.log("clonedEmployee", clonedEmployee[i]);                  
+                        //   console.log("clonedEmployee", clonedEmployee[i]);
                         weekly_timetable_array[i][j][k] = number1;
                         if (number1 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
@@ -111,7 +111,7 @@ class DNA {
                     //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
 
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
-                        // console.log("clonedEmployee", clonedEmployee[i]); 
+                        // console.log("clonedEmployee", clonedEmployee[i]);
                         weekly_timetable_array[i][j][k] = number2;
                         if (number2 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
@@ -129,7 +129,7 @@ class DNA {
                 }
                 for (let k = 14; k < 18; k++) {
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
-                        // console.log("clonedEmployee", clonedEmployee[i]); 
+                        // console.log("clonedEmployee", clonedEmployee[i]);
                         weekly_timetable_array[i][j][k] = number3;
                         if (number3 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
@@ -165,19 +165,19 @@ class DNA {
     }
 
     calcStaffing() {
-        console.log("this is genes", this.genes);
+        // console.log("this is genes", this.genes);
         let finalOverstuffing = 0
         let finalUnderStuffing = 0
         for (let i = 0; i < this.genes.length; i++) {
             let stuffingOutcome = this.calculateOverStuffing(this.genes[i])
-            console.log("this is stuffeing outcome", stuffingOutcome);
+            // console.log("this is stuffeing outcome", stuffingOutcome);
             finalOverstuffing += stuffingOutcome.finalOverstuffing
             finalUnderStuffing += stuffingOutcome.finalUnderStuffing
         }
 
 
         // console.log("this is overstuffing in each loop", overStuffing);
-        console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
+        // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
@@ -185,8 +185,17 @@ class DNA {
     }
     calcStaffTiming() {
         // console.log("this is genes", this.genes);
+                // console.log("this is genes", this.genes);
+                let finalOverTime = 0
+                let finalUnderTime = 0
+                for (let i = 0; i < this.genes.length; i++) {
+                    let stuffingOutcome = this.calculateOverStuffing(this.genes[i])
+                    // console.log("this is stuffeing outcome", stuffingOutcome);
+                    finalOverTime += stuffingOutcome.finalOverTime
+                    finalUnderTime += stuffingOutcome.finalUnderTime
+                }
 
-        const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
+        // const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
         // console.log("this is overstuffing in each loop", overStuffing);
         // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
@@ -227,53 +236,129 @@ class DNA {
 
     calcFairness(task_day: number) {
         // console.log("cal fairness", task_day);
-        if (task_day != 1) {
-            let score = 0
-            // console.log("this is previous selected employee object", lastEmployeeInfo);
+        let totalPositiveWishNotFulfilled = 0
+        let totalNegativeWishNotFulfilled = 0
+        let totalAbsenceWishNotFulfilled = 0
+        let score = 0
 
-            // let sortingEmployee = employee
-            lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
-            // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
-            // console.log("this is current employee before", employee);
-            timetable(this.genes, employee)
-            // console.log("this is current employee affter", employee);
-            // let currentEmp = employee
-            // console.log("employee in currentEmppppppppp before", currentEmp);
-            for (let i = 0; i < lastEmployeeInfo.length; i++) {
-                for (let j = 0; j < employee.length; j++) {
-                    if (lastEmployeeInfo[i].empId == employee[j].empId) {
-                        // let employee = employee[j]
-                        // console.log("employee in currentEmppppppppp", employee[j]);
+        for (let i = 0; i < this.genes.length; i++) {
+        
+            if(i==0){
+              let  stuffingOutcome = timetable(this.genes[i], employee)
+                // console.log("this is stuffeing outcome", stuffingOutcome);
+                totalPositiveWishNotFulfilled += stuffingOutcome.totalPositiveWishNotFulfilled
+                totalNegativeWishNotFulfilled += stuffingOutcome.totalNegativeWishNotFulfilled
+                totalAbsenceWishNotFulfilled += stuffingOutcome.totalAbsenceWishNotFulfilled
+                score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+            }else{
+                // stuffingOutcome = timetable(this.genes[i], employee)
 
-                        let { positiveWishNotFullfilled, negativeWishNotFullfilled, absenceWishNotFullfilled } = this.calScore(employee[j])
 
-                        //checking the difference between current and next employee EP, if they are same then give equal penalty else the penalty is diffrence between them
-                        let penalty
-                        if (i < lastEmployeeInfo.length - 1) {
-                            penalty = Math.abs(lastEmployeeInfo[i].empPower!) - Math.abs(lastEmployeeInfo[i + 1].empPower!)
-                        } else {
-                            penalty = Math.abs(lastEmployeeInfo[i].empPower!)
+
+                lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
+                // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
+                // console.log("this is current employee before", employee);
+                timetable(this.genes[i], employee)
+                // console.log("this is current employee affter", employee);
+                // let currentEmp = employee
+                // console.log("employee in currentEmppppppppp before", currentEmp);
+                for (let i = 0; i < lastEmployeeInfo.length; i++) {
+                    for (let j = 0; j < employee.length; j++) {
+                        if (lastEmployeeInfo[i].empId == employee[j].empId) {
+                            // let employee = employee[j]
+                            // console.log("employee in currentEmppppppppp", employee[j]);
+    
+                            let { positiveWishNotFullfilled, negativeWishNotFullfilled, absenceWishNotFullfilled } = this.calScore(employee[j])
+    
+                            //checking the difference between current and next employee EP, if they are same then give equal penalty else the penalty is diffrence between them
+                            let penalty
+                            if (i < lastEmployeeInfo.length - 1) {
+                                penalty = Math.abs(lastEmployeeInfo[i].empPower!) - Math.abs(lastEmployeeInfo[i + 1].empPower!)
+                            } else {
+                                penalty = Math.abs(lastEmployeeInfo[i].empPower!)
+                            }
+                            penalty == 0 ? penalty = 1 : Math.abs(penalty)
+                            // console.log("this is penalty", Math.abs(penalty));
+    
+                            score += (positiveWishNotFullfilled + negativeWishNotFullfilled + absenceWishNotFullfilled) * Math.abs(penalty)
+    
                         }
-                        penalty == 0 ? penalty = 1 : Math.abs(penalty)
-                        // console.log("this is penalty", Math.abs(penalty));
-
-                        score += (positiveWishNotFullfilled + negativeWishNotFullfilled + absenceWishNotFullfilled) * Math.abs(penalty)
-
                     }
                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
-            // console.log("this is final score", score);
-
-            this.fairness = score;
-            // let clonedEmployee = _.cloneDeep(employee);
-            // console.log("ye rahi clonedEmployee", employee);
-        } else {
-            const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
-
-            let score = 0;
-            score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
-            this.fairness = score;
+ 
         }
+    
+        score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+        this.fairness = score;
+
+
+
+
+        // if (task_day != 1) {
+        //     let score = 0
+        //     // console.log("this is previous selected employee object", lastEmployeeInfo);
+
+        //     // let sortingEmployee = employee
+        //     lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
+        //     // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
+        //     // console.log("this is current employee before", employee);
+        //     timetable(this.genes, employee)
+        //     // console.log("this is current employee affter", employee);
+        //     // let currentEmp = employee
+        //     // console.log("employee in currentEmppppppppp before", currentEmp);
+        //     for (let i = 0; i < lastEmployeeInfo.length; i++) {
+        //         for (let j = 0; j < employee.length; j++) {
+        //             if (lastEmployeeInfo[i].empId == employee[j].empId) {
+        //                 // let employee = employee[j]
+        //                 // console.log("employee in currentEmppppppppp", employee[j]);
+
+        //                 let { positiveWishNotFullfilled, negativeWishNotFullfilled, absenceWishNotFullfilled } = this.calScore(employee[j])
+
+        //                 //checking the difference between current and next employee EP, if they are same then give equal penalty else the penalty is diffrence between them
+        //                 let penalty
+        //                 if (i < lastEmployeeInfo.length - 1) {
+        //                     penalty = Math.abs(lastEmployeeInfo[i].empPower!) - Math.abs(lastEmployeeInfo[i + 1].empPower!)
+        //                 } else {
+        //                     penalty = Math.abs(lastEmployeeInfo[i].empPower!)
+        //                 }
+        //                 penalty == 0 ? penalty = 1 : Math.abs(penalty)
+        //                 // console.log("this is penalty", Math.abs(penalty));
+
+        //                 score += (positiveWishNotFullfilled + negativeWishNotFullfilled + absenceWishNotFullfilled) * Math.abs(penalty)
+
+        //             }
+        //         }
+        //     }
+        //     // console.log("this is final score", score);
+
+        //     this.fairness = score;
+        //     // let clonedEmployee = _.cloneDeep(employee);
+        //     // console.log("ye rahi clonedEmployee", employee);
+        // } else {
+        //     const { totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled } = timetable(this.genes, employee)
+
+        //     let score = 0;
+        //     score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+        //     this.fairness = score;
+        // }
     }
 
     calcFitness() {
