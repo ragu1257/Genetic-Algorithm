@@ -69,74 +69,85 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
+        let number_of_days = 2
+        let uncloned_weekly_timetable_array = []
         const result: any[] = new Array(employee.length);
-        for (let i = 0; i < result.length; i++) {
-            result[i] = [];
+        for (let j = 0; j < result.length; j++) {
+            result[j] = [];
         }
+
+        for (let i = 0; i < number_of_days; i++) {
+            uncloned_weekly_timetable_array[i] = result;
+        }
+
         let clonedEmployee = _.cloneDeep(employee);
-        for (let i = 0; i < employee.length; i++) {
+        let weekly_timetable_array = _.cloneDeep(uncloned_weekly_timetable_array)
+        for (let i = 0; i < weekly_timetable_array.length; i++) {
+            for (let j = 0; j < employee.length; j++) {
 
-            let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            for (let j = 6; j < 10; j++) {
-                // this.randomEmployee = randomEmployees
+                let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+                for (let k = 6; k < 10; k++) {
+                    // this.randomEmployee = randomEmployees
 
-                if (clonedEmployee[i].todayWorkingHours! < 9) {
-                    //   console.log("clonedEmployee", clonedEmployee[i]);                  
-                    result[i][j] = number1;
-                    if (number1 == 0) {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
+                    if (clonedEmployee[j].todayWorkingHours! < 9) {
+                        //   console.log("clonedEmployee", clonedEmployee[i]);                  
+                        weekly_timetable_array[i][j][k] = number1;
+                        if (number1 == 0) {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
+                        } else {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours! + 1
+                        }
+
                     } else {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
+                        break
                     }
 
-                } else {
-                    break
+                }
+                let number2 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+                if (number1 == 0 && number2 == 0) {
+                    number2 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
+                }
+                for (let k = 10; k < 14; k++) {
+                    //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
+
+                    if (clonedEmployee[j].todayWorkingHours! < 9) {
+                        // console.log("clonedEmployee", clonedEmployee[i]); 
+                        weekly_timetable_array[i][j][k] = number2;
+                        if (number2 == 0) {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
+                        } else {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours! + 1
+                        }
+                    } else {
+                        break
+                    }
+
+                }
+                let number3 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+                if (number1 == 0 && number2 == 0 && number3 == 0) {
+                    number3 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
+                }
+                for (let k = 14; k < 18; k++) {
+                    if (clonedEmployee[j].todayWorkingHours! < 9) {
+                        // console.log("clonedEmployee", clonedEmployee[i]); 
+                        weekly_timetable_array[i][j][k] = number3;
+                        if (number3 == 0) {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
+                        } else {
+                            clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours! + 1
+                        }
+                    } else {
+                        break
+                    }
+
                 }
 
             }
-            let number2 = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            if (number1 == 0 && number2 == 0) {
-                number2 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
-            }
-            for (let j = 10; j < 14; j++) {
-                //         if (clonedEmployee[randomEmployees[i]].todayWorkingHours! < 9 && clonedDemand[j].amount>0 && !clonedDemand[j].alreadyAllocatedEmp?.includes(randomEmployees[i])) {
-
-                if (clonedEmployee[i].todayWorkingHours! < 9) {
-                    // console.log("clonedEmployee", clonedEmployee[i]); 
-                    result[i][j] = number2;
-                    if (number2 == 0) {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
-                    } else {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
-                    }
-                } else {
-                    break
-                }
-
-            }
-            let number3 = TARGET[(Math.floor(Math.random() * TARGET.length))]
-            if (number1 == 0 && number2 == 0 && number3 == 0) {
-                number3 = TARGET2[(Math.floor(Math.random() * TARGET2.length))]
-            }
-            for (let j = 14; j < 18; j++) {
-                if (clonedEmployee[i].todayWorkingHours! < 9) {
-                    // console.log("clonedEmployee", clonedEmployee[i]); 
-                    result[i][j] = number3;
-                    if (number3 == 0) {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours!
-                    } else {
-                        clonedEmployee[i].todayWorkingHours = clonedEmployee[i].todayWorkingHours! + 1
-                    }
-                } else {
-                    break
-                }
-
-            }
-
         }
-        // console.log("this is result", result);
 
-        return result
+        console.log("this is weekly_timetable_array", weekly_timetable_array);
+
+        return weekly_timetable_array
     }
 
     generateDNARandom() {
@@ -154,11 +165,19 @@ class DNA {
     }
 
     calcStaffing() {
-        // console.log("this is genes", this.genes);
+        console.log("this is genes", this.genes);
+        let finalOverstuffing = 0
+        let finalUnderStuffing = 0
+        for (let i = 0; i < this.genes.length; i++) {
+            let stuffingOutcome = this.calculateOverStuffing(this.genes[i])
+            console.log("this is stuffeing outcome", stuffingOutcome);
+            finalOverstuffing += stuffingOutcome.finalOverstuffing
+            finalUnderStuffing += stuffingOutcome.finalUnderStuffing
+        }
 
-        const { finalOverstuffing, finalUnderStuffing } = this.calculateOverStuffing(this.genes)
+
         // console.log("this is overstuffing in each loop", overStuffing);
-        // console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
+        console.log("this.calculateOverStuffing(this.genes)", finalOverstuffing, finalUnderStuffing);
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
@@ -188,7 +207,7 @@ class DNA {
         oneEmp.positiveWish.some((item: any) => {
             if (oneEmp.timeRange.includes(item)) {
                 positiveWishNotFullfilled += 0
-            }else{
+            } else {
                 positiveWishNotFullfilled += 1
             }
         });
@@ -235,16 +254,16 @@ class DNA {
                         } else {
                             penalty = Math.abs(lastEmployeeInfo[i].empPower!)
                         }
-                        penalty==0?penalty=1:Math.abs(penalty)
+                        penalty == 0 ? penalty = 1 : Math.abs(penalty)
                         // console.log("this is penalty", Math.abs(penalty));
-                        
+
                         score += (positiveWishNotFullfilled + negativeWishNotFullfilled + absenceWishNotFullfilled) * Math.abs(penalty)
-                        
+
                     }
                 }
             }
             // console.log("this is final score", score);
-            
+
             this.fairness = score;
             // let clonedEmployee = _.cloneDeep(employee);
             // console.log("ye rahi clonedEmployee", employee);
