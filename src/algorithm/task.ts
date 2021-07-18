@@ -93,15 +93,18 @@ export function task(task_day=1) {
   // console.log("this is task");  
 
   let { firstIndexShiftArray, best_pop_array, final_rank_index, final_pop_population } = createPopulation(task_day)
-  let { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(firstIndexShiftArray, employee, task_day)
 
-  demand = demand.filter(item=>item.day==task_day)
+  
+
+  // let { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(firstIndexShiftArray, employee, task_day)
+
+  // demand = demand.filter(item=>item.day==task_day)
   // console.log("shift",shift);
   // console.log("final_rank_index in task function", final_rank_index);
 
 
-  return { officeOpenTimings, demand, shift, workArea, stuffingFinal, best_pop_array, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, final_rank_index, final_pop_population }
+  // return { officeOpenTimings, demand, shift, workArea, stuffingFinal, best_pop_array, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, final_rank_index, final_pop_population }
 
-
+return {firstIndexShiftArray, best_pop_array, final_rank_index, final_pop_population}
 
 }

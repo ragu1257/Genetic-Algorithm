@@ -70,28 +70,33 @@ class DNA {
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
         let number_of_days = 2
-        let uncloned_weekly_timetable_array = []
+        let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
             result[j] = [];
         }
 
-        for (let i = 0; i < number_of_days; i++) {
-            uncloned_weekly_timetable_array[i] = result;
-        }
+        // for (let i = 0; i < number_of_days; i++) {
+        //     uncloned_weekly_timetable_array[i] = result;
+        // }
 
-        let clonedEmployee = _.cloneDeep(employee);
+     
         let weekly_timetable_array = _.cloneDeep(uncloned_weekly_timetable_array)
-        for (let i = 0; i < weekly_timetable_array.length; i++) {
+        
+        for (let i = 0; i < number_of_days; i++) {
+            
+               let clonedResult = _.cloneDeep(result);
+               let clonedEmployee = _.cloneDeep(employee);
             for (let j = 0; j < employee.length; j++) {
-
                 let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
+                // console.log("this is number 1 for j", number1, j);
+                
                 for (let k = 6; k < 10; k++) {
                     // this.randomEmployee = randomEmployees
 
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
                         //   console.log("clonedEmployee", clonedEmployee[i]);
-                        weekly_timetable_array[i][j][k] = number1;
+                        clonedResult[j][k] = number1;
                         if (number1 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
                         } else {
@@ -112,7 +117,7 @@ class DNA {
 
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
                         // console.log("clonedEmployee", clonedEmployee[i]);
-                        weekly_timetable_array[i][j][k] = number2;
+                        clonedResult[j][k] = number2;
                         if (number2 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
                         } else {
@@ -130,7 +135,7 @@ class DNA {
                 for (let k = 14; k < 18; k++) {
                     if (clonedEmployee[j].todayWorkingHours! < 9) {
                         // console.log("clonedEmployee", clonedEmployee[i]);
-                        weekly_timetable_array[i][j][k] = number3;
+                        clonedResult[j][k] = number3;
                         if (number3 == 0) {
                             clonedEmployee[j].todayWorkingHours = clonedEmployee[j].todayWorkingHours!
                         } else {
@@ -143,9 +148,13 @@ class DNA {
                 }
 
             }
+            
+            // console.log("each day clonedResult array", clonedResult);
+            weekly_timetable_array.push(clonedResult)
+            
         }
 
-        console.log("this is weekly_timetable_array", weekly_timetable_array);
+        // console.log("Final is weekly_timetable_array", weekly_timetable_array);
 
         return weekly_timetable_array
     }
@@ -169,7 +178,7 @@ class DNA {
         let finalOverstuffing = 0
         let finalUnderStuffing = 0
         for (let i = 0; i < this.genes.length; i++) {
-            let stuffingOutcome = this.calculateOverStuffing(this.genes[i])
+            let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i+1)
             // console.log("this is stuffeing outcome", stuffingOutcome);
             finalOverstuffing += stuffingOutcome.finalOverstuffing
             finalUnderStuffing += stuffingOutcome.finalUnderStuffing
@@ -189,7 +198,7 @@ class DNA {
                 let finalOverTime = 0
                 let finalUnderTime = 0
                 for (let i = 0; i < this.genes.length; i++) {
-                    let stuffingOutcome = this.calculateOverStuffing(this.genes[i])
+                    let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i+1)
                     // console.log("this is stuffeing outcome", stuffingOutcome);
                     finalOverTime += stuffingOutcome.finalOverTime
                     finalUnderTime += stuffingOutcome.finalUnderTime
@@ -244,7 +253,7 @@ class DNA {
         for (let i = 0; i < this.genes.length; i++) {
         
             if(i==0){
-              let  stuffingOutcome = timetable(this.genes[i], employee)
+              let  stuffingOutcome = timetable(this.genes[i], employee, i+1)
                 // console.log("this is stuffeing outcome", stuffingOutcome);
                 totalPositiveWishNotFulfilled += stuffingOutcome.totalPositiveWishNotFulfilled
                 totalNegativeWishNotFulfilled += stuffingOutcome.totalNegativeWishNotFulfilled
@@ -258,7 +267,7 @@ class DNA {
                 lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
                 // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
                 // console.log("this is current employee before", employee);
-                timetable(this.genes[i], employee)
+                timetable(this.genes[i], employee, i+1)
                 // console.log("this is current employee affter", employee);
                 // let currentEmp = employee
                 // console.log("employee in currentEmppppppppp before", currentEmp);
@@ -307,6 +316,9 @@ class DNA {
         }
     
         score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+
+        // console.log("fairness score", score);
+        
         this.fairness = score;
 
 
@@ -365,9 +377,9 @@ class DNA {
         this.fitness = this.staffing + this.fairness
     }
 
-    calculateOverStuffing(dna: any[]) {
+    calculateOverStuffing(dna: any[], task_day: number | undefined) {
 
-        const { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna, employee)
+        const { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(dna, employee, task_day)
 
         return { finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime }
 
