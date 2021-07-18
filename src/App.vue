@@ -12,7 +12,7 @@
     </div>
     <!-- {{ array_number }} -->
     <div>
-      <button>Save</button>
+      <!-- <button>Save</button> -->
       <button @click="updateDayTable">Next</button>
     </div>
     <table
@@ -24,7 +24,7 @@
         <tr>
           <th>Name</th>
           <th v-for="item in officeOpenTimings" :key="item">{{ item }}</th>
-          <th>Daily working time / Fixed Working Time</th>
+          <!-- <th>Daily working time / Fixed Working Time</th> -->
           <th>Positive Wish Fulfilled / Total Positive Wish</th>
           <th>Negative Wish Fulfilled / Total Negative Wish</th>
           <th>Absence Wish Fulfilled / Total Absence</th>
@@ -100,7 +100,7 @@
                 </div>
               </span>
             </td>
-            <td
+            <!-- <td
               class="m-3"
               :class="
                       (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 20
@@ -120,7 +120,7 @@
                     "
             >
               {{ item.totalTime }}/{{ item.weeklyWorkingHours / 5 }}
-            </td>
+            </td> -->
             <td
               class="m-3"
               :class="
@@ -241,14 +241,14 @@
               {{ staffing.underStuffing }}
             </td>
           </tr>
-          <tr v-if="workArea.workAreaId == staffing.workAreaId">
+          <!-- <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underTime</td>
             <td colspan="12" class="bg-orange-200">{{ staffing.underTime }}</td>
           </tr>
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>overtime</td>
             <td colspan="12" class="bg-orange-700">{{ staffing.overtime }}</td>
-          </tr>
+          </tr> -->
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>Wish Fulfilled</td>
             <td colspan="12" class="bg-green-400">
