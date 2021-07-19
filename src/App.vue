@@ -313,11 +313,14 @@ import {
   employee,
   setLastEmployeeInfo,
   ep_powers,
+  lastEmployeeInfo,
+  set_ep_power,
 } from "./algorithm/interface";
 import { std } from "mathjs";
 import chart from "./chart.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
+import * as _ from "lodash";
 // import dna from "./algorithm/dna";
 export default defineComponent({
   name: "App",
@@ -377,26 +380,45 @@ export default defineComponent({
     function fetchFirstIndexValue() {
       let default_timetable_pop =
         final_pop_population.value[final_rank_index.value[0]];
-      // console.log("default_timetable_pop", default_timetable_pop);
+      console.log("default_timetable_pop", default_timetable_pop);
+       let cloned_lastEmployeeInfo = _.cloneDeep(employee)
+       let ep_powers_for_all_days = []
       for (let i = 0; i < default_timetable_pop.genes.length; i++) {
         // console.log(
         //   "default_timetable_pop.genes[i]",
         //   default_timetable_pop.genes[i]
         // );
         let shift_for_each_day: any = {};
-        shift_for_each_day = timetable(
+        // console.log("checking employee in shift each day", employee)
+        if(i==0){
+          shift_for_each_day = timetable(
           default_timetable_pop.genes[i],
-          employee,
+          cloned_lastEmployeeInfo,
           i + 1
         );
+         let updated_emp = empPower(default_timetable_pop.genes[i])
+         setLastEmployeeInfo(updated_emp)
+         ep_powers_for_all_days.push(updated_emp)
+        }else{
+          shift_for_each_day = timetable(
+          default_timetable_pop.genes[i],
+          lastEmployeeInfo,
+          i + 1
+        );
+         let updated_emp = empPower(default_timetable_pop.genes[i])
+         setLastEmployeeInfo(updated_emp)
+         ep_powers_for_all_days.push(updated_emp)
+        }
+
         shift_for_each_day.day_id = i + 1;
         weekly_timetable_array.value.push(shift_for_each_day);
         // console.log("shift_for_each_day", shift_for_each_day);
       }
+      set_ep_power(ep_powers_for_all_days)
     }
  
-
-
+// console.log("weekly_timetable_array", weekly_timetable_array)
+// console.log("ep_powers", ep_powers)
 
 
 
@@ -439,7 +461,7 @@ export default defineComponent({
     // }
 
     function makeArray() {
-      // console.log("final_rank_index in make array", final_rank_index.value);
+      console.log("final_rank_index in make array", final_rank_index.value);
       fairness_staffing_array.value = [];
       for (let i = 0; i < final_rank_index.value.length; i++) {
         fairness_staffing_array.value.push([
