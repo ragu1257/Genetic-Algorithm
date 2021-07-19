@@ -12,6 +12,9 @@
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
       />
+      <groupedBarChart 
+      :barArrayObject="bar_array_object"
+      />
     </div>
     <!-- {{ array_number }} -->
     <div>
@@ -320,6 +323,7 @@ import { std } from "mathjs";
 import chart from "./chart.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
+import groupedBarChart from "./groupedBarChart.vue";
 import * as _ from "lodash";
 // import dna from "./algorithm/dna";
 export default defineComponent({
@@ -328,6 +332,7 @@ export default defineComponent({
     chart,
     pieChart,
     sDLineChart,
+    groupedBarChart,
   },
   setup() {
     // let {
@@ -363,6 +368,7 @@ export default defineComponent({
     let standardDeviationArray = ref();
     let standardDeviation = ref(0);
     let weekly_timetable_array: any = ref([]);
+    let bar_array_object: any= ref();
 
     let fetchTask = task();
     final_pop_population.value = fetchTask.final_pop_population;
@@ -668,33 +674,32 @@ export default defineComponent({
         let currentEmployeeFairnessScore = 0;
         for (let j = 0; j < ep_powers.length; j++) {
           // console.log("inside");
-          for(let k=0; k<ep_powers[j].length; k++){
-       if (employee[i].empId == ep_powers[j][k].empId) {
-            // console.log("ep_powers[j].positiveWish", ep_powers[j].positiveWish);
-            ep_powers[j][k].positiveWish.some((item: any) => {
-              if (ep_powers[j][k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 1;
-              } else {
-                currentEmployeeFairnessScore += 0;
-              }
-            });
-            ep_powers[j][k].negativeWish.some((item: any) => {
-              if (ep_powers[j][k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 0;
-              } else {
-                currentEmployeeFairnessScore += 1;
-              }
-            });
-            ep_powers[j][k].absenceRange.some((item: any) => {
-              if (ep_powers[j][k].timeRange.includes(item)) {
-                currentEmployeeFairnessScore += 0;
-              } else {
-                currentEmployeeFairnessScore += 1;
-              }
-            });
+          for (let k = 0; k < ep_powers[j].length; k++) {
+            if (employee[i].empId == ep_powers[j][k].empId) {
+              // console.log("ep_powers[j].positiveWish", ep_powers[j].positiveWish);
+              ep_powers[j][k].positiveWish.some((item: any) => {
+                if (ep_powers[j][k].timeRange.includes(item)) {
+                  currentEmployeeFairnessScore += 1;
+                } else {
+                  currentEmployeeFairnessScore += 0;
+                }
+              });
+              ep_powers[j][k].negativeWish.some((item: any) => {
+                if (ep_powers[j][k].timeRange.includes(item)) {
+                  currentEmployeeFairnessScore += 0;
+                } else {
+                  currentEmployeeFairnessScore += 1;
+                }
+              });
+              ep_powers[j][k].absenceRange.some((item: any) => {
+                if (ep_powers[j][k].timeRange.includes(item)) {
+                  currentEmployeeFairnessScore += 0;
+                } else {
+                  currentEmployeeFairnessScore += 1;
+                }
+              });
+            }
           }
-          }
-   
         }
         standardDeviationArrayLocal.push(currentEmployeeFairnessScore);
       }
@@ -720,6 +725,45 @@ export default defineComponent({
       standardDeviationArray.value = standardDeviationArrayLocal;
 
       // console.log("standardDeviation, standardDeviationArray", standardDeviation.value, standardDeviationArray.value);
+    }
+
+    calGroupData();
+
+    function calGroupData() {
+      let barArrayObject:any = []
+      for (let i = 0; i < ep_powers.length; i++) {
+        // console.log("inside");
+        let currentDayEmpWishes = []
+        for (let j = 0; j < ep_powers[i].length; j++) {
+          let wishesCount = 0
+            // console.log("ep_powers[i].positiveWish", ep_powers[i].positiveWish);
+            ep_powers[i][j].positiveWish.some((item: any) => {
+              if (ep_powers[i][j].timeRange.includes(item)) {
+                wishesCount += 1;
+              } else {
+                wishesCount += 0;
+              }
+            });
+            ep_powers[i][j].negativeWish.some((item: any) => {
+              if (ep_powers[i][j].timeRange.includes(item)) {
+                wishesCount += 0;
+              } else {
+                wishesCount += 1;
+              }
+            });
+            ep_powers[i][j].absenceRange.some((item: any) => {
+              if (ep_powers[i][j].timeRange.includes(item)) {
+                wishesCount += 0;
+              } else {
+                wishesCount += 1;
+              }
+            });
+            currentDayEmpWishes.push(wishesCount)
+          }
+          barArrayObject.push({data: currentDayEmpWishes})
+      }
+      bar_array_object.value = barArrayObject
+      // console.log("bar object", barArrayObject)
     }
 
     // function updateDayTable() {
@@ -788,6 +832,7 @@ export default defineComponent({
       standardDeviationArray,
       standardDeviation,
       weekly_timetable_array,
+      bar_array_object
       // fairness_array,
       // staffing_array,
     };
