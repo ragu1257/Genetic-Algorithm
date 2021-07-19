@@ -377,10 +377,11 @@ export default defineComponent({
 
     fetchFirstIndexValue();
 
-    function fetchFirstIndexValue() {
+    function fetchFirstIndexValue(index_value=0) {
+      weekly_timetable_array.value = []
       let default_timetable_pop =
-        final_pop_population.value[final_rank_index.value[0]];
-      console.log("default_timetable_pop", default_timetable_pop);
+        final_pop_population.value[final_rank_index.value[index_value]];
+      // console.log("default_timetable_pop", default_timetable_pop);
        let cloned_lastEmployeeInfo = _.cloneDeep(employee)
        let ep_powers_for_all_days = []
       for (let i = 0; i < default_timetable_pop.genes.length; i++) {
@@ -415,13 +416,15 @@ export default defineComponent({
         // console.log("shift_for_each_day", shift_for_each_day);
       }
       set_ep_power(ep_powers_for_all_days)
+
+      updateEPInTable()
     }
  
 // console.log("weekly_timetable_array", weekly_timetable_array)
 // console.log("ep_powers", ep_powers)
 
 
-
+function updateEPInTable(){
     for(let i=0; i< weekly_timetable_array.value.length; i++){
       for(let j=0; j< ep_powers.length; j++){
         if(i==j){
@@ -433,6 +436,8 @@ export default defineComponent({
         }
       }
     }
+}
+
 
 
     //    console.log("weekly_timetable_array", weekly_timetable_array.value);
@@ -461,7 +466,8 @@ export default defineComponent({
     // }
 
     function makeArray() {
-      console.log("final_rank_index in make array", final_rank_index.value);
+      // console.log("final_rank_index in make array", final_rank_index.value);
+      // console.log("final_pop_population",final_pop_population.value)
       fairness_staffing_array.value = [];
       for (let i = 0; i < final_rank_index.value.length; i++) {
         fairness_staffing_array.value.push([
@@ -495,8 +501,10 @@ export default defineComponent({
     // workArea.value = setInitialShift.workArea;
     // stuffingFinal.value = setInitialShift.stuffingFinal;
 
-    // function updateTable(e: any) {
-    //   array_number.value = e.config;
+    function updateTable(e: any) {
+      array_number.value = e.config;
+      // console.log("this is clicked", e.config)
+      fetchFirstIndexValue(array_number.value)
     //   employeeObjectForThisTimetable = empPower(
     //     final_pop_population.value[array_number.value].genes
     //   );
@@ -513,7 +521,7 @@ export default defineComponent({
     //   shift.value = click_callback.shift;
     //   workArea.value = click_callback.workArea;
     //   stuffingFinal.value = click_callback.stuffingFinal;
-    // }
+    }
 
     // function calcTotalWishesNotFulfilledWeek() {
     //   let negativeWishNotFullfilled = 0;
@@ -752,7 +760,7 @@ export default defineComponent({
       shift,
       workArea,
       stuffingFinal,
-      // updateTable,
+      updateTable,
       array_number,
       fairness_staffing_array,
       // updateDayTable,
