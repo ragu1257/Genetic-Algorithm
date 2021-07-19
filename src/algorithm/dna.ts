@@ -252,12 +252,13 @@ class DNA {
         let totalAbsenceWishNotFulfilled = 0
         let score = 0
         let cloned_lastEmployeeInfo = _.cloneDeep(employee)
+        let ep_powers_for_all_days = []
         for (let i = 0; i < this.genes.length; i++) {
         
             if(i==0){
                 // let updated_emp = empPower(this.genes[i])
                 // console.log("updated_emp 1", updated_emp);
-                console.log("step 1- sending initial emp to timetable", cloned_lastEmployeeInfo);
+                // console.log("step 1- sending initial emp to timetable", cloned_lastEmployeeInfo);
                 
                 let  stuffingOutcome = timetable(this.genes[i], cloned_lastEmployeeInfo, i+1)
                 // console.log("this is stuffeing outcome", stuffingOutcome);
@@ -266,27 +267,29 @@ class DNA {
                 totalAbsenceWishNotFulfilled += stuffingOutcome.totalAbsenceWishNotFulfilled
                 score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
                 // console.log("this is upudated from timetable ts", employee);
-                console.log("step 3- after lastEmployeeInfo is updated by timetable, we update emp power of this table", lastEmployeeInfo);
+                // console.log("step 3- after lastEmployeeInfo is updated by timetable, we update emp power of this table", lastEmployeeInfo);
                 
                 let updated_emp = empPower(this.genes[i])
-                console.log("step 5 received the updated ep powerrs", updated_emp);
+                // console.log("step 5 received the updated ep powerrs", updated_emp);
                 
                 setLastEmployeeInfo(updated_emp)
-                console.log("step 6 updated the ep powers and set to last emp info", lastEmployeeInfo);
+                ep_powers_for_all_days.push(updated_emp)
+                // console.log("step 6 updated the ep powers and set to last emp info", lastEmployeeInfo);
                 // set_ep_power(updated_emp)
             }else{
                 // console.log("this is upudated from timetable ts after in second loop", employee);
                 // let updated_emp = empPower(this.genes[i])
                 // console.log("updated_emp 2", updated_emp);
                 // stuffingOutcome = timetable(this.genes[i], employee)   
-                console.log("step 7 2nd day table createion with last updated emp info", lastEmployeeInfo);
+                // console.log("step 7 2nd day table createion with last updated emp info", lastEmployeeInfo);
                              
                 timetable(this.genes[i], lastEmployeeInfo, i+1)
-                console.log("step 8- after lastEmployeeInfo is updated by timetable, we will update emp power of this table", lastEmployeeInfo);
+                // console.log("step 8- after lastEmployeeInfo is updated by timetable, we will update emp power of this table", lastEmployeeInfo);
                 let updated_emp = empPower(this.genes[i])
-                console.log("step 9 received the updated ep powerrs", updated_emp);
+                // console.log("step 9 received the updated ep powerrs", updated_emp);
                 setLastEmployeeInfo(updated_emp)
-                console.log("step 10 updated the ep powers and set to last emp info", lastEmployeeInfo);
+                ep_powers_for_all_days.push(updated_emp)
+                // console.log("step 10 updated the ep powers and set to last emp info", lastEmployeeInfo);
                 // lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
                 // // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
                 // // console.log("this is current employee before", employee);
@@ -337,6 +340,7 @@ class DNA {
             }
  
         }
+        set_ep_power(ep_powers_for_all_days)
     
         score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
 

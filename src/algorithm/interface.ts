@@ -73,10 +73,10 @@ export function setNewEmployee(newValue: employeeInfo[]) {
     employee = newValue;
 }
 
-export let ep_powers: any[] = []
+export let ep_powers: any
 
-export function set_ep_power(values: any[]){
-    ep_powers.push(values)
+export function set_ep_power(values: any){
+    ep_powers = values
 }
 
 export function setLastEmployeeInfo(newValue: employeeInfo[]){

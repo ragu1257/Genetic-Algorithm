@@ -470,6 +470,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
         totalAbsenceWishNotFulfilled += (stuffingFinal[i].totalAbsence! - stuffingFinal[i].absenceWishFulfilled!)
 
     }
+    
 
     for (let i = 0; i < clonedEmployee.length; i++) {
         for (let j = 0; j < shift.length; j++) {
@@ -481,7 +482,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
 
     // console.log("this is in table function", clonedEmployee);
     setLastEmployeeInfo(clonedEmployee)
-    console.log("step 2- timetable calculated everything and set the value to last emp info", clonedEmployee);
+    // console.log("step 2- timetable calculated everything and set the value to last emp info", clonedEmployee);
     
 
     return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }

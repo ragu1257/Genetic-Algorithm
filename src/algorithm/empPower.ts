@@ -4,8 +4,8 @@ import * as _ from "lodash";
 
 
 export function empPower(finalTableArray: any) {
-    console.log("employee in emppower.ts", employee);
-    console.log("step 4 emp power.ts received table to update the lastEmployeeInfo ep power", lastEmployeeInfo);
+    // console.log("employee in emppower.ts", employee);
+    // console.log("step 4 emp power.ts received table to update the lastEmployeeInfo ep power", lastEmployeeInfo);
     
     
     let clonedEmployee = _.cloneDeep(lastEmployeeInfo);

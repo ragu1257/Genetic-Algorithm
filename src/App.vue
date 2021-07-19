@@ -394,8 +394,27 @@ export default defineComponent({
         // console.log("shift_for_each_day", shift_for_each_day);
       }
     }
-    console.log("weekly_timetable_array", weekly_timetable_array.value);
-    console.log("this is final ep powers array object", ep_powers);
+ 
+
+
+
+
+
+    for(let i=0; i< weekly_timetable_array.value.length; i++){
+      for(let j=0; j< ep_powers.length; j++){
+        if(i==j){
+        for(let k=0; k<weekly_timetable_array.value[i].shift.length; k++){
+          let result = ep_powers[j].filter((item: { empId: any; })=> item.empId == weekly_timetable_array.value[i].shift[k].employeeId)
+          // console.log("it is mattchedddddddddddddddddddddddddddddd", result)
+          weekly_timetable_array.value[i].shift[k].empPower = result[0].empPower 
+        }
+        }
+      }
+    }
+
+
+    //    console.log("weekly_timetable_array", weekly_timetable_array.value);
+    // console.log("this is final ep powers array object", ep_powers);
     // function setTaskData(fetchTask: {
     //   officeOpenTimings: any;
     //   demand: any;
