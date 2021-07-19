@@ -6,8 +6,8 @@ import { employee } from "./interface"
 import { empPower } from "./empPower"
 
 function createPopulation(task_day: number) {
-  const pop_size: number = 4;
-  const population_number = 4;
+  const pop_size: number = 40;
+  const population_number = 20;
 
   const pop = new Population(pop_size, task_day);
   let generattion_array: number[] = []

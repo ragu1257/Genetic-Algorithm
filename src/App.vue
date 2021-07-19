@@ -6,7 +6,7 @@
       @update-table="updateTable"
     />
 
-    <div v-if="makePieChart">
+    <div>
       <pieChart :totalWishNotFulfilled="wish_fulfil_not_fulfil_array" />
       <sDLineChart
         :standardDeviationArray="standardDeviationArray"
@@ -377,13 +377,13 @@ export default defineComponent({
 
     fetchFirstIndexValue();
 
-    function fetchFirstIndexValue(index_value=0) {
-      weekly_timetable_array.value = []
+    function fetchFirstIndexValue(index_value = 0) {
+      weekly_timetable_array.value = [];
       let default_timetable_pop =
         final_pop_population.value[final_rank_index.value[index_value]];
       // console.log("default_timetable_pop", default_timetable_pop);
-       let cloned_lastEmployeeInfo = _.cloneDeep(employee)
-       let ep_powers_for_all_days = []
+      let cloned_lastEmployeeInfo = _.cloneDeep(employee);
+      let ep_powers_for_all_days = [];
       for (let i = 0; i < default_timetable_pop.genes.length; i++) {
         // console.log(
         //   "default_timetable_pop.genes[i]",
@@ -391,54 +391,60 @@ export default defineComponent({
         // );
         let shift_for_each_day: any = {};
         // console.log("checking employee in shift each day", employee)
-        if(i==0){
+        if (i == 0) {
           shift_for_each_day = timetable(
-          default_timetable_pop.genes[i],
-          cloned_lastEmployeeInfo,
-          i + 1
-        );
-         let updated_emp = empPower(default_timetable_pop.genes[i])
-         setLastEmployeeInfo(updated_emp)
-         ep_powers_for_all_days.push(updated_emp)
-        }else{
+            default_timetable_pop.genes[i],
+            cloned_lastEmployeeInfo,
+            i + 1
+          );
+          let updated_emp = empPower(default_timetable_pop.genes[i]);
+          setLastEmployeeInfo(updated_emp);
+          ep_powers_for_all_days.push(updated_emp);
+        } else {
           shift_for_each_day = timetable(
-          default_timetable_pop.genes[i],
-          lastEmployeeInfo,
-          i + 1
-        );
-         let updated_emp = empPower(default_timetable_pop.genes[i])
-         setLastEmployeeInfo(updated_emp)
-         ep_powers_for_all_days.push(updated_emp)
+            default_timetable_pop.genes[i],
+            lastEmployeeInfo,
+            i + 1
+          );
+          let updated_emp = empPower(default_timetable_pop.genes[i]);
+          setLastEmployeeInfo(updated_emp);
+          ep_powers_for_all_days.push(updated_emp);
         }
 
         shift_for_each_day.day_id = i + 1;
         weekly_timetable_array.value.push(shift_for_each_day);
         // console.log("shift_for_each_day", shift_for_each_day);
       }
-      set_ep_power(ep_powers_for_all_days)
+      set_ep_power(ep_powers_for_all_days);
 
-      updateEPInTable()
+      updateEPInTable();
     }
- 
-// console.log("weekly_timetable_array", weekly_timetable_array)
-// console.log("ep_powers", ep_powers)
 
+    // console.log("weekly_timetable_array", weekly_timetable_array)
+    // console.log("ep_powers", ep_powers)
 
-function updateEPInTable(){
-    for(let i=0; i< weekly_timetable_array.value.length; i++){
-      for(let j=0; j< ep_powers.length; j++){
-        if(i==j){
-        for(let k=0; k<weekly_timetable_array.value[i].shift.length; k++){
-          let result = ep_powers[j].filter((item: { empId: any; })=> item.empId == weekly_timetable_array.value[i].shift[k].employeeId)
-          // console.log("it is mattchedddddddddddddddddddddddddddddd", result)
-          weekly_timetable_array.value[i].shift[k].empPower = result[0].empPower 
-        }
+    function updateEPInTable() {
+      for (let i = 0; i < weekly_timetable_array.value.length; i++) {
+        for (let j = 0; j < ep_powers.length; j++) {
+          if (i == j) {
+            for (
+              let k = 0;
+              k < weekly_timetable_array.value[i].shift.length;
+              k++
+            ) {
+              let result = ep_powers[j].filter(
+                (item: { empId: any }) =>
+                  item.empId ==
+                  weekly_timetable_array.value[i].shift[k].employeeId
+              );
+              // console.log("it is mattchedddddddddddddddddddddddddddddd", result)
+              weekly_timetable_array.value[i].shift[k].empPower =
+                result[0].empPower;
+            }
+          }
         }
       }
     }
-}
-
-
 
     //    console.log("weekly_timetable_array", weekly_timetable_array.value);
     // console.log("this is final ep powers array object", ep_powers);
@@ -504,23 +510,67 @@ function updateEPInTable(){
     function updateTable(e: any) {
       array_number.value = e.config;
       // console.log("this is clicked", e.config)
-      fetchFirstIndexValue(array_number.value)
-    //   employeeObjectForThisTimetable = empPower(
-    //     final_pop_population.value[array_number.value].genes
-    //   );
+      fetchFirstIndexValue(array_number.value);
+      calcTotalWishesNotFulfilledWeek();
+      calStandardDeviationOfIndividualsFairness();
+      //           console.log("weekly_timetable_array on click", weekly_timetable_array.value)
+      // console.log("ep_powers on click", ep_powers)
+      //   employeeObjectForThisTimetable = empPower(
+      //     final_pop_population.value[array_number.value].genes
+      //   );
 
-    // setNewEmployee(employeeObjectForThisTimetable);
+      // setNewEmployee(employeeObjectForThisTimetable);
 
-    // let click_callback = timetable(
-    //   final_pop_population.value[array_number.value].genes,
-    //   employeeObjectForThisTimetable
-    // );
+      // let click_callback = timetable(
+      //   final_pop_population.value[array_number.value].genes,
+      //   employeeObjectForThisTimetable
+      // );
 
-    //   officeOpenTimings.value = click_callback.officeOpenTimings;
-    //   demand.value = click_callback.demand;
-    //   shift.value = click_callback.shift;
-    //   workArea.value = click_callback.workArea;
-    //   stuffingFinal.value = click_callback.stuffingFinal;
+      //   officeOpenTimings.value = click_callback.officeOpenTimings;
+      //   demand.value = click_callback.demand;
+      //   shift.value = click_callback.shift;
+      //   workArea.value = click_callback.workArea;
+      //   stuffingFinal.value = click_callback.stuffingFinal;
+    }
+
+    console.log("weekly_timetable_array", weekly_timetable_array.value);
+    console.log("ep_powers", ep_powers);
+    calcTotalWishesNotFulfilledWeek();
+
+    function calcTotalWishesNotFulfilledWeek() {
+      let totalWishesNotFulfilled = 0;
+      let totalWishes = 0;
+      for (let i = 0; i < weekly_timetable_array.value.length; i++) {
+        for (
+          let j = 0;
+          j < weekly_timetable_array.value[i].stuffingFinal.length;
+          j++
+        ) {
+          totalWishesNotFulfilled +=
+            weekly_timetable_array.value[i].stuffingFinal[j]
+              .absenceWishFulfilled +
+            weekly_timetable_array.value[i].stuffingFinal[j]
+              .wishNegativeFulfilled +
+            weekly_timetable_array.value[i].stuffingFinal[j]
+              .wishPositiveFulfilled;
+          totalWishes +=
+            weekly_timetable_array.value[i].stuffingFinal[j].totalAbsence +
+            weekly_timetable_array.value[i].stuffingFinal[j].totalNegativeWish +
+            weekly_timetable_array.value[i].stuffingFinal[j].totalPositiveWish;
+        }
+      }
+      console.log(
+        "total wished and not fullfilled",
+        totalWishesNotFulfilled,
+        totalWishes
+      );
+      totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
+      totalWeeklyWishForAllEmployees.value = totalWishes;
+      wish_fulfil_not_fulfil_array.value = [
+        totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishForAllEmployees.value -
+          totalWeeklyWishNotFulfilled.value,
+      ];
     }
 
     // function calcTotalWishesNotFulfilledWeek() {
@@ -610,73 +660,42 @@ function updateEPInTable(){
     //       totalWeeklyWishNotFulfilled.value,
     //   ];
     // }
+    calStandardDeviationOfIndividualsFairness();
 
     function calStandardDeviationOfIndividualsFairness() {
       let standardDeviationArrayLocal = [];
-
       for (let i = 0; i < employee.length; i++) {
         let currentEmployeeFairnessScore = 0;
-        for (
-          let j = 0;
-          j < complete_log_of_everyday_timetable.value.length;
-          j++
-        ) {
-          for (
-            let k = 0;
-            k <
-            complete_log_of_everyday_timetable.value[j].employee_object_info
-              .length;
-            k++
-          ) {
-            if (
-              employee[i].empId ==
-              complete_log_of_everyday_timetable.value[j].employee_object_info[
-                k
-              ].empId
-            ) {
-              complete_log_of_everyday_timetable.value[j].employee_object_info[
-                k
-              ].positiveWish.some((item: any) => {
-                if (
-                  complete_log_of_everyday_timetable.value[
-                    j
-                  ].employee_object_info[k].timeRange.includes(item)
-                ) {
-                  currentEmployeeFairnessScore += 1;
-                } else {
-                  currentEmployeeFairnessScore += 0;
-                }
-              });
-              complete_log_of_everyday_timetable.value[j].employee_object_info[
-                k
-              ].negativeWish.some((item: any) => {
-                if (
-                  complete_log_of_everyday_timetable.value[
-                    j
-                  ].employee_object_info[k].timeRange.includes(item)
-                ) {
-                  currentEmployeeFairnessScore += 0;
-                } else {
-                  currentEmployeeFairnessScore += 1;
-                }
-              });
-              complete_log_of_everyday_timetable.value[j].employee_object_info[
-                k
-              ].absenceRange.some((item: any) => {
-                if (
-                  complete_log_of_everyday_timetable.value[
-                    j
-                  ].employee_object_info[k].timeRange.includes(item)
-                ) {
-                  currentEmployeeFairnessScore += 0;
-                } else {
-                  currentEmployeeFairnessScore += 1;
-                }
-              });
-            }
+        for (let j = 0; j < ep_powers.length; j++) {
+          // console.log("inside");
+          for(let k=0; k<ep_powers[j].length; k++){
+       if (employee[i].empId == ep_powers[j][k].empId) {
+            // console.log("ep_powers[j].positiveWish", ep_powers[j].positiveWish);
+            ep_powers[j][k].positiveWish.some((item: any) => {
+              if (ep_powers[j][k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 1;
+              } else {
+                currentEmployeeFairnessScore += 0;
+              }
+            });
+            ep_powers[j][k].negativeWish.some((item: any) => {
+              if (ep_powers[j][k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 0;
+              } else {
+                currentEmployeeFairnessScore += 1;
+              }
+            });
+            ep_powers[j][k].absenceRange.some((item: any) => {
+              if (ep_powers[j][k].timeRange.includes(item)) {
+                currentEmployeeFairnessScore += 0;
+              } else {
+                currentEmployeeFairnessScore += 1;
+              }
+            });
           }
+          }
+   
         }
-
         standardDeviationArrayLocal.push(currentEmployeeFairnessScore);
       }
 
