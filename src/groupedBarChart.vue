@@ -1,7 +1,7 @@
 <template>
       <div id="chart">
         <apexchart type="bar" height="430" :options="chartOptions" :series="series"></apexchart>
-        {{barArrayObject}}
+        <!-- {{barArrayObject}} -->
       </div>
 </template>
 
@@ -47,9 +47,9 @@ export default {
               shared: true,
               intersect: false
             },
-            xaxis: {
-              categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
-            },
+            // xaxis: {
+            //   categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
+            // },
           },
           
             }

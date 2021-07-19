@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button>Monday</button>
+    <!-- <button>Monday</button> -->
     <chart
       :staffingFairnessArray="fairness_staffing_array"
       @update-table="updateTable"
@@ -16,18 +16,17 @@
       :barArrayObject="bar_array_object"
       />
     </div>
-    <!-- {{ array_number }} -->
-    <div>
-      <!-- <button>Save</button> -->
-      <button @click="updateDayTable">Next</button>
-    </div>
+<div
+ v-for="(daily_shift, index) in weekly_timetable_array"
+      :key="index">
+       <div class="days">Day {{daily_shift.day_id}}</div>
     <table
       @update-table="updateTable"
       class="table-auto w-2/3 text-center"
       v-bind:style="{ display: 'inline-table' }"
-      v-for="(daily_shift, index) in weekly_timetable_array"
-      :key="index"
+     
     >
+   
       <thead>
         <tr>
           <th>Name</th>
@@ -243,7 +242,7 @@
             </span>
           </td>
         </tr>
-        <template v-for="(staffing, i) in stuffingFinal" :key="i">
+        <template v-for="(staffing, i) in daily_shift.stuffingFinal" :key="i">
           <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>overStaffing</td>
             <td colspan="12" class="bg-pink-700">
@@ -283,6 +282,7 @@
         </template>
       </tbody>
     </table>
+    </div>
     <!-- <div class="inline-grid p-10">
       <div v-for="(item, i) in demand" :key="i">
         <span class="pr-5">start_time: {{ item.start_time }} </span>
@@ -579,6 +579,12 @@ export default defineComponent({
       ];
     }
 
+    calcTotalDeamndMetAndNotMet()
+
+    function calcTotalDeamndMetAndNotMet(){
+
+    }
+
     // function calcTotalWishesNotFulfilledWeek() {
     //   let negativeWishNotFullfilled = 0;
     //   let positiveWishNotFullfilled = 0;
@@ -851,5 +857,12 @@ table,
 th,
 td {
   border: 1px solid black;
+}
+.days{
+      background: #333;
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+
 }
 </style>
