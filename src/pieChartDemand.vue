@@ -1,10 +1,10 @@
 <template>
-  <div id="chart">
+  <div v-if="createChart" id="chart">
     <apexchart
       type="pie"
       width="380"
       :options="chartOptions"
-      :series="series"
+      :series="createChart"
     ></apexchart>
   </div>
 </template>
@@ -20,14 +20,14 @@ export default {
   },
   data: function() {
     return {
-      series: this.totalDemandOutcome,
+      // series: null,
       chartOptions: {
         chart: {
           width: 380,
           type: "pie",
         },
         colors: ["#ff0000", "#008ffb"],
-        labels: ["Demand Fulfilled", "Demand Not Fulfilled"],
+        labels: ["Not Fulfilled", "Wishes Fulfilled"],
         responsive: [
           {
             breakpoint: 480,
@@ -41,8 +41,13 @@ export default {
             },
           },
         ],
-      },
+      }
     };
+  },
+  computed: {
+    createChart: function() {
+    return this.totalDemandOutcome;
+    },
   },
 };
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <div id="chart">
+  <div v-if="createChart && createChartOptions" id="chart">
     <apexchart
       type="line"
       height="350"
-      :options="chartOptions"
-      :series="series"
+      :options="createChartOptions"
+      :series="createChart"
     ></apexchart>
   </div>
 </template>
@@ -21,13 +21,22 @@ export default {
   },
   data: function() {
     return {
-      series: [
+      series: null,
+      chartOptions: null,
+    };
+  },
+  computed: {
+    createChart: function() {
+      return([
         {
           name: "Desktops",
           data: this.standardDeviationArray,
         },
-      ],
-      chartOptions: {
+      ])
+     
+    },
+    createChartOptions: function(){
+      return {
         chart: {
           height: 350,
           type: "line",
@@ -52,36 +61,24 @@ export default {
           },
         },
         annotations: {
-          xaxis: [{
-            x: parseInt(this.standardDeviation),
-            strokeDashArray: 0,
-            borderColor: '#775DD0',
-            label: {
-              borderColor: '#775DD0',
-              style: {
-                color: '#fff',
-                background: '#775DD0',
+          xaxis: [
+            {
+              x: parseInt(this.standardDeviation),
+              strokeDashArray: 0,
+              borderColor: "#775DD0",
+              label: {
+                borderColor: "#775DD0",
+                style: {
+                  color: "#fff",
+                  background: "#775DD0",
+                },
+                text: "Anno Test",
               },
-              text: 'Anno Test',
-            }
-          }]
+            },
+          ],
         },
-        
-        // xaxis: {
-        //   categories: [
-        //     "Jan",
-        //     "Feb",
-        //     "Mar",
-        //     "Apr",
-        //     "May",
-        //     "Jun",
-        //     "Jul",
-        //     "Aug",
-        //     "Sep",
-        //   ],
-        // },
-      },
-    };
+      }
+    }
   },
 };
 </script>

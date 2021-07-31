@@ -516,6 +516,7 @@ export default defineComponent({
       // console.log("this is clicked", e.config)
       fetchFirstIndexValue(array_number.value);
       calcTotalWishesNotFulfilledWeek();
+      calcTotalDeamndMetAndNotMet();
       calStandardDeviationOfIndividualsFairness();
       //           console.log("weekly_timetable_array on click", weekly_timetable_array.value)
       // console.log("ep_powers on click", ep_powers)

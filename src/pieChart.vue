@@ -1,12 +1,11 @@
 <template>
-  <div id="chart">
+  <div v-if="createChart" id="chart">
     <apexchart
       type="pie"
       width="380"
       :options="chartOptions"
-      :series="series"
+      :series="createChart"
     ></apexchart>
-    {{totalWishNotFulfilled}}
   </div>
 </template>
 
@@ -21,33 +20,34 @@ export default {
   },
   data: function() {
     return {
-      series: null,
-      chartOptions: null,
-    };
-  },
-  mounted: function() {
-    this.series = this.totalWishNotFulfilled;
-    this.chartOptions = {
-      chart: {
-        width: 380,
-        type: "pie",
-      },
-      colors: ["#ff0000", "#008ffb"],
-      labels: ["Not Fulfilled", "Wishes Fulfilled"],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: "bottom",
+      // series: null,
+      chartOptions: {
+        chart: {
+          width: 380,
+          type: "pie",
+        },
+        colors: ["#ff0000", "#008ffb"],
+        labels: ["Not Fulfilled", "Wishes Fulfilled"],
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                position: "bottom",
+              },
             },
           },
-        },
-      ],
+        ],
+      }
     };
+  },
+  computed: {
+    createChart: function() {
+    return this.totalWishNotFulfilled;
+    },
   },
 };
 </script>
