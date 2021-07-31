@@ -114,9 +114,35 @@ export default {
           //     offsetX: 0,
           //     offsetY: 0
           // },
+          
+      title: {
+          text: 'Demand coverage',
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+              color: undefined,
+              fontSize: '12px',
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontWeight: 600,
+              cssClass: 'apexcharts-xaxis-title',
+          },
+      },
         },
         yaxis: {
-          tickAmount: 7
+          tickAmount: 7,
+            title: {
+          text: 'Fairness',
+          rotate: -90,
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+              color: undefined,
+              fontSize: '12px',
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontWeight: 600,
+              cssClass: 'apexcharts-yaxis-title',
+          },
+      },
         }
       },
     };

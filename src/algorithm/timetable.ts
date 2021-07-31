@@ -58,8 +58,8 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
 
 
     const workArea: workArea[] = [
-        { workAreaId: 1, workAreaName: "Books" },
-        { workAreaId: 2, workAreaName: "Food" },
+        { workAreaId: 1, workAreaName: "Packaging" },
+        { workAreaId: 2, workAreaName: "Stocking" },
         { workAreaId: 3, workAreaName: "Cleaning" }
     ]
     //Overstaffing, understaffing, overtime, minus hours, absence, wish
