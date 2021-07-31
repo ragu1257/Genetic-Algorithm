@@ -537,11 +537,12 @@ export default defineComponent({
       //   stuffingFinal.value = click_callback.stuffingFinal;
     }
 
-    console.log("weekly_timetable_array", weekly_timetable_array.value);
-    console.log("ep_powers", ep_powers);
+    // console.log("weekly_timetable_array", weekly_timetable_array.value);
+    // console.log("ep_powers", ep_powers);
     calcTotalWishesNotFulfilledWeek();
 
     function calcTotalWishesNotFulfilledWeek() {
+      console.log("weekly_timetable_array.value. weekly_timetable_array.value.",weekly_timetable_array.value)
       let totalWishesNotFulfilled = 0;
       let totalWishes = 0;
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
@@ -563,11 +564,6 @@ export default defineComponent({
             weekly_timetable_array.value[i].stuffingFinal[j].totalPositiveWish;
         }
       }
-      console.log(
-        "total wished and not fullfilled",
-        totalWishesNotFulfilled,
-        totalWishes
-      );
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
@@ -604,98 +600,10 @@ export default defineComponent({
         }
       }
       let demandMet = totalDemand - demandNotMet;
-      console.log("demand met not met", demandMet, demandNotMet, totalDemand);
 
       demant_met_not_met_array.value = [demandMet, demandNotMet];
     }
 
-    // function calcTotalWishesNotFulfilledWeek() {
-    //   let negativeWishNotFullfilled = 0;
-    //   let positiveWishNotFullfilled = 0;
-    //   let absenceWishNotFullfilled = 0;
-
-    //   let negativeWish = 0;
-    //   let positiveWish = 0;
-    //   let absenceWish = 0;
-
-    //   for (
-    //     let i = 0;
-    //     i < complete_log_of_everyday_timetable.value.length;
-    //     i++
-    //   ) {
-    //     for (
-    //       let j = 0;
-    //       j <
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info
-    //         .length;
-    //       j++
-    //     ) {
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].positiveWish.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           positiveWishNotFullfilled += 0;
-    //         } else {
-    //           positiveWishNotFullfilled += 1;
-    //         }
-    //       });
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].negativeWish.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           negativeWishNotFullfilled += 1;
-    //         }
-    //       });
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].absenceRange.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           absenceWishNotFullfilled += 1;
-    //         }
-    //       });
-
-    //       positiveWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .positiveWish.length;
-    //       negativeWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .negativeWish.length;
-    //       absenceWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .absenceRange.length;
-    //     }
-    //   }
-    //   totalWeeklyWishNotFulfilled.value =
-    //     negativeWishNotFullfilled +
-    //     positiveWishNotFullfilled +
-    //     absenceWishNotFullfilled;
-
-    //   totalWeeklyWishForAllEmployees.value =
-    //     negativeWish + positiveWish + absenceWish;
-
-    //   console.log(
-    //     "this is totalWeeklyWishNotFulfilled, totalWeeklyWishForAllEmployees",
-    //     totalWeeklyWishNotFulfilled.value,
-    //     totalWeeklyWishForAllEmployees.value
-    //   );
-    //   wish_fulfil_not_fulfil_array.value = [
-    //     totalWeeklyWishNotFulfilled.value,
-    //     totalWeeklyWishForAllEmployees.value -
-    //       totalWeeklyWishNotFulfilled.value,
-    //   ];
-    // }
     calStandardDeviationOfIndividualsFairness();
 
     function calStandardDeviationOfIndividualsFairness() {
@@ -795,57 +703,6 @@ export default defineComponent({
       bar_array_object.value = barArrayObject;
       // console.log("bar object", barArrayObject)
     }
-
-    // function updateDayTable() {
-    //   if (next_day.value < days.value.length) {
-    //     setLastEmployeeInfo(employeeObjectForThisTimetable);
-    //     let day_object = {
-    //       day: days.value[next_day.value],
-    //       employee_object_info: employeeObjectForThisTimetable,
-    //       final_pop_population: final_pop_population.value,
-    //       final_rank_index: final_rank_index.value,
-    //       selected_score: array_number.value,
-    //       fairness_staffing_array: fairness_staffing_array.value,
-    //       shift: shift.value,
-    //     };
-    //     // console.log("this is day object", day_object);
-    //     complete_log_of_everyday_timetable.value.push(day_object);
-    //     next_day.value += 1;
-
-    //     let new_day_task_return_values = task(next_day.value + 1);
-    //     // console.log("ep value before", employee);
-    //     // console.log(new_day_task_return_values);
-    //     // setTaskData(new_day_task_return_values);
-    //     employeeObjectForThisTimetable = empPower(
-    //       final_pop_population.value[final_rank_index.value[0]].genes
-    //     );
-
-    //     //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
-    //     let setInitialShift = timetable(
-    //       final_pop_population.value[0].genes,
-    //       employeeObjectForThisTimetable
-    //     );
-    //     //setting shift to a updated shift and all other return values respectively
-
-    //     officeOpenTimings.value = setInitialShift.officeOpenTimings;
-    //     demand.value = setInitialShift.demand;
-    //     shift.value = setInitialShift.shift;
-    //     workArea.value = setInitialShift.workArea;
-    //     stuffingFinal.value = setInitialShift.stuffingFinal;
-
-    //     makeArray();
-    //     // this.$emit("new-chart-data")
-    //   } else {
-    //     calcTotalWishesNotFulfilledWeek();
-    //     calStandardDeviationOfIndividualsFairness();
-    //     // console.log(
-    //     //   "complete_log_of_everyday_timetable",
-    //     //   complete_log_of_everyday_timetable
-    //     // );
-
-    //     makePieChart.value = true;
-    //   }
-    // }
 
     return {
       officeOpenTimings,

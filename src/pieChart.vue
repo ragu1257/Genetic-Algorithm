@@ -6,6 +6,7 @@
       :options="chartOptions"
       :series="series"
     ></apexchart>
+    {{totalWishNotFulfilled}}
   </div>
 </template>
 
@@ -20,28 +21,32 @@ export default {
   },
   data: function() {
     return {
-      series: this.totalWishNotFulfilled,
-      chartOptions: {
-        chart: {
-          width: 380,
-          type: "pie",
-        },
-        colors: ["#ff0000", "#008ffb"],
-        labels: ["Not Fulfilled", "Wishes Fulfilled"],
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200,
-              },
-              legend: {
-                position: "bottom",
-              },
+      series: null,
+      chartOptions: null,
+    };
+  },
+  mounted: function() {
+    this.series = this.totalWishNotFulfilled;
+    this.chartOptions = {
+      chart: {
+        width: 380,
+        type: "pie",
+      },
+      colors: ["#ff0000", "#008ffb"],
+      labels: ["Not Fulfilled", "Wishes Fulfilled"],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: "bottom",
             },
           },
-        ],
-      },
+        },
+      ],
     };
   },
 };
