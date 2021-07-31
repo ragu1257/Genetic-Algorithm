@@ -453,18 +453,6 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
     // console.log("this is shiftArray, shift and stuffingFinal", employee, shiftArray, shift, stuffingFinal);
 
 
-    //merge the range of working time for each employee
-    function mergeRangeOfEachEmpWorkingTime(empId: number) {
-        let combinedArray: any = []
-        for (let i = 0; i < shift.length; i++) {
-            if (shift[i].employeeId == empId) {
-                combinedArray.push(shift[i].range)
-            }
-        }
-        return [].concat.apply([], combinedArray);
-    }
-
-
     //calculating not fulfilled score of each employee
     let individualScore = []
 
@@ -488,42 +476,6 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
         individualScore.push(currentEmployeeIdObj)
 
     }
-
-    //     for (let i = 0; i < employee.length; i++) {
-    //         let currentEmployeeId = employee[i].empId
-    //         let currentEmployeeIdObj: any = {}
-    //         let totalScoreNotFulfilled: number
-    //         let mergedRange: any = mergeRangeOfEachEmpWorkingTime(currentEmployeeId)
-
-    // console.log("clonedEmployee clonedEmployee clonedEmployee",clonedEmployee);
-
-
-    //         for (let j = 0; j < shift.length; j++) {
-    //             if (shift[j].employeeId == employee[i].empId) {
-
-    //                 totalScoreNotFulfilled = 0
-    //                 shift[j].positiveWish?.forEach(item => {
-    //                     // console.log("thisis merged Range and item", mergedRange, item, mergedRange.includes(item));
-    //                     !mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
-    //                 })
-    //                 shift[j].absenceRange?.forEach(item => {
-    //                     mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
-    //                 })
-    //                 shift[j].negativeWish?.forEach(item => {
-    //                     mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
-    //                 })
-    //             }
-    //         }
-
-    //         currentEmployeeIdObj.empID = currentEmployeeId
-    //         currentEmployeeIdObj.score = totalScoreNotFulfilled!
-    //         individualScore.push(currentEmployeeIdObj)
-    //     }
-    // console.log("this is final score of all emp", individualScore);
-
-
-
-
 
 
 

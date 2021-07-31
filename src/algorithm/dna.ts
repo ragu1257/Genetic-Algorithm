@@ -248,13 +248,13 @@ class DNA {
     getScoreOfHighestScoreEmployee(genes: any, scoreCollection: { name: string; value: any; }[]) {
 
         let maxScore = Math.max.apply(Math, scoreCollection.map(function (o) { return o.value; }))
-        console.log("maxScore maxScore", maxScore);
+        // console.log("maxScore maxScore", maxScore);
         let maxScoreObjectEmpId = scoreCollection.find(item => {
             if (item.value == maxScore) {
                 return parseInt(item.name)
             }
         })
-        console.log("max score object", parseInt(maxScoreObjectEmpId!.name));
+        // console.log("max score object", parseInt(maxScoreObjectEmpId!.name));
 
 
         let totalPositiveWishNotFulfilled = 0
@@ -268,7 +268,7 @@ class DNA {
             if (i == 0) {
 
                 let stuffingOutcome = timetable(genes[i], cloned_lastEmployeeInfo, i + 1)
-                console.log("stuffingOutcome.cloned employee first", stuffingOutcome.clonedEmployee);
+                // console.log("stuffingOutcome.cloned employee first", stuffingOutcome.clonedEmployee);
                 for (let j = 0; j < stuffingOutcome.clonedEmployee.length; j++) {
 
                     if (stuffingOutcome.clonedEmployee[j].empId == parseInt(maxScoreObjectEmpId!.name)) {
@@ -295,7 +295,7 @@ class DNA {
             } else {
 
                 let stuffingOutcome = timetable(genes[i], lastEmployeeInfo, i + 1)
-                console.log("stuffingOutcome.cloned employee secondssss", stuffingOutcome.clonedEmployee);
+                // console.log("stuffingOutcome.cloned employee secondssss", stuffingOutcome.clonedEmployee);
                 for (let j = 0; j < stuffingOutcome.clonedEmployee.length; j++) {
                     if (stuffingOutcome.clonedEmployee[j].empId == parseInt(maxScoreObjectEmpId!.name)) {
                         stuffingOutcome.clonedEmployee[j].positiveWish.forEach((item: any) => {
@@ -362,13 +362,13 @@ class DNA {
             }
 
         }
-        console.log("scoreCollection scoreCollection scoreCollection", scoreCollection);
+        // console.log("scoreCollection scoreCollection scoreCollection", scoreCollection);
 
         //join all days each employees score
 
         let merged: any = [].concat.apply([], scoreCollection);
 
-        console.log("mergeddddddddd", merged);
+        // console.log("mergeddddddddd", merged);
         var holder: any = {};
 
         merged.forEach(function (d: { empID: string | number; score: any; }) {
@@ -385,7 +385,7 @@ class DNA {
             obj2.push({ name: prop, value: holder[prop] });
         }
 
-        console.log(obj2);
+        // console.log(obj2);
 
         score = this.getScoreOfHighestScoreEmployee(this.genes, obj2)
 
@@ -394,7 +394,7 @@ class DNA {
 
         // score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
 
-        console.log("fairness score", score);
+        // console.log("fairness score", score);
 
         this.fairness = score;
     }
