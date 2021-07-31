@@ -29,7 +29,7 @@ export default {
     createChart: function() {
       return([
         {
-          name: "Desktops",
+          name: "wish fulfilled",
           data: this.standardDeviationArray,
         },
       ])
@@ -72,7 +72,7 @@ export default {
                   color: "#fff",
                   background: "#775DD0",
                 },
-                text: "Anno Test",
+                text: "mean wish fulfilled",
               },
             },
           ],

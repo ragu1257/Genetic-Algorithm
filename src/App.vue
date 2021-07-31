@@ -7,8 +7,14 @@
     />
 
     <div>
-      <pieChart :totalWishNotFulfilled="wish_fulfil_not_fulfil_array" />
-      <pieChartDemand :totalDemandOutcome="demant_met_not_met_array" />
+      <pieChart
+        class="pieChart-inline"
+        :totalWishNotFulfilled="wish_fulfil_not_fulfil_array"
+      />
+      <pieChartDemand
+        class="pieChart-inline"
+        :totalDemandOutcome="demant_met_not_met_array"
+      />
       <sDLineChart
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
@@ -329,7 +335,7 @@ export default defineComponent({
     pieChart,
     sDLineChart,
     groupedBarChart,
-    pieChartDemand
+    pieChartDemand,
   },
   setup() {
     // let {
@@ -543,7 +549,10 @@ export default defineComponent({
     calcTotalWishesNotFulfilledWeek();
 
     function calcTotalWishesNotFulfilledWeek() {
-      console.log("weekly_timetable_array.value. weekly_timetable_array.value.",weekly_timetable_array.value)
+      console.log(
+        "weekly_timetable_array.value. weekly_timetable_array.value.",
+        weekly_timetable_array.value
+      );
       let totalWishesNotFulfilled = 0;
       let totalWishes = 0;
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
@@ -746,5 +755,8 @@ td {
   color: #fff;
   text-align: center;
   font-size: 24px;
+}
+.pieChart-inline {
+  display: inline-block;
 }
 </style>
