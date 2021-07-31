@@ -562,6 +562,6 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
     // console.log("step 2- timetable calculated everything and set the value to last emp info", clonedEmployee);
 
 
-    return { officeOpenTimings, demand, shift, workArea, stuffingFinal,individualScore, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
+    return { officeOpenTimings, demand, shift, workArea, stuffingFinal,individualScore, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled, clonedEmployee }
 
 }
