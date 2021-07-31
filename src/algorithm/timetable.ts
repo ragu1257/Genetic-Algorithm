@@ -450,6 +450,83 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
         stuffingFinal[i].totalAbsence = totalAbsence
     }
 
+    // console.log("this is shiftArray, shift and stuffingFinal", employee, shiftArray, shift, stuffingFinal);
+
+
+    //merge the range of working time for each employee
+    function mergeRangeOfEachEmpWorkingTime(empId: number) {
+        let combinedArray: any = []
+        for (let i = 0; i < shift.length; i++) {
+            if (shift[i].employeeId == empId) {
+                combinedArray.push(shift[i].range)
+            }
+        }
+        return [].concat.apply([], combinedArray);
+    }
+
+
+    //calculating not fulfilled score of each employee
+    let individualScore = []
+
+    for (let i = 0; i < clonedEmployee.length; i++) {
+        let currentEmployeeId = clonedEmployee[i].empId
+        let currentEmployeeIdObj: any = {}
+        let totalScoreNotFulfilled = 0
+
+        clonedEmployee[i].positiveWish.forEach((item: any) => {
+            !clonedEmployee[i].timeRange.includes(item) ? totalScoreNotFulfilled++ : totalScoreNotFulfilled
+        });
+        clonedEmployee[i].negativeWish.forEach((item: any) => {
+            clonedEmployee[i].timeRange.includes(item) ? totalScoreNotFulfilled++ : totalScoreNotFulfilled
+        });
+        clonedEmployee[i].absenceRange.forEach((item: any) => {
+            clonedEmployee[i].timeRange.includes(item) ? totalScoreNotFulfilled++ : totalScoreNotFulfilled
+        });
+
+        currentEmployeeIdObj.empID = currentEmployeeId
+        currentEmployeeIdObj.score = totalScoreNotFulfilled!
+        individualScore.push(currentEmployeeIdObj)
+
+    }
+
+    //     for (let i = 0; i < employee.length; i++) {
+    //         let currentEmployeeId = employee[i].empId
+    //         let currentEmployeeIdObj: any = {}
+    //         let totalScoreNotFulfilled: number
+    //         let mergedRange: any = mergeRangeOfEachEmpWorkingTime(currentEmployeeId)
+
+    // console.log("clonedEmployee clonedEmployee clonedEmployee",clonedEmployee);
+
+
+    //         for (let j = 0; j < shift.length; j++) {
+    //             if (shift[j].employeeId == employee[i].empId) {
+
+    //                 totalScoreNotFulfilled = 0
+    //                 shift[j].positiveWish?.forEach(item => {
+    //                     // console.log("thisis merged Range and item", mergedRange, item, mergedRange.includes(item));
+    //                     !mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
+    //                 })
+    //                 shift[j].absenceRange?.forEach(item => {
+    //                     mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
+    //                 })
+    //                 shift[j].negativeWish?.forEach(item => {
+    //                     mergedRange.includes(item) ? totalScoreNotFulfilled+1 : totalScoreNotFulfilled
+    //                 })
+    //             }
+    //         }
+
+    //         currentEmployeeIdObj.empID = currentEmployeeId
+    //         currentEmployeeIdObj.score = totalScoreNotFulfilled!
+    //         individualScore.push(currentEmployeeIdObj)
+    //     }
+    // console.log("this is final score of all emp", individualScore);
+
+
+
+
+
+
+
 
     let finalOverstuffing: number = 0
     let finalUnderStuffing: number = 0
@@ -470,7 +547,7 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
         totalAbsenceWishNotFulfilled += (stuffingFinal[i].totalAbsence! - stuffingFinal[i].absenceWishFulfilled!)
 
     }
-    
+
 
     for (let i = 0; i < clonedEmployee.length; i++) {
         for (let j = 0; j < shift.length; j++) {
@@ -483,8 +560,8 @@ export function timetable(shiftArray: any[], employee: any[], task_day = 1) {
     // console.log("this is in table function", clonedEmployee);
     setLastEmployeeInfo(clonedEmployee)
     // console.log("step 2- timetable calculated everything and set the value to last emp info", clonedEmployee);
-    
 
-    return { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
+
+    return { officeOpenTimings, demand, shift, workArea, stuffingFinal,individualScore, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime, totalPositiveWishNotFulfilled, totalNegativeWishNotFulfilled, totalAbsenceWishNotFulfilled }
 
 }

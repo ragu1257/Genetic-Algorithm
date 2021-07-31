@@ -82,17 +82,17 @@ class DNA {
         //     uncloned_weekly_timetable_array[i] = result;
         // }
 
-     
+
         let weekly_timetable_array = _.cloneDeep(uncloned_weekly_timetable_array)
-        
+
         for (let i = 0; i < number_of_days; i++) {
-            
-               let clonedResult = _.cloneDeep(result);
-               let clonedEmployee = _.cloneDeep(employee);
+
+            let clonedResult = _.cloneDeep(result);
+            let clonedEmployee = _.cloneDeep(employee);
             for (let j = 0; j < employee.length; j++) {
                 let number1 = TARGET[(Math.floor(Math.random() * TARGET.length))]
                 // console.log("this is number 1 for j", number1, j);
-                
+
                 for (let k = 6; k < 10; k++) {
                     // this.randomEmployee = randomEmployees
 
@@ -150,10 +150,10 @@ class DNA {
                 }
 
             }
-            
+
             // console.log("each day clonedResult array", clonedResult);
             weekly_timetable_array.push(clonedResult)
-            
+
         }
 
         // console.log("Final is weekly_timetable_array", weekly_timetable_array);
@@ -180,7 +180,7 @@ class DNA {
         let finalOverstuffing = 0
         let finalUnderStuffing = 0
         for (let i = 0; i < this.genes.length; i++) {
-            let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i+1)
+            let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i + 1)
             // console.log("this is stuffeing outcome", stuffingOutcome);
             finalOverstuffing += stuffingOutcome.finalOverstuffing
             finalUnderStuffing += stuffingOutcome.finalUnderStuffing
@@ -196,15 +196,15 @@ class DNA {
     }
     calcStaffTiming() {
         // console.log("this is genes", this.genes);
-                // console.log("this is genes", this.genes);
-                let finalOverTime = 0
-                let finalUnderTime = 0
-                for (let i = 0; i < this.genes.length; i++) {
-                    let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i+1)
-                    // console.log("this is stuffeing outcome", stuffingOutcome);
-                    finalOverTime += stuffingOutcome.finalOverTime
-                    finalUnderTime += stuffingOutcome.finalUnderTime
-                }
+        // console.log("this is genes", this.genes);
+        let finalOverTime = 0
+        let finalUnderTime = 0
+        for (let i = 0; i < this.genes.length; i++) {
+            let stuffingOutcome = this.calculateOverStuffing(this.genes[i], i + 1)
+            // console.log("this is stuffeing outcome", stuffingOutcome);
+            finalOverTime += stuffingOutcome.finalOverTime
+            finalUnderTime += stuffingOutcome.finalUnderTime
+        }
 
         // const { finalUnderTime, finalOverTime } = this.calculateOverStuffing(this.genes)
         // console.log("this is overstuffing in each loop", overStuffing);
@@ -253,37 +253,42 @@ class DNA {
         let score = 0
         let cloned_lastEmployeeInfo = _.cloneDeep(employee)
         let ep_powers_for_all_days = []
+        let scoreCollection: any = []
         for (let i = 0; i < this.genes.length; i++) {
-        
-            if(i==0){
+
+            if (i == 0) {
                 // let updated_emp = empPower(this.genes[i])
                 // console.log("updated_emp 1", updated_emp);
                 // console.log("step 1- sending initial emp to timetable", cloned_lastEmployeeInfo);
-                
-                let  stuffingOutcome = timetable(this.genes[i], cloned_lastEmployeeInfo, i+1)
+
+                let stuffingOutcome = timetable(this.genes[i], cloned_lastEmployeeInfo, i + 1)
                 // console.log("this is stuffeing outcome", stuffingOutcome);
-                totalPositiveWishNotFulfilled += stuffingOutcome.totalPositiveWishNotFulfilled
-                totalNegativeWishNotFulfilled += stuffingOutcome.totalNegativeWishNotFulfilled
-                totalAbsenceWishNotFulfilled += stuffingOutcome.totalAbsenceWishNotFulfilled
-                score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
+                // totalPositiveWishNotFulfilled += stuffingOutcome.totalPositiveWishNotFulfilled
+                // totalNegativeWishNotFulfilled += stuffingOutcome.totalNegativeWishNotFulfilled
+                // totalAbsenceWishNotFulfilled += stuffingOutcome.totalAbsenceWishNotFulfilled
+                // score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
                 // console.log("this is upudated from timetable ts", employee);
                 // console.log("step 3- after lastEmployeeInfo is updated by timetable, we update emp power of this table", lastEmployeeInfo);
-                
+
+                scoreCollection.push(stuffingOutcome.individualScore)
+
                 let updated_emp = empPower(this.genes[i])
                 // console.log("step 5 received the updated ep powerrs", updated_emp);
-                
+
                 setLastEmployeeInfo(updated_emp)
                 ep_powers_for_all_days.push(updated_emp)
                 // console.log("step 6 updated the ep powers and set to last emp info", lastEmployeeInfo);
                 // set_ep_power(updated_emp)
-            }else{
+            } else {
                 // console.log("this is upudated from timetable ts after in second loop", employee);
                 // let updated_emp = empPower(this.genes[i])
                 // console.log("updated_emp 2", updated_emp);
                 // stuffingOutcome = timetable(this.genes[i], employee)   
                 // console.log("step 7 2nd day table createion with last updated emp info", lastEmployeeInfo);
-                             
-                timetable(this.genes[i], lastEmployeeInfo, i+1)
+
+                let stuffingOutcome = timetable(this.genes[i], lastEmployeeInfo, i + 1)
+
+                scoreCollection.push(stuffingOutcome.individualScore)
                 // console.log("step 8- after lastEmployeeInfo is updated by timetable, we will update emp power of this table", lastEmployeeInfo);
                 let updated_emp = empPower(this.genes[i])
                 // console.log("step 9 received the updated ep powerrs", updated_emp);
@@ -302,9 +307,9 @@ class DNA {
                 //         if (lastEmployeeInfo[i].empId == employee[j].empId) {
                 //             // let employee = employee[j]
                 //             // console.log("employee in currentEmppppppppp", employee[j]);
-    
+
                 //             let { positiveWishNotFullfilled, negativeWishNotFullfilled, absenceWishNotFullfilled } = this.calScore(employee[j])
-    
+
                 //             //checking the difference between current and next employee EP, if they are same then give equal penalty else the penalty is diffrence between them
                 //             let penalty
                 //             if (i < lastEmployeeInfo.length - 1) {
@@ -314,38 +319,47 @@ class DNA {
                 //             }
                 //             penalty == 0 ? penalty = 1 : Math.abs(penalty)
                 //             // console.log("this is penalty", Math.abs(penalty));
-    
+
                 //             score += (positiveWishNotFullfilled + negativeWishNotFullfilled + absenceWishNotFullfilled) * Math.abs(penalty)
-    
+
                 //         }
                 //     }
                 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
- 
+
         }
+        console.log("scoreCollection scoreCollection scoreCollection", scoreCollection);
+
+        //join all days each employees score
+
+        let merged: any = [].concat.apply([], scoreCollection);
+
+        console.log("mergeddddddddd", merged);
+        var holder: any = {};
+
+        merged.forEach(function (d: { empID: string | number; score: any; }) {
+            if (holder.hasOwnProperty(d.empID)) {
+                holder[d.empID] = holder[d.empID] + d.score;
+            } else {
+                holder[d.empID] = d.score;
+            }
+        });
+
+        var obj2 = [];
+
+        for (var prop in holder) {
+            obj2.push({ name: prop, value: holder[prop] });
+        }
+
+        console.log(obj2);
+
         set_ep_power(ep_powers_for_all_days)
-    
+
         score = totalPositiveWishNotFulfilled + totalNegativeWishNotFulfilled + totalAbsenceWishNotFulfilled
 
         // console.log("fairness score", score);
-        
+
         this.fairness = score;
 
 
