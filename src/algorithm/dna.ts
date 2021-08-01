@@ -384,26 +384,35 @@ class DNA {
                 // set_ep_power(updated_emp)
             } else {
 
+                // console.log("lastEmployeeInfo before", lastEmployeeInfo);
+                let beforelastEmployeeInfo = lastEmployeeInfo
                 let stuffingOutcome = timetable(this.genes[i], lastEmployeeInfo, i + 1)
+                let updated_emp_day_next = empPower(this.genes[i])
+                // console.log("stuffingOutcome.clonedEmployee", stuffingOutcome.clonedEmployee);
+
+                // console.log("lastEmployeeInfo after", lastEmployeeInfo, updated_emp_day_next);
 
                 // console.log("clonedEmployee second", stuffingOutcome.clonedEmployee);
-                for(let k=0;k<stuffingOutcome.clonedEmployee.length;k++){
-                    let positive = 0
-                    let negative = 0
-                    let absence = 0
-                    let score = 0
-                    stuffingOutcome.clonedEmployee[k].positiveWish.forEach((item: any) => {
-                        !stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? positive++ : positive
-                    });
-                    stuffingOutcome.clonedEmployee[k].negativeWish.forEach((item: any) => {
-                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? negative++ : negative
-                    });
-                    stuffingOutcome.clonedEmployee[k].absenceRange.forEach((item: any) => {
-                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? absence++ : absence
-                    });
-                     score = positive + negative + absence;
-                     scoreEmpIdSequence.push({empId: stuffingOutcome.clonedEmployee[k].empId, score: score}) 
-
+                for (let l = 0; l < beforelastEmployeeInfo.length; l++) {
+                    for (let k = 0; k < updated_emp_day_next.length; k++) {
+                        if (beforelastEmployeeInfo[l].empId == updated_emp_day_next[k].empId) {
+                            let positive = 0
+                            let negative = 0
+                            let absence = 0
+                            let score = 0
+                            updated_emp_day_next[k].positiveWish!.forEach((item: any) => {
+                                !updated_emp_day_next[k].timeRange!.includes(item) ? positive++ : positive
+                            });
+                            updated_emp_day_next[k].negativeWish!.forEach((item: any) => {
+                                updated_emp_day_next[k].timeRange!.includes(item) ? negative++ : negative
+                            });
+                            updated_emp_day_next[k].absenceRange!.forEach((item: any) => {
+                                updated_emp_day_next[k].timeRange!.includes(item) ? absence++ : absence
+                            });
+                            score = (positive + negative + absence) * (beforelastEmployeeInfo[l].empPower! * 10);
+                            scoreEmpIdSequence.push({ empId: updated_emp_day_next[k].empId, score: score })
+                        }
+                    }
                 }
 
 
