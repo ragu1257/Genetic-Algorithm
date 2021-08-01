@@ -71,7 +71,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 2
+        let number_of_days = 3
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
@@ -290,10 +290,10 @@ class DNA {
                 setLastEmployeeInfo(updated_emp)
                 ep_powers_for_all_days.push(updated_emp)
                 // console.log("step 10 updated the ep powers and set to last emp info", lastEmployeeInfo);
-                // lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
-                // // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
+                lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
+                console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
                 // // console.log("this is current employee before", employee);
-                // timetable(this.genes[i], lastEmployeeInfo, i+1)
+                timetable(this.genes[i], lastEmployeeInfo, i+1)
                 // // console.log("this is current employee affter", employee);
                 // // let currentEmp = employee
                 // // console.log("employee in currentEmppppppppp before", currentEmp);
