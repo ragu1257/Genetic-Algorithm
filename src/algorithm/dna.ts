@@ -450,7 +450,8 @@ class DNA {
         // console.log("finaaaaaaaaaaaaaaallllllll",obj2);
 
         let maxScore = Math.max.apply(Math, obj2.map(function (o) { return o.value; }))
-        // console.log("maxScore maxScore", maxScore);
+        let minScore = Math.min.apply(Math, obj2.map(function (o) { return o.value; }))
+        // console.log("maxScore maxScore min also", maxScore, minScore);
         // let maxScoreObjectEmpId = obj2.find(item => {
         //     if (item.value == maxScore) {
         //         return parseInt(item.name)
@@ -465,7 +466,7 @@ class DNA {
 
         // console.log("fairness score", score);
 
-        this.fairness = maxScore;
+        this.fairness = maxScore - minScore;
     }
 
     calcFitness() {
