@@ -13,7 +13,7 @@
 import VueApexCharts from "vue3-apexcharts";
 export default {
   props: {
-    totalWishNotFulfilled: Array,
+    totalDemandOutcome: Array,
   },
   components: {
     apexchart: VueApexCharts,
@@ -26,8 +26,8 @@ export default {
           width: 380,
           type: "pie",
         },
-        colors: ["#ff0000", "#008ffb"],
-        labels: ["Wish Not Fulfilled", "Wishes Fulfilled"],
+        colors: ["#008ffb", "#ff0000"],
+        labels: ["Demand Fulfilled", "Demand Not Fulfilled"],
         responsive: [
           {
             breakpoint: 480,
@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     createChart: function() {
-    return this.totalWishNotFulfilled;
+    return this.totalDemandOutcome;
     },
   },
 };

@@ -7,109 +7,110 @@
     />
 
     <div>
-      <pieChart :totalWishNotFulfilled="wish_fulfil_not_fulfil_array" />
+      <pieChart
+        class="pieChart-inline"
+        :totalWishNotFulfilled="wish_fulfil_not_fulfil_array"
+      />
+      <pieChartDemand
+        class="pieChart-inline"
+        :totalDemandOutcome="demant_met_not_met_array"
+      />
       <sDLineChart
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
       />
-      <groupedBarChart 
-      :barArrayObject="bar_array_object"
-      />
+      <groupedBarChart :barArrayObject="bar_array_object" />
     </div>
-<div
- v-for="(daily_shift, index) in weekly_timetable_array"
-      :key="index">
-       <div class="days">Day {{daily_shift.day_id}}</div>
-    <table
-      @update-table="updateTable"
-      class="table-auto w-2/3 text-center"
-      v-bind:style="{ display: 'inline-table' }"
-     
-    >
-   
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th v-for="item in daily_shift.officeOpenTimings" :key="item">
-            {{ item }}
-          </th>
-          <!-- <th>Daily working time / Fixed Working Time</th> -->
-          <th>Positive Wish Fulfilled / Total Positive Wish</th>
-          <th>Negative Wish Fulfilled / Total Negative Wish</th>
-          <th>Absence Wish Fulfilled / Total Absence</th>
-          <th>Employee Power</th>
-        </tr>
-      </thead>
-      <tbody v-for="(workArea, i) in daily_shift.workArea" :key="i">
-        <!-- <div v-for="(workArea, i) in workArea" :key="i"> -->
-        <tr class="bg-orange-400">
-          <td>{{ workArea.workAreaName }}</td>
-        </tr>
-        <template v-for="(item, i) in daily_shift.shift" :key="i">
-          <tr v-if="item.workAreaId == workArea.workAreaId">
-            <!-- <span v-if="item.workAreaId == workArea.workAreaId"> -->
-            <td>
-              {{ item.employeeId }}
-            </td>
-            <td v-for="(time, i) in item.range" :key="i">
-              <span
-                v-if="
-                  item.absenceRange &&
-                    time > 0 &&
-                    item.absenceRange.includes(time)
-                "
-              >
-                <!-- <div
+    <div v-for="(daily_shift, index) in weekly_timetable_array" :key="index">
+      <div class="days">Day {{ daily_shift.day_id }}</div>
+      <table
+        @update-table="updateTable"
+        class="table-auto w-2/3 text-center"
+        v-bind:style="{ display: 'inline-table' }"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th v-for="item in daily_shift.officeOpenTimings" :key="item">
+              {{ item }}
+            </th>
+            <!-- <th>Daily working time / Fixed Working Time</th> -->
+            <th>Positive Wish Fulfilled / Total Positive Wish</th>
+            <th>Negative Wish Fulfilled / Total Negative Wish</th>
+            <th>Absence Wish Fulfilled / Total Absence</th>
+            <th>Employee Power</th>
+          </tr>
+        </thead>
+        <tbody v-for="(workArea, i) in daily_shift.workArea" :key="i">
+          <!-- <div v-for="(workArea, i) in workArea" :key="i"> -->
+          <tr class="bg-orange-400">
+            <td>{{ workArea.workAreaName }}</td>
+          </tr>
+          <template v-for="(item, i) in daily_shift.shift" :key="i">
+            <tr v-if="item.workAreaId == workArea.workAreaId">
+              <!-- <span v-if="item.workAreaId == workArea.workAreaId"> -->
+              <td>
+                {{ item.employeeId }}
+              </td>
+              <td v-for="(time, i) in item.range" :key="i">
+                <span
+                  v-if="
+                    item.absenceRange &&
+                      time > 0 &&
+                      item.absenceRange.includes(time)
+                  "
+                >
+                  <!-- <div
                   v-if="time > 0 && item.absenceRange.includes(time)"
                   class="bg-red-200"
                 > -->
-                <div class="bg-red-600">{{ item.employeeId }}</div>
-                <!-- </div> -->
-                <!-- <div v-else class="bg-green-200">
+                  <div class="bg-red-600">{{ item.employeeId }}</div>
+                  <!-- </div> -->
+                  <!-- <div v-else class="bg-green-200">
                   {{ item.employeeId }}
                 </div> -->
-              </span>
-              <span
-                v-else-if="
-                  item.negativeWish &&
-                    time > 0 &&
-                    item.negativeWish.includes(time)
-                "
-              >
-                <!-- <div
+                </span>
+                <span
+                  v-else-if="
+                    item.negativeWish &&
+                      time > 0 &&
+                      item.negativeWish.includes(time)
+                  "
+                >
+                  <!-- <div
                   v-if="time > 0 && item.negativeWish.includes(time)"
                   class="bg-red-200"
                 > -->
-                <div class="bg-red-200">{{ item.employeeId }}</div>
-                <!-- </div> -->
-                <!-- <div v-else class="bg-green-200">
+                  <div class="bg-red-200">{{ item.employeeId }}</div>
+                  <!-- </div> -->
+                  <!-- <div v-else class="bg-green-200">
                   {{ item.employeeId }}
                 </div> -->
-              </span>
-              <span
-                v-else-if="
-                  item.positiveWish &&
-                    time > 0 &&
-                    item.positiveWish.includes(time)
-                "
-              >
-                <!-- <div
+                </span>
+                <span
+                  v-else-if="
+                    item.positiveWish &&
+                      time > 0 &&
+                      item.positiveWish.includes(time)
+                  "
+                >
+                  <!-- <div
                   v-if="time > 0 && item.positiveWish.includes(time)"
                   class="bg-red-200"
                 > -->
-                <div class="bg-green-400">{{ item.employeeId }}</div>
-                <!-- </div> -->
-                <!-- <div v-else class="bg-green-200">
+                  <div class="bg-green-400">{{ item.employeeId }}</div>
+                  <!-- </div> -->
+                  <!-- <div v-else class="bg-green-200">
                   {{ item.employeeId }}
                 </div> -->
-              </span>
-              <span v-else>
-                <div v-if="time > 0">
-                  {{ item.employeeId }}
-                </div>
-              </span>
-            </td>
-            <!-- <td
+                </span>
+                <span v-else>
+                  <div v-if="time > 0">
+                    {{ item.employeeId }}
+                  </div>
+                </span>
+              </td>
+              <!-- <td
               class="m-3"
               :class="
                       (item.totalTime / (item.weeklyWorkingHours / 5)) * 100 &lt; 20
@@ -130,9 +131,9 @@
             >
               {{ item.totalTime }}/{{ item.weeklyWorkingHours / 5 }}
             </td> -->
-            <td
-              class="m-3"
-              :class="
+              <td
+                class="m-3"
+                :class="
                       (item.positiveWishFulfilled / item.positiveWish.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.positiveWishFulfilled / item.positiveWish.length) * 100 >= 20 && (item.positiveWishFulfilled / item.positiveWish.length) * 100 &lt; 40?
@@ -148,12 +149,12 @@
                         : ((item.positiveWishFulfilled / item.positiveWish.length) * 100) >100 ?
                         'bg-green-800' : 'bg-gray-100'
                     "
-            >
-              {{ item.positiveWishFulfilled }}/{{ item.positiveWish.length }}
-            </td>
-            <td
-              class="m-3"
-              :class="
+              >
+                {{ item.positiveWishFulfilled }}/{{ item.positiveWish.length }}
+              </td>
+              <td
+                class="m-3"
+                :class="
                       (item.negativeWishFulfilled / item.negativeWish.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.negativeWishFulfilled / item.negativeWish.length) * 100 >= 20 && (item.negativeWishFulfilled / item.negativeWish.length) * 100 &lt; 40?
@@ -169,12 +170,12 @@
                         : ((item.negativeWishFulfilled / item.negativeWish.length) * 100) >100 ?
                         'bg-green-800' : 'bg-gray-100'
                     "
-            >
-              {{ item.negativeWishFulfilled }}/{{ item.negativeWish.length }}
-            </td>
-            <td
-              class="m-3"
-              :class="
+              >
+                {{ item.negativeWishFulfilled }}/{{ item.negativeWish.length }}
+              </td>
+              <td
+                class="m-3"
+                :class="
                       (item.absenceWishFulfilled / item.absenceRange.length) * 100 &lt; 20
                         ? 'bg-green-200'
                         : (item.absenceWishFulfilled / item.absenceRange.length) * 100 >= 20 && (item.absenceWishFulfilled / item.absenceRange.length) * 100 &lt; 40?
@@ -190,29 +191,29 @@
                         : ((item.absenceWishFulfilled / item.absenceRange.length) * 100) >100 ?
                         'bg-green-800' : 'bg-gray-100'
                     "
-            >
-              {{ item.absenceWishFulfilled }}/{{ item.absenceRange.length }}
-            </td>
-            <td>
-              {{ item.empPower.toFixed(2) }}
-            </td>
-          </tr>
-        </template>
-        <tr>
-          <td>demand coverage</td>
-          <td v-for="number in daily_shift.officeOpenTimings" :key="number">
-            <span v-for="(item, i) in daily_shift.demand" :key="i">
-              <span
-                v-if="
-                  item.workAreaId == workArea.workAreaId &&
-                    item.day == daily_shift.day_id
-                "
               >
-                <span v-for="(demand, i) in item.totalDemand" :key="i">
-                  <span
-                    v-if="demand.time == number"
-                    class="p-3"
-                    :class="
+                {{ item.absenceWishFulfilled }}/{{ item.absenceRange.length }}
+              </td>
+              <td>
+                {{ item.empPower.toFixed(2) }}
+              </td>
+            </tr>
+          </template>
+          <tr>
+            <td>demand coverage</td>
+            <td v-for="number in daily_shift.officeOpenTimings" :key="number">
+              <span v-for="(item, i) in daily_shift.demand" :key="i">
+                <span
+                  v-if="
+                    item.workAreaId == workArea.workAreaId &&
+                      item.day == daily_shift.day_id
+                  "
+                >
+                  <span v-for="(demand, i) in item.totalDemand" :key="i">
+                    <span
+                      v-if="demand.time == number"
+                      class="p-3"
+                      :class="
                       (demand.currentlyEmployed / item.amount) * 100 &lt; 20
                         ? 'bg-pink-200'
                         : (demand.currentlyEmployed / item.amount) * 100 >= 20 && (demand.currentlyEmployed / item.amount) * 100 &lt; 40?
@@ -228,34 +229,34 @@
                         : ((demand.currentlyEmployed / item.amount) * 100) >100 ?
                         'bg-pink-700' : 'bg-red-800'
                     "
-                  >
-                    <!-- {{((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100}} -->
-                    <!-- {{((demand.currentlyEmployed/item.amount)*100 > 20) && (((demand.currentlyEmployed/item.amount)*100) &lt; 90)}} -->
-                    {{ demand.currentlyEmployed }}/{{ item.amount }}
-                  </span>
-                  <!-- <span v-else-if="demand.time == number" class="p-3">
+                    >
+                      <!-- {{((demand.currentlyEmployed / item.amount) * 100) >=90 && ((demand.currentlyEmployed / item.amount) * 100) &lt;= 100}} -->
+                      <!-- {{((demand.currentlyEmployed/item.amount)*100 > 20) && (((demand.currentlyEmployed/item.amount)*100) &lt; 90)}} -->
+                      {{ demand.currentlyEmployed }}/{{ item.amount }}
+                    </span>
+                    <!-- <span v-else-if="demand.time == number" class="p-3">
                     {{((demand.currentlyEmployed/item.amount)*100) > 50}}
                     {{ demand.currentlyEmployed }}/{{ item.amount }}
                   </span> -->
+                  </span>
                 </span>
               </span>
-            </span>
-          </td>
-        </tr>
-        <template v-for="(staffing, i) in daily_shift.stuffingFinal" :key="i">
-          <tr v-if="workArea.workAreaId == staffing.workAreaId">
-            <td>overStaffing</td>
-            <td colspan="12" class="bg-pink-700">
-              {{ staffing.overStuffing }}
             </td>
           </tr>
-          <tr v-if="workArea.workAreaId == staffing.workAreaId">
-            <td>underStaffing</td>
-            <td colspan="12" class="bg-pink-200">
-              {{ staffing.underStuffing }}
-            </td>
-          </tr>
-          <!-- <tr v-if="workArea.workAreaId == staffing.workAreaId">
+          <template v-for="(staffing, i) in daily_shift.stuffingFinal" :key="i">
+            <tr v-if="workArea.workAreaId == staffing.workAreaId">
+              <td>overStaffing</td>
+              <td colspan="12" class="bg-pink-700">
+                {{ staffing.overStuffing }}
+              </td>
+            </tr>
+            <tr v-if="workArea.workAreaId == staffing.workAreaId">
+              <td>underStaffing</td>
+              <td colspan="12" class="bg-pink-200">
+                {{ staffing.underStuffing }}
+              </td>
+            </tr>
+            <!-- <tr v-if="workArea.workAreaId == staffing.workAreaId">
             <td>underTime</td>
             <td colspan="12" class="bg-orange-200">{{ staffing.underTime }}</td>
           </tr>
@@ -263,25 +264,25 @@
             <td>overtime</td>
             <td colspan="12" class="bg-orange-700">{{ staffing.overtime }}</td>
           </tr> -->
-          <tr v-if="workArea.workAreaId == staffing.workAreaId">
-            <td>Wish Fulfilled</td>
-            <td colspan="12" class="bg-green-400">
-              {{
-                (
-                  ((staffing.absenceWishFulfilled +
-                    staffing.wishNegativeFulfilled +
-                    staffing.wishPositiveFulfilled) /
-                    (staffing.totalAbsence +
-                      staffing.totalNegativeWish +
-                      staffing.totalPositiveWish)) *
-                  100
-                ).toFixed(2)
-              }}%
-            </td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+            <tr v-if="workArea.workAreaId == staffing.workAreaId">
+              <td>Wish Fulfilled</td>
+              <td colspan="12" class="bg-green-400">
+                {{
+                  (
+                    ((staffing.absenceWishFulfilled +
+                      staffing.wishNegativeFulfilled +
+                      staffing.wishPositiveFulfilled) /
+                      (staffing.totalAbsence +
+                        staffing.totalNegativeWish +
+                        staffing.totalPositiveWish)) *
+                    100
+                  ).toFixed(2)
+                }}%
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
     </div>
     <!-- <div class="inline-grid p-10">
       <div v-for="(item, i) in demand" :key="i">
@@ -321,6 +322,7 @@ import {
 } from "./algorithm/interface";
 import { std } from "mathjs";
 import chart from "./chart.vue";
+import pieChartDemand from "./pieChartDemand.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
 import groupedBarChart from "./groupedBarChart.vue";
@@ -333,6 +335,7 @@ export default defineComponent({
     pieChart,
     sDLineChart,
     groupedBarChart,
+    pieChartDemand,
   },
   setup() {
     // let {
@@ -358,6 +361,7 @@ export default defineComponent({
     let final_pop_population: any = ref();
     let array_number = ref(1);
     let fairness_staffing_array: any = ref([]);
+    let demant_met_not_met_array: any = ref([]);
     let days = ref(["Monday", "Tuesday", "Wednesday"]);
     let complete_log_of_everyday_timetable: any = ref([]);
     let next_day = ref(0);
@@ -368,7 +372,7 @@ export default defineComponent({
     let standardDeviationArray = ref();
     let standardDeviation = ref(0);
     let weekly_timetable_array: any = ref([]);
-    let bar_array_object: any= ref();
+    let bar_array_object: any = ref();
 
     let fetchTask = task();
     final_pop_population.value = fetchTask.final_pop_population;
@@ -518,6 +522,7 @@ export default defineComponent({
       // console.log("this is clicked", e.config)
       fetchFirstIndexValue(array_number.value);
       calcTotalWishesNotFulfilledWeek();
+      calcTotalDeamndMetAndNotMet();
       calStandardDeviationOfIndividualsFairness();
       //           console.log("weekly_timetable_array on click", weekly_timetable_array.value)
       // console.log("ep_powers on click", ep_powers)
@@ -539,11 +544,15 @@ export default defineComponent({
       //   stuffingFinal.value = click_callback.stuffingFinal;
     }
 
-    console.log("weekly_timetable_array", weekly_timetable_array.value);
-    console.log("ep_powers", ep_powers);
+    // console.log("weekly_timetable_array", weekly_timetable_array.value);
+    // console.log("ep_powers", ep_powers);
     calcTotalWishesNotFulfilledWeek();
 
     function calcTotalWishesNotFulfilledWeek() {
+      console.log(
+        "weekly_timetable_array.value. weekly_timetable_array.value.",
+        weekly_timetable_array.value
+      );
       let totalWishesNotFulfilled = 0;
       let totalWishes = 0;
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
@@ -565,11 +574,6 @@ export default defineComponent({
             weekly_timetable_array.value[i].stuffingFinal[j].totalPositiveWish;
         }
       }
-      console.log(
-        "total wished and not fullfilled",
-        totalWishesNotFulfilled,
-        totalWishes
-      );
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
@@ -579,99 +583,37 @@ export default defineComponent({
       ];
     }
 
-    calcTotalDeamndMetAndNotMet()
+    calcTotalDeamndMetAndNotMet();
 
-    function calcTotalDeamndMetAndNotMet(){
+    function calcTotalDeamndMetAndNotMet() {
+      let demandNotMet = 0;
+      let totalDemand = 0;
+      for (let i = 0; i < weekly_timetable_array.value.length; i++) {
+        for (
+          let j = 0;
+          j < weekly_timetable_array.value[i].stuffingFinal.length;
+          j++
+        ) {
+          demandNotMet +=
+            weekly_timetable_array.value[i].stuffingFinal[j].overStuffing +
+            weekly_timetable_array.value[i].stuffingFinal[j].underStuffing;
+        }
+      }
 
+      for (let i = 0; i < weekly_timetable_array.value.length; i++) {
+        for (
+          let j = 0;
+          j < weekly_timetable_array.value[i].demand.length;
+          j++
+        ) {
+          totalDemand += weekly_timetable_array.value[i].demand[j].amount;
+        }
+      }
+      let demandMet = totalDemand - demandNotMet;
+
+      demant_met_not_met_array.value = [demandMet, demandNotMet];
     }
 
-    // function calcTotalWishesNotFulfilledWeek() {
-    //   let negativeWishNotFullfilled = 0;
-    //   let positiveWishNotFullfilled = 0;
-    //   let absenceWishNotFullfilled = 0;
-
-    //   let negativeWish = 0;
-    //   let positiveWish = 0;
-    //   let absenceWish = 0;
-
-    //   for (
-    //     let i = 0;
-    //     i < complete_log_of_everyday_timetable.value.length;
-    //     i++
-    //   ) {
-    //     for (
-    //       let j = 0;
-    //       j <
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info
-    //         .length;
-    //       j++
-    //     ) {
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].positiveWish.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           positiveWishNotFullfilled += 0;
-    //         } else {
-    //           positiveWishNotFullfilled += 1;
-    //         }
-    //       });
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].negativeWish.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           negativeWishNotFullfilled += 1;
-    //         }
-    //       });
-    //       complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //         j
-    //       ].absenceRange.some((item: any) => {
-    //         if (
-    //           complete_log_of_everyday_timetable.value[i].employee_object_info[
-    //             j
-    //           ].timeRange.includes(item)
-    //         ) {
-    //           absenceWishNotFullfilled += 1;
-    //         }
-    //       });
-
-    //       positiveWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .positiveWish.length;
-    //       negativeWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .negativeWish.length;
-    //       absenceWish +=
-    //         complete_log_of_everyday_timetable.value[i].employee_object_info[j]
-    //           .absenceRange.length;
-    //     }
-    //   }
-    //   totalWeeklyWishNotFulfilled.value =
-    //     negativeWishNotFullfilled +
-    //     positiveWishNotFullfilled +
-    //     absenceWishNotFullfilled;
-
-    //   totalWeeklyWishForAllEmployees.value =
-    //     negativeWish + positiveWish + absenceWish;
-
-    //   console.log(
-    //     "this is totalWeeklyWishNotFulfilled, totalWeeklyWishForAllEmployees",
-    //     totalWeeklyWishNotFulfilled.value,
-    //     totalWeeklyWishForAllEmployees.value
-    //   );
-    //   wish_fulfil_not_fulfil_array.value = [
-    //     totalWeeklyWishNotFulfilled.value,
-    //     totalWeeklyWishForAllEmployees.value -
-    //       totalWeeklyWishNotFulfilled.value,
-    //   ];
-    // }
     calStandardDeviationOfIndividualsFairness();
 
     function calStandardDeviationOfIndividualsFairness() {
@@ -736,92 +678,41 @@ export default defineComponent({
     calGroupData();
 
     function calGroupData() {
-      let barArrayObject:any = []
+      let barArrayObject: any = [];
       for (let i = 0; i < ep_powers.length; i++) {
         // console.log("inside");
-        let currentDayEmpWishes = []
+        let currentDayEmpWishes = [];
         for (let j = 0; j < ep_powers[i].length; j++) {
-          let wishesCount = 0
-            // console.log("ep_powers[i].positiveWish", ep_powers[i].positiveWish);
-            ep_powers[i][j].positiveWish.some((item: any) => {
-              if (ep_powers[i][j].timeRange.includes(item)) {
-                wishesCount += 1;
-              } else {
-                wishesCount += 0;
-              }
-            });
-            ep_powers[i][j].negativeWish.some((item: any) => {
-              if (ep_powers[i][j].timeRange.includes(item)) {
-                wishesCount += 0;
-              } else {
-                wishesCount += 1;
-              }
-            });
-            ep_powers[i][j].absenceRange.some((item: any) => {
-              if (ep_powers[i][j].timeRange.includes(item)) {
-                wishesCount += 0;
-              } else {
-                wishesCount += 1;
-              }
-            });
-            currentDayEmpWishes.push(wishesCount)
-          }
-          barArrayObject.push({data: currentDayEmpWishes})
+          let wishesCount = 0;
+          // console.log("ep_powers[i].positiveWish", ep_powers[i].positiveWish);
+          ep_powers[i][j].positiveWish.some((item: any) => {
+            if (ep_powers[i][j].timeRange.includes(item)) {
+              wishesCount += 1;
+            } else {
+              wishesCount += 0;
+            }
+          });
+          ep_powers[i][j].negativeWish.some((item: any) => {
+            if (ep_powers[i][j].timeRange.includes(item)) {
+              wishesCount += 0;
+            } else {
+              wishesCount += 1;
+            }
+          });
+          ep_powers[i][j].absenceRange.some((item: any) => {
+            if (ep_powers[i][j].timeRange.includes(item)) {
+              wishesCount += 0;
+            } else {
+              wishesCount += 1;
+            }
+          });
+          currentDayEmpWishes.push(wishesCount);
+        }
+        barArrayObject.push({ data: currentDayEmpWishes });
       }
-      bar_array_object.value = barArrayObject
+      bar_array_object.value = barArrayObject;
       // console.log("bar object", barArrayObject)
     }
-
-    // function updateDayTable() {
-    //   if (next_day.value < days.value.length) {
-    //     setLastEmployeeInfo(employeeObjectForThisTimetable);
-    //     let day_object = {
-    //       day: days.value[next_day.value],
-    //       employee_object_info: employeeObjectForThisTimetable,
-    //       final_pop_population: final_pop_population.value,
-    //       final_rank_index: final_rank_index.value,
-    //       selected_score: array_number.value,
-    //       fairness_staffing_array: fairness_staffing_array.value,
-    //       shift: shift.value,
-    //     };
-    //     // console.log("this is day object", day_object);
-    //     complete_log_of_everyday_timetable.value.push(day_object);
-    //     next_day.value += 1;
-
-    //     let new_day_task_return_values = task(next_day.value + 1);
-    //     // console.log("ep value before", employee);
-    //     // console.log(new_day_task_return_values);
-    //     // setTaskData(new_day_task_return_values);
-    //     employeeObjectForThisTimetable = empPower(
-    //       final_pop_population.value[final_rank_index.value[0]].genes
-    //     );
-
-    //     //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
-    //     let setInitialShift = timetable(
-    //       final_pop_population.value[0].genes,
-    //       employeeObjectForThisTimetable
-    //     );
-    //     //setting shift to a updated shift and all other return values respectively
-
-    //     officeOpenTimings.value = setInitialShift.officeOpenTimings;
-    //     demand.value = setInitialShift.demand;
-    //     shift.value = setInitialShift.shift;
-    //     workArea.value = setInitialShift.workArea;
-    //     stuffingFinal.value = setInitialShift.stuffingFinal;
-
-    //     makeArray();
-    //     // this.$emit("new-chart-data")
-    //   } else {
-    //     calcTotalWishesNotFulfilledWeek();
-    //     calStandardDeviationOfIndividualsFairness();
-    //     // console.log(
-    //     //   "complete_log_of_everyday_timetable",
-    //     //   complete_log_of_everyday_timetable
-    //     // );
-
-    //     makePieChart.value = true;
-    //   }
-    // }
 
     return {
       officeOpenTimings,
@@ -838,7 +729,8 @@ export default defineComponent({
       standardDeviationArray,
       standardDeviation,
       weekly_timetable_array,
-      bar_array_object
+      demant_met_not_met_array,
+      bar_array_object,
       // fairness_array,
       // staffing_array,
     };
@@ -858,11 +750,13 @@ th,
 td {
   border: 1px solid black;
 }
-.days{
-      background: #333;
-    color: #fff;
-    text-align: center;
-    font-size: 24px;
-
+.days {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+}
+.pieChart-inline {
+  display: inline-block;
 }
 </style>
