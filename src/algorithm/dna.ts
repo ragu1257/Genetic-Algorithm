@@ -282,7 +282,8 @@ class DNA {
                 // console.log("updated_emp 2", updated_emp);
                 // stuffingOutcome = timetable(this.genes[i], employee)   
                 // console.log("step 7 2nd day table createion with last updated emp info", lastEmployeeInfo);
-                             
+                // console.log("sorted array employee initialllllll lastEmployeeInfo", lastEmployeeInfo);
+                let compareLastEmployeeInfo = lastEmployeeInfo
                 timetable(this.genes[i], lastEmployeeInfo, i+1)
                 // console.log("step 8- after lastEmployeeInfo is updated by timetable, we will update emp power of this table", lastEmployeeInfo);
                 let updated_emp = empPower(this.genes[i])
@@ -290,11 +291,37 @@ class DNA {
                 setLastEmployeeInfo(updated_emp)
                 ep_powers_for_all_days.push(updated_emp)
                 // console.log("step 10 updated the ep powers and set to last emp info", lastEmployeeInfo);
-                lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
-                console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
-                // // console.log("this is current employee before", employee);
-                timetable(this.genes[i], lastEmployeeInfo, i+1)
-                // // console.log("this is current employee affter", employee);
+                // lastEmployeeInfo.sort((a, b) => (a.empPower! > b.empPower!) ? -1 : ((b.empPower! > a.empPower!) ? 1 : 0))
+                // console.log("sorted array employee lastEmployeeInfo", lastEmployeeInfo);
+
+                // console.log("before compareLastEmployeeInfo", compareLastEmployeeInfo);
+                // console.log("upudated lastEmployeeInfo", lastEmployeeInfo);
+                
+                
+                for(let k=0; k<compareLastEmployeeInfo.length; k++){
+                    for(let l=0; l<lastEmployeeInfo.length; l++){
+                        if(lastEmployeeInfo[l].empId == compareLastEmployeeInfo[k].empId){
+                            let scorePerEmployee = 0
+                            lastEmployeeInfo[l].positiveWish!.map(item =>{
+                                !lastEmployeeInfo[l].timeRange!.includes(item)? scorePerEmployee++ : scorePerEmployee
+                            })
+                            lastEmployeeInfo[l].negativeWish!.map(item =>{
+                                lastEmployeeInfo[l].timeRange!.includes(item)? scorePerEmployee++ : scorePerEmployee
+                            })
+                            lastEmployeeInfo[l].absenceRange!.map(item =>{
+                                lastEmployeeInfo[l].timeRange!.includes(item)? scorePerEmployee++ : scorePerEmployee
+                            })
+                            scorePerEmployee = scorePerEmployee * (compareLastEmployeeInfo[k].empPower! * 10)
+                            score +=scorePerEmployee
+                            
+                        }
+                    }
+                }
+
+
+                // console.log("this is current employee before", employee);
+                // timetable(this.genes[i], lastEmployeeInfo, i+1)
+                // console.log("this is current employee affter", employee);
                 // // let currentEmp = employee
                 // // console.log("employee in currentEmppppppppp before", currentEmp);
                 // for (let i = 0; i < lastEmployeeInfo.length; i++) {
