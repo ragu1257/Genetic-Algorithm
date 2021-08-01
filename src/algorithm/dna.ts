@@ -71,7 +71,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 2
+        let number_of_days = 3
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
