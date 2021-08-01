@@ -332,11 +332,46 @@ class DNA {
         let cloned_lastEmployeeInfo = _.cloneDeep(employee)
         let ep_powers_for_all_days = []
         let scoreCollection: any = []
+
+        let scoreEmpIdSequence: any = []
         for (let i = 0; i < this.genes.length; i++) {
 
             if (i == 0) {
 
                 let stuffingOutcome = timetable(this.genes[i], cloned_lastEmployeeInfo, i + 1)
+
+
+                // console.log("clonedEmployee", stuffingOutcome.clonedEmployee);
+                for(let k=0;k<stuffingOutcome.clonedEmployee.length;k++){
+                    let positive = 0
+                    let negative = 0
+                    let absence = 0
+                    let score = 0
+                    stuffingOutcome.clonedEmployee[k].positiveWish.forEach((item: any) => {
+                        !stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? positive++ : positive
+                    });
+                    stuffingOutcome.clonedEmployee[k].negativeWish.forEach((item: any) => {
+                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? negative++ : negative
+                    });
+                    stuffingOutcome.clonedEmployee[k].absenceRange.forEach((item: any) => {
+                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? absence++ : absence
+                    });
+                     score = positive + negative + absence;
+                     scoreEmpIdSequence.push({empId: stuffingOutcome.clonedEmployee[k].empId, score: score}) 
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
 
                 scoreCollection.push(stuffingOutcome.individualScore)
 
@@ -351,6 +386,30 @@ class DNA {
 
                 let stuffingOutcome = timetable(this.genes[i], lastEmployeeInfo, i + 1)
 
+                // console.log("clonedEmployee second", stuffingOutcome.clonedEmployee);
+                for(let k=0;k<stuffingOutcome.clonedEmployee.length;k++){
+                    let positive = 0
+                    let negative = 0
+                    let absence = 0
+                    let score = 0
+                    stuffingOutcome.clonedEmployee[k].positiveWish.forEach((item: any) => {
+                        !stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? positive++ : positive
+                    });
+                    stuffingOutcome.clonedEmployee[k].negativeWish.forEach((item: any) => {
+                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? negative++ : negative
+                    });
+                    stuffingOutcome.clonedEmployee[k].absenceRange.forEach((item: any) => {
+                        stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? absence++ : absence
+                    });
+                     score = positive + negative + absence;
+                     scoreEmpIdSequence.push({empId: stuffingOutcome.clonedEmployee[k].empId, score: score}) 
+
+                }
+
+
+
+
+
                 scoreCollection.push(stuffingOutcome.individualScore)
                 // console.log("step 8- after lastEmployeeInfo is updated by timetable, we will update emp power of this table", lastEmployeeInfo);
                 let updated_emp = empPower(this.genes[i])
@@ -362,6 +421,9 @@ class DNA {
             }
 
         }
+
+        // console.log("scoreEmpIdSequence scoreEmpIdSequence", scoreEmpIdSequence);
+        
         // console.log("scoreCollection scoreCollection scoreCollection", scoreCollection);
 
         //join all days each employees score
@@ -371,11 +433,11 @@ class DNA {
         // console.log("mergeddddddddd", merged);
         var holder: any = {};
 
-        merged.forEach(function (d: { empID: string | number; score: any; }) {
-            if (holder.hasOwnProperty(d.empID)) {
-                holder[d.empID] = holder[d.empID] + d.score;
+        scoreEmpIdSequence.forEach(function (d: { empId: string | number; score: any; }) {
+            if (holder.hasOwnProperty(d.empId)) {
+                holder[d.empId] = holder[d.empId] + d.score;
             } else {
-                holder[d.empID] = d.score;
+                holder[d.empId] = d.score;
             }
         });
 
@@ -385,9 +447,16 @@ class DNA {
             obj2.push({ name: prop, value: holder[prop] });
         }
 
-        // console.log(obj2);
+        // console.log("finaaaaaaaaaaaaaaallllllll",obj2);
 
-        score = this.getScoreOfHighestScoreEmployee(this.genes, obj2)
+        let maxScore = Math.max.apply(Math, obj2.map(function (o) { return o.value; }))
+        // console.log("maxScore maxScore", maxScore);
+        // let maxScoreObjectEmpId = obj2.find(item => {
+        //     if (item.value == maxScore) {
+        //         return parseInt(item.name)
+        //     }
+        // })
+        // console.log("max score object", parseInt(maxScoreObjectEmpId!.name));
 
 
         set_ep_power(ep_powers_for_all_days)
@@ -396,7 +465,7 @@ class DNA {
 
         // console.log("fairness score", score);
 
-        this.fairness = score;
+        this.fairness = maxScore;
     }
 
     calcFitness() {
