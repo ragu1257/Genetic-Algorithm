@@ -6,6 +6,7 @@
       :options="createChartOptions"
       :series="createChart"
     ></apexchart>
+    {{this.standardDeviation}}
   </div>
 </template>
 
@@ -27,15 +28,14 @@ export default {
   },
   computed: {
     createChart: function() {
-      return([
+      return [
         {
           name: "wish fulfilled",
           data: this.standardDeviationArray,
         },
-      ])
-     
+      ];
     },
-    createChartOptions: function(){
+    createChartOptions: function() {
       return {
         chart: {
           height: 350,
@@ -63,10 +63,11 @@ export default {
         annotations: {
           xaxis: [
             {
-              x: parseInt(this.standardDeviation),
+              x: parseInt(this.standardDeviation)*2.5,
               strokeDashArray: 0,
               borderColor: "#775DD0",
               label: {
+                show: true,
                 borderColor: "#775DD0",
                 style: {
                   color: "#fff",
@@ -77,8 +78,18 @@ export default {
             },
           ],
         },
-      }
-    }
+        xaxis: {
+          labels: {
+            show: true,
+          },
+        },
+        yaxis: {
+          labels: {
+            show: false,
+          },
+        },
+      };
+    },
   },
 };
 </script>

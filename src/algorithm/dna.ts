@@ -192,7 +192,7 @@ class DNA {
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
-        this.staffing = score;
+        this.staffing = score * 50;
     }
     calcStaffTiming() {
         // console.log("this is genes", this.genes);
@@ -356,7 +356,7 @@ class DNA {
                     stuffingOutcome.clonedEmployee[k].absenceRange.forEach((item: any) => {
                         stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? absence++ : absence
                     });
-                    score = positive + negative + absence;
+                    score = positive*20 + negative*50 + absence*100;
                     scoreEmpIdSequence.push({ empId: stuffingOutcome.clonedEmployee[k].empId, score: score })
 
                 }
@@ -408,7 +408,7 @@ class DNA {
                             updated_emp_day_next[k].absenceRange!.forEach((item: any) => {
                                 updated_emp_day_next[k].timeRange!.includes(item) ? absence++ : absence
                             });
-                            score = (positive + negative + absence) * (beforelastEmployeeInfo[l].empPower! * 10);
+                            score = (positive*20 + negative*50 + absence*100) * (beforelastEmployeeInfo[l].empPower! * 10);
                             scoreEmpIdSequence.push({ empId: updated_emp_day_next[k].empId, score: score })
                         }
                     }
