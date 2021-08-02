@@ -19,7 +19,8 @@
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
       />
-      <groupedBarChart :barArrayObject="bar_array_object" />
+      <!-- <groupedBarChart :barArrayObject="bar_array_object" /> -->
+      <columnDataLabels :dataLabels="columnWithDataLabelsData" />
     </div>
     <div v-for="(daily_shift, index) in weekly_timetable_array" :key="index">
       <div class="days">Day {{ daily_shift.day_id }}</div>
@@ -326,6 +327,7 @@ import pieChartDemand from "./pieChartDemand.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
 import groupedBarChart from "./groupedBarChart.vue";
+import columnDataLabels from "./columnDataLabels.vue"
 import * as _ from "lodash";
 // import dna from "./algorithm/dna";
 export default defineComponent({
@@ -336,6 +338,7 @@ export default defineComponent({
     sDLineChart,
     groupedBarChart,
     pieChartDemand,
+    columnDataLabels
   },
   setup() {
     // let {
@@ -373,6 +376,7 @@ export default defineComponent({
     let standardDeviation = ref(0);
     let weekly_timetable_array: any = ref([]);
     let bar_array_object: any = ref();
+    let columnWithDataLabelsData: any = ref([]);
 
     let fetchTask = task();
     final_pop_population.value = fetchTask.final_pop_population;
@@ -679,6 +683,7 @@ export default defineComponent({
 
     function calGroupData() {
       let barArrayObject: any = [];
+      console.log("ep_powers", ep_powers);
       for (let i = 0; i < ep_powers.length; i++) {
         // console.log("inside");
         let currentDayEmpWishes = [];
@@ -711,9 +716,52 @@ export default defineComponent({
         barArrayObject.push({ data: currentDayEmpWishes });
       }
       bar_array_object.value = barArrayObject;
-      // console.log("bar object", barArrayObject)
+      console.log("bar object", barArrayObject);
     }
 
+    columnWithDataLabels();
+
+    function columnWithDataLabels() {
+      let finalData = [];
+      for (let i = 0; i < employee.length; i++) {
+        let wishFulfilled = 0;
+        let totalWish = 0;
+        for (let j = 0; j < ep_powers.length; j++) {
+          let empOutcome = ep_powers[j].filter(
+            (item: { empId: number }) => item.empId == employee[i].empId
+          );
+          empOutcome[0].absenceRange.map((item: any) => {
+            !empOutcome[0].timeRange.includes(item)
+              ? wishFulfilled++
+              : wishFulfilled;
+            totalWish++;
+          });
+          empOutcome[0].negativeWish.map((item: any) => {
+            !empOutcome[0].timeRange.includes(item)
+              ? wishFulfilled++
+              : wishFulfilled;
+            totalWish++;
+          });
+          empOutcome[0].positiveWish.map((item: any) => {
+            empOutcome[0].timeRange.includes(item)
+              ? wishFulfilled++
+              : wishFulfilled;
+            totalWish++;
+          });
+          // if(employee[i].empId == ep_powers[j].)
+        }
+        // console.log(
+        //   "total wish of emp i ",
+        //   employee[i].empId,
+        //   totalWish,
+        //   wishFulfilled
+        // );
+        let wishFulfilledPercentage = (wishFulfilled/totalWish)*100
+        finalData.push(wishFulfilledPercentage.toFixed(2))
+      }
+      // console.log("this is final perecenteage", data)
+      columnWithDataLabelsData.value = [{name: 'wish fulfilled', data: finalData}] 
+    }
     return {
       officeOpenTimings,
       demand,
@@ -731,6 +779,7 @@ export default defineComponent({
       weekly_timetable_array,
       demant_met_not_met_array,
       bar_array_object,
+      columnWithDataLabelsData
       // fairness_array,
       // staffing_array,
     };
