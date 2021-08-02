@@ -38,14 +38,14 @@ export default {
             click: (event, chartContext, config) => {
               this.dataPointSelectionHandler(config.dataPointIndex);
               // this.$emit('update-cart')
-              console.log("1", config.config.series[config.seriesIndex]);
-              console.log("2", config.config.series[config.seriesIndex].name);
-              console.log(
-                "3",
-                config.config.series[config.seriesIndex].data[
-                  config.dataPointIndex
-                ]
-              );
+              // console.log("1", config.config.series[config.seriesIndex]);
+              // console.log("2", config.config.series[config.seriesIndex].name);
+              // console.log(
+              //   "3",
+              //   config.config.series[config.seriesIndex].data[
+              //     config.dataPointIndex
+              //   ]
+              // );
             },
           },
         },

@@ -549,10 +549,10 @@ export default defineComponent({
     calcTotalWishesNotFulfilledWeek();
 
     function calcTotalWishesNotFulfilledWeek() {
-      console.log(
-        "weekly_timetable_array.value. weekly_timetable_array.value.",
-        weekly_timetable_array.value
-      );
+      // console.log(
+      //   "weekly_timetable_array.value. weekly_timetable_array.value.",
+      //   weekly_timetable_array.value
+      // );
       let totalWishesNotFulfilled = 0;
       let totalWishes = 0;
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
@@ -577,9 +577,10 @@ export default defineComponent({
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
-        totalWeeklyWishNotFulfilled.value,
-        totalWeeklyWishForAllEmployees.value -
+            totalWeeklyWishForAllEmployees.value -
           totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishNotFulfilled.value
+    
       ];
     }
 
