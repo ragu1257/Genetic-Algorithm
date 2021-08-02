@@ -26,8 +26,8 @@ export default {
           width: 380,
           type: "pie",
         },
-        colors: ["#ff0000", "#008ffb"],
-        labels: ["Wish Not Fulfilled", "Wishes Fulfilled"],
+        colors: [ "#008ffb", "#ff0000"],
+        labels: [ "Wishes Fulfilled", "Wish Not Fulfilled"],
         responsive: [
           {
             breakpoint: 480,

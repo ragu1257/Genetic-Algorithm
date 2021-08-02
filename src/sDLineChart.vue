@@ -27,15 +27,14 @@ export default {
   },
   computed: {
     createChart: function() {
-      return([
+      return [
         {
           name: "wish fulfilled",
           data: this.standardDeviationArray,
         },
-      ])
-     
+      ];
     },
-    createChartOptions: function(){
+    createChartOptions: function() {
       return {
         chart: {
           height: 350,
@@ -63,7 +62,7 @@ export default {
         annotations: {
           xaxis: [
             {
-              x: parseInt(this.standardDeviation)*4,
+              x: parseInt(this.standardDeviation) * 4,
               strokeDashArray: 0,
               borderColor: "#775DD0",
               label: {
@@ -77,8 +76,13 @@ export default {
             },
           ],
         },
-      }
-    }
+        yaxis: {
+          labels: {
+            show: false,
+          },
+        },
+      };
+    },
   },
 };
 </script>
