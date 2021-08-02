@@ -26,7 +26,7 @@ export default {
           width: 380,
           type: "pie",
         },
-        colors: ["#ff0000", "#008ffb"],
+        colors: ["#008ffb","#ff0000"],
         labels: ["Demand Fulfilled", "Demand Not Fulfilled"],
         responsive: [
           {
