@@ -577,9 +577,10 @@ export default defineComponent({
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
+            totalWeeklyWishNotFulfilled.value,
             totalWeeklyWishForAllEmployees.value -
-          totalWeeklyWishNotFulfilled.value,
-        totalWeeklyWishNotFulfilled.value
+          totalWeeklyWishNotFulfilled.value
+    
     
       ];
     }

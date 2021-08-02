@@ -63,7 +63,7 @@ export default {
         annotations: {
           xaxis: [
             {
-              x: parseInt(this.standardDeviation),
+              x: parseInt(this.standardDeviation)*3,
               strokeDashArray: 0,
               borderColor: "#775DD0",
               label: {
