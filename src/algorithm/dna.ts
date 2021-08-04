@@ -16,7 +16,10 @@ import { empPower } from "./empPower";
 
 //   return String.fromCharCode(c);
 // }
-
+const demandPenalty = 50
+const positivePenalty = 20
+const negativePenalty = 50
+const absencePenalty = 100
 
 
 class DNA {
@@ -71,7 +74,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 3
+        let number_of_days = 10
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
@@ -192,7 +195,7 @@ class DNA {
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
-        this.staffing = score * 50;
+        this.staffing = score * demandPenalty;
     }
     calcStaffTiming() {
         // console.log("this is genes", this.genes);
@@ -314,7 +317,7 @@ class DNA {
                             lastEmployeeInfo[l].absenceRange!.map(item => {
                                 lastEmployeeInfo[l].timeRange!.includes(item) ? internaltotalAbsenceWishNotFulfilled++ : totalAbsenceWishNotFulfilled
                             })
-                            scorePerEmployee = (internaltotalPositiveWishNotFulfilled * 20 + internaltotalNegativeWishNotFulfilled * 50 + internaltotalAbsenceWishNotFulfilled * 100) * (compareLastEmployeeInfo[k].empPower! * 10)
+                            scorePerEmployee = (internaltotalPositiveWishNotFulfilled * positivePenalty + internaltotalNegativeWishNotFulfilled * negativePenalty + internaltotalAbsenceWishNotFulfilled * absencePenalty) * (compareLastEmployeeInfo[k].empPower! * 10)
                             score += scorePerEmployee
 
                         }
@@ -324,7 +327,7 @@ class DNA {
         }
         set_ep_power(ep_powers_for_all_days)
 
-        score += totalPositiveWishNotFulfilled * 20 + totalNegativeWishNotFulfilled * 50 + totalAbsenceWishNotFulfilled * 100
+        score += totalPositiveWishNotFulfilled * positivePenalty + totalNegativeWishNotFulfilled * negativePenalty + totalAbsenceWishNotFulfilled * absencePenalty
 
         // console.log("fairness score", score);
 

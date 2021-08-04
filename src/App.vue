@@ -613,9 +613,9 @@ export default defineComponent({
         ) {
           totalDemand += weekly_timetable_array.value[i].demand[j].amount;
         }
+        break;
       }
       let demandMet = totalDemand - demandNotMet;
-
       demant_met_not_met_array.value = [demandMet, demandNotMet];
     }
 
