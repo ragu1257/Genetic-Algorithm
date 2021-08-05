@@ -27,7 +27,7 @@ import { empPower } from "./empPower";
 // const negativePenalty = 25
 // const absencePenalty = 50
 
-const demandPenalty=5
+const demandPenalty=50
 const positivePenalty =20
 const negativePenalty = 50
 const absencePenalty = 100
