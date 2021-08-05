@@ -17,7 +17,20 @@ import { empPower } from "./empPower";
 //   return String.fromCharCode(c);
 // }
 
+// const demandPenalty=10
+// const positivePenalty =2
+// const negativePenalty = 5
+// const absencePenalty = 10
 
+// const demandPenalty=10
+// const positivePenalty =10
+// const negativePenalty = 25
+// const absencePenalty = 50
+
+const demandPenalty=5
+const positivePenalty =20
+const negativePenalty = 50
+const absencePenalty = 100
 
 class DNA {
     genes: any[] = [];
@@ -71,7 +84,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 2
+        let number_of_days = 20
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
@@ -192,7 +205,7 @@ class DNA {
 
         let score = 0;
         score = finalOverstuffing + finalUnderStuffing
-        this.staffing = score * 50;
+        this.staffing = score * demandPenalty;
     }
     calcStaffTiming() {
         // console.log("this is genes", this.genes);
@@ -356,7 +369,7 @@ class DNA {
                     stuffingOutcome.clonedEmployee[k].absenceRange.forEach((item: any) => {
                         stuffingOutcome.clonedEmployee[k].timeRange.includes(item) ? absence++ : absence
                     });
-                     score = positive * 20 + negative * 50 + absence * 100;
+                     score = positive * positivePenalty + negative * negativePenalty + absence * absencePenalty;
                      scoreEmpIdSequence.push({empId: stuffingOutcome.clonedEmployee[k].empId, score: score}) 
 
                 }
@@ -398,7 +411,7 @@ class DNA {
                             updated_emp_day_next[k].absenceRange!.forEach((item: any) => {
                                 updated_emp_day_next[k].timeRange!.includes(item) ? absence++ : absence
                             });
-                            score = (positive * 20 + negative * 50 + absence * 100) * (beforelastEmployeeInfo[l].empPower! * 10);
+                            score = (positive * positivePenalty + negative * negativePenalty + absence * absencePenalty) * (beforelastEmployeeInfo[l].empPower! * 10);
                             scoreEmpIdSequence.push({ empId: updated_emp_day_next[k].empId, score: score })
                         }
                     }

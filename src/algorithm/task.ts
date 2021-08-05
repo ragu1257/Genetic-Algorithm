@@ -6,7 +6,7 @@ import { employee } from "./interface"
 import { empPower } from "./empPower"
 
 function createPopulation(task_day: number) {
-  const pop_size: number =100;
+  const pop_size: number =50;
   const population_number = 50;
 
   const pop = new Population(pop_size, task_day);
