@@ -16,7 +16,7 @@ import { empPower } from "./empPower";
 
 //   return String.fromCharCode(c);
 // }
-const demandPenalty = 50
+const demandPenalty = 5
 const positivePenalty = 20
 const negativePenalty = 50
 const absencePenalty = 100
@@ -74,7 +74,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 20
+        let number_of_days = 5
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
