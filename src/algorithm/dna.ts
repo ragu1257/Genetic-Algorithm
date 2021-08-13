@@ -16,10 +16,23 @@ import { empPower } from "./empPower";
 
 //   return String.fromCharCode(c);
 // }
-const demandPenalty = 5
-const positivePenalty = 20
-const negativePenalty = 50
-const absencePenalty = 100
+const demandPenalty = 10
+const positivePenalty = 2
+const negativePenalty = 5
+const absencePenalty = 10
+
+
+// const demandPenalty = 10
+// const positivePenalty = 10
+// const negativePenalty = 25
+// const absencePenalty = 50
+
+
+// const demandPenalty = 5
+// const positivePenalty = 20
+// const negativePenalty = 50
+// const absencePenalty = 100
+
 
 
 class DNA {
@@ -74,7 +87,7 @@ class DNA {
 
     generateDNASequence() {
         const TARGET2: number[] = [1, 2, 3]
-        let number_of_days = 5
+        let number_of_days = 20
         let uncloned_weekly_timetable_array: any[] = []
         const result: any[] = new Array(employee.length);
         for (let j = 0; j < result.length; j++) {
@@ -317,14 +330,15 @@ class DNA {
                             lastEmployeeInfo[l].absenceRange!.map(item => {
                                 lastEmployeeInfo[l].timeRange!.includes(item) ? internaltotalAbsenceWishNotFulfilled++ : totalAbsenceWishNotFulfilled
                             })
-                            scorePerEmployee = (internaltotalPositiveWishNotFulfilled * positivePenalty + internaltotalNegativeWishNotFulfilled * negativePenalty + internaltotalAbsenceWishNotFulfilled * absencePenalty) * (compareLastEmployeeInfo[k].empPower! * 10)
+                            scorePerEmployee = (internaltotalPositiveWishNotFulfilled * positivePenalty + internaltotalNegativeWishNotFulfilled * negativePenalty + internaltotalAbsenceWishNotFulfilled * absencePenalty) * Math.abs(compareLastEmployeeInfo[k].empPower! * 10)
                             score += scorePerEmployee
-
+                            // console.log("this is scorePerEmployee", scorePerEmployee)
                         }
                     }
                 }
             }
         }
+
         set_ep_power(ep_powers_for_all_days)
 
         score += totalPositiveWishNotFulfilled * positivePenalty + totalNegativeWishNotFulfilled * negativePenalty + totalAbsenceWishNotFulfilled * absencePenalty

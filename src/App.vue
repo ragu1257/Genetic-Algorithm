@@ -495,8 +495,8 @@ export default defineComponent({
           final_pop_population.value[final_rank_index.value[i]].staffing,
         ]);
       }
-
-      // console.log("fairness_staffing_array", fairness_staffing_array.value);
+// console.log("final_pop_population.value[final_rank_index.value[i]]",final_pop_population.value[final_rank_index.value[1]])
+//       console.log("fairness_staffing_array", fairness_staffing_array.value);
     }
 
     makeArray();
@@ -554,10 +554,10 @@ export default defineComponent({
     calcTotalWishesNotFulfilledWeek();
 
     function calcTotalWishesNotFulfilledWeek() {
-      console.log(
-        "weekly_timetable_array.value. weekly_timetable_array.value.",
-        weekly_timetable_array.value
-      );
+      // console.log(
+      //   "weekly_timetable_array.value. weekly_timetable_array.value.",
+      //   weekly_timetable_array.value
+      // );
       let totalWishesNotFulfilled = 0;
       let totalWishes = 0;
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
@@ -586,6 +586,7 @@ export default defineComponent({
         totalWeeklyWishForAllEmployees.value -
           totalWeeklyWishNotFulfilled.value,
       ];
+      // console.log("wish not fulfil vs fulifl", wish_fulfil_not_fulfil_array.value)
     }
 
     calcTotalDeamndMetAndNotMet();
@@ -617,6 +618,7 @@ export default defineComponent({
       }
       let demandMet = totalDemand - demandNotMet;
       demant_met_not_met_array.value = [demandMet, demandNotMet];
+      // console.log("demand met, not met", demant_met_not_met_array.value)
     }
 
     calStandardDeviationOfIndividualsFairness();
@@ -684,7 +686,7 @@ export default defineComponent({
 
     function calGroupData() {
       let barArrayObject: any = [];
-      console.log("ep_powers", ep_powers);
+      // console.log("ep_powers", ep_powers);
       for (let i = 0; i < ep_powers.length; i++) {
         // console.log("inside");
         let currentDayEmpWishes = [];
@@ -717,7 +719,7 @@ export default defineComponent({
         barArrayObject.push({ data: currentDayEmpWishes });
       }
       bar_array_object.value = barArrayObject;
-      console.log("bar object", barArrayObject);
+      // console.log("bar object", barArrayObject);
     }
 
     columnWithDataLabels();

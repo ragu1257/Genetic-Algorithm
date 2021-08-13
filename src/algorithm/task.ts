@@ -7,7 +7,7 @@ import { empPower } from "./empPower"
 
 function createPopulation(task_day: number) {
   const pop_size: number =150;
-  const population_number = 200;
+  const population_number = 50;
 
   const pop = new Population(pop_size, task_day);
   let generattion_array: number[] = []
@@ -94,7 +94,7 @@ export function task(task_day=1) {
 
   let { firstIndexShiftArray, best_pop_array, final_rank_index, final_pop_population } = createPopulation(task_day)
 
-  
+  // console.log("final_pop_population", final_pop_population)
 
   // let { officeOpenTimings, demand, shift, workArea, stuffingFinal, finalOverstuffing, finalUnderStuffing, finalUnderTime, finalOverTime } = timetable(firstIndexShiftArray, employee, task_day)
 
