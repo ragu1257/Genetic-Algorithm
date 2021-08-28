@@ -19,6 +19,10 @@
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
       />
+      <meanColumnChart
+        :standardMeanArray="standardMeanArray"
+        :standardMeanValue="standardMeanValue"
+      />
       <!-- <groupedBarChart :barArrayObject="bar_array_object" /> -->
       <columnDataLabels :dataLabels="columnWithDataLabelsData" />
     </div>
@@ -321,13 +325,14 @@ import {
   lastEmployeeInfo,
   set_ep_power,
 } from "./algorithm/interface";
-import { std } from "mathjs";
+import { std, mean } from "mathjs";
 import chart from "./chart.vue";
 import pieChartDemand from "./pieChartDemand.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
+import meanColumnChart from "./meanColumnChart.vue";
 import groupedBarChart from "./groupedBarChart.vue";
-import columnDataLabels from "./columnDataLabels.vue"
+import columnDataLabels from "./columnDataLabels.vue";
 import * as _ from "lodash";
 // import dna from "./algorithm/dna";
 export default defineComponent({
@@ -336,9 +341,10 @@ export default defineComponent({
     chart,
     pieChart,
     sDLineChart,
+    meanColumnChart,
     groupedBarChart,
     pieChartDemand,
-    columnDataLabels
+    columnDataLabels,
   },
   setup() {
     // let {
@@ -373,6 +379,8 @@ export default defineComponent({
     let makePieChart = ref(false);
     let wish_fulfil_not_fulfil_array = ref();
     let standardDeviationArray = ref();
+    let standardMeanArray = ref();
+    let standardMeanValue = ref(0);
     let standardDeviation = ref(0);
     let weekly_timetable_array: any = ref([]);
     let bar_array_object: any = ref();
@@ -656,7 +664,27 @@ export default defineComponent({
         }
         standardDeviationArrayLocal.push(currentEmployeeFairnessScore);
       }
+      console.log("standardDeviationArrayLocal", standardDeviationArrayLocal);
+      let meanValue: number = mean(standardDeviationArrayLocal);
+      console.log("this is mean", mean(standardDeviationArrayLocal));
+      let sortedArray = standardDeviationArrayLocal.sort((a, b) => a - b);
+      console.log(
+        "sort aarray",
+        standardDeviationArrayLocal.sort((a, b) => a - b)
+      );
+      let meanDeviationArrayIntermediate = [];
+      let meanDeviationArray = [];
 
+      for (let i = 0; i < sortedArray.length; i++) {
+        meanDeviationArrayIntermediate.push(sortedArray[i] - meanValue);
+      }
+
+      for (let i = 0; i < meanDeviationArrayIntermediate.length; i++) {
+        meanDeviationArray.push(parseFloat(meanDeviationArrayIntermediate[i].toFixed(0)));
+      }
+      console.log("thi sis subtracted values", meanDeviationArray);
+      standardMeanArray.value = meanDeviationArray;
+      standardMeanValue.value = meanValue;
       let leftArray = [];
       let rightArray = [];
 
@@ -757,11 +785,13 @@ export default defineComponent({
         //   totalWish,
         //   wishFulfilled
         // );
-        let wishFulfilledPercentage = (wishFulfilled/totalWish)*100
-        finalData.push(wishFulfilledPercentage.toFixed(2))
+        let wishFulfilledPercentage = (wishFulfilled / totalWish) * 100;
+        finalData.push(wishFulfilledPercentage.toFixed(2));
       }
       // console.log("this is final perecenteage", data)
-      columnWithDataLabelsData.value = [{name: 'wish fulfilled', data: finalData}] 
+      columnWithDataLabelsData.value = [
+        { name: "wish fulfilled", data: finalData },
+      ];
     }
     return {
       officeOpenTimings,
@@ -776,11 +806,13 @@ export default defineComponent({
       makePieChart,
       wish_fulfil_not_fulfil_array,
       standardDeviationArray,
+      standardMeanArray,
+      standardMeanValue,
       standardDeviation,
       weekly_timetable_array,
       demant_met_not_met_array,
       bar_array_object,
-      columnWithDataLabelsData
+      columnWithDataLabelsData,
       // fairness_array,
       // staffing_array,
     };
