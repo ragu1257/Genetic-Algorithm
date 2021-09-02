@@ -15,10 +15,10 @@
         class="pieChart-inline"
         :totalDemandOutcome="demant_met_not_met_array"
       />
-      <sDLineChart
+      <!-- <sDLineChart
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
-      />
+      /> -->
       <meanColumnChart
         :standardMeanArray="standardMeanArray"
         :standardMeanValue="standardMeanValue"
@@ -589,9 +589,10 @@ export default defineComponent({
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
-        totalWeeklyWishNotFulfilled.value,
         totalWeeklyWishForAllEmployees.value -
           totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishNotFulfilled.value
+        
       ];
     }
 
