@@ -15,10 +15,7 @@
         class="pieChart-inline"
         :totalDemandOutcome="demant_met_not_met_array"
       />
-      <sDLineChart
-        :standardDeviationArray="standardDeviationArray"
-        :standardDeviation="standardDeviation"
-      />
+
       <!-- <groupedBarChart :barArrayObject="bar_array_object" /> -->
       <columnDataLabels :dataLabels="columnWithDataLabelsData" />
     </div>

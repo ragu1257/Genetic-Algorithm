@@ -7,7 +7,7 @@ import { empPower } from "./empPower"
 
 function createPopulation(task_day: number) {
   const pop_size: number =150;
-  const population_number = 50;
+  const population_number = 200;
 
   const pop = new Population(pop_size, task_day);
   let generattion_array: number[] = []
