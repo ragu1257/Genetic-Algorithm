@@ -5,7 +5,7 @@
       :staffingFairnessArray="fairness_staffing_array"
       @update-table="updateTable"
     />
-
+ 
     <div>
       <pieChart
         class="pieChart-inline"
@@ -15,9 +15,13 @@
         class="pieChart-inline"
         :totalDemandOutcome="demant_met_not_met_array"
       />
-      <sDLineChart
+      <!-- <sDLineChart
         :standardDeviationArray="standardDeviationArray"
         :standardDeviation="standardDeviation"
+      /> -->
+      <meanColumnChart
+        :standardMeanArray="standardMeanArray"
+        :standardMeanValue="standardMeanValue"
       />
       <!-- <groupedBarChart :barArrayObject="bar_array_object" /> -->
       <columnDataLabels :dataLabels="columnWithDataLabelsData" />
@@ -304,9 +308,9 @@
     </div> -->
   </div>
 </template>
-
+ 
 <!-- eslint-disable -->
-
+ 
 <script lang="ts">
 /* eslint-disable */
 import { defineComponent, ref } from "vue";
@@ -321,13 +325,14 @@ import {
   lastEmployeeInfo,
   set_ep_power,
 } from "./algorithm/interface";
-import { std } from "mathjs";
+import { std, mean } from "mathjs";
 import chart from "./chart.vue";
 import pieChartDemand from "./pieChartDemand.vue";
 import pieChart from "./pieChart.vue";
 import sDLineChart from "./sDLineChart.vue";
+import meanColumnChart from "./meanColumnChart.vue";
 import groupedBarChart from "./groupedBarChart.vue";
-import columnDataLabels from "./columnDataLabels.vue"
+import columnDataLabels from "./columnDataLabels.vue";
 import * as _ from "lodash";
 // import dna from "./algorithm/dna";
 export default defineComponent({
@@ -336,9 +341,10 @@ export default defineComponent({
     chart,
     pieChart,
     sDLineChart,
+    meanColumnChart,
     groupedBarChart,
     pieChartDemand,
-    columnDataLabels
+    columnDataLabels,
   },
   setup() {
     // let {
@@ -373,24 +379,26 @@ export default defineComponent({
     let makePieChart = ref(false);
     let wish_fulfil_not_fulfil_array = ref();
     let standardDeviationArray = ref();
+    let standardMeanArray = ref();
+    let standardMeanValue = ref(0);
     let standardDeviation = ref(0);
     let weekly_timetable_array: any = ref([]);
     let bar_array_object: any = ref();
     let columnWithDataLabelsData: any = ref([]);
-
+ 
     let fetchTask = task();
     final_pop_population.value = fetchTask.final_pop_population;
     final_rank_index.value = fetchTask.final_rank_index;
-
+ 
     // console.log(
     //   "this is fetch tasks",
     //   fetchTask,
     //   final_rank_index.value,
     //   final_pop_population.value
     // );
-
+ 
     fetchFirstIndexValue();
-
+ 
     function fetchFirstIndexValue(index_value = 0) {
       weekly_timetable_array.value = [];
       let default_timetable_pop =
@@ -424,19 +432,19 @@ export default defineComponent({
           setLastEmployeeInfo(updated_emp);
           ep_powers_for_all_days.push(updated_emp);
         }
-
+ 
         shift_for_each_day.day_id = i + 1;
         weekly_timetable_array.value.push(shift_for_each_day);
         // console.log("shift_for_each_day", shift_for_each_day);
       }
       set_ep_power(ep_powers_for_all_days);
-
+ 
       updateEPInTable();
     }
-
+ 
     // console.log("weekly_timetable_array", weekly_timetable_array)
     // console.log("ep_powers", ep_powers)
-
+ 
     function updateEPInTable() {
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
         for (let j = 0; j < ep_powers.length; j++) {
@@ -459,7 +467,7 @@ export default defineComponent({
         }
       }
     }
-
+ 
     //    console.log("weekly_timetable_array", weekly_timetable_array.value);
     // console.log("this is final ep powers array object", ep_powers);
     // function setTaskData(fetchTask: {
@@ -484,7 +492,7 @@ export default defineComponent({
     //   final_rank_index.value = fetchTask.final_rank_index;
     //   final_pop_population.value = fetchTask.final_pop_population;
     // }
-
+ 
     function makeArray() {
       // console.log("final_rank_index in make array", final_rank_index.value);
       // console.log("final_pop_population",final_pop_population.value)
@@ -495,32 +503,32 @@ export default defineComponent({
           final_pop_population.value[final_rank_index.value[i]].staffing,
         ]);
       }
-
+ 
       // console.log("fairness_staffing_array", fairness_staffing_array.value);
     }
-
+ 
     makeArray();
-
+ 
     // return a new employee object with updated EP power
     // let employeeObjectForThisTimetable = empPower(
     //   final_pop_population.value[final_rank_index.value[0]].genes
     // );
-
+ 
     // setNewEmployee(employeeObjectForThisTimetable);
-
+ 
     //calling timetable.ts to return new shift with updated EP power for the first DNA/timetable in set of population/timetable
     // let setInitialShift = timetable(
     //   final_pop_population.value[0].genes,
     //   employeeObjectForThisTimetable
     // );
     //setting shift to a updated shift and all other return values respectively
-
+ 
     // officeOpenTimings.value = setInitialShift.officeOpenTimings;
     // demand.value = setInitialShift.demand;
     // shift.value = setInitialShift.shift;
     // workArea.value = setInitialShift.workArea;
     // stuffingFinal.value = setInitialShift.stuffingFinal;
-
+ 
     function updateTable(e: any) {
       array_number.value = e.config;
       // console.log("this is clicked", e.config)
@@ -528,31 +536,30 @@ export default defineComponent({
       calcTotalWishesNotFulfilledWeek();
       calcTotalDeamndMetAndNotMet();
       calStandardDeviationOfIndividualsFairness();
-      columnWithDataLabels();
       //           console.log("weekly_timetable_array on click", weekly_timetable_array.value)
       // console.log("ep_powers on click", ep_powers)
       //   employeeObjectForThisTimetable = empPower(
       //     final_pop_population.value[array_number.value].genes
       //   );
-
+ 
       // setNewEmployee(employeeObjectForThisTimetable);
-
+ 
       // let click_callback = timetable(
       //   final_pop_population.value[array_number.value].genes,
       //   employeeObjectForThisTimetable
       // );
-
+ 
       //   officeOpenTimings.value = click_callback.officeOpenTimings;
       //   demand.value = click_callback.demand;
       //   shift.value = click_callback.shift;
       //   workArea.value = click_callback.workArea;
       //   stuffingFinal.value = click_callback.stuffingFinal;
     }
-
+ 
     // console.log("weekly_timetable_array", weekly_timetable_array.value);
     // console.log("ep_powers", ep_powers);
     calcTotalWishesNotFulfilledWeek();
-
+ 
     function calcTotalWishesNotFulfilledWeek() {
       console.log(
         "weekly_timetable_array.value. weekly_timetable_array.value.",
@@ -582,14 +589,15 @@ export default defineComponent({
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
       wish_fulfil_not_fulfil_array.value = [
-        totalWeeklyWishNotFulfilled.value,
         totalWeeklyWishForAllEmployees.value -
           totalWeeklyWishNotFulfilled.value,
+        totalWeeklyWishNotFulfilled.value
+        
       ];
     }
-
+ 
     calcTotalDeamndMetAndNotMet();
-
+ 
     function calcTotalDeamndMetAndNotMet() {
       let demandNotMet = 0;
       let totalDemand = 0;
@@ -604,7 +612,7 @@ export default defineComponent({
             weekly_timetable_array.value[i].stuffingFinal[j].underStuffing;
         }
       }
-
+ 
       for (let i = 0; i < weekly_timetable_array.value.length; i++) {
         for (
           let j = 0;
@@ -616,12 +624,12 @@ export default defineComponent({
         break;
       }
       let demandMet = totalDemand - demandNotMet;
-console.log("demandful", totalDemand, demandNotMet)
+ 
       demant_met_not_met_array.value = [demandMet, demandNotMet];
     }
-
+ 
     calStandardDeviationOfIndividualsFairness();
-
+ 
     function calStandardDeviationOfIndividualsFairness() {
       let standardDeviationArrayLocal = [];
       for (let i = 0; i < employee.length; i++) {
@@ -657,10 +665,30 @@ console.log("demandful", totalDemand, demandNotMet)
         }
         standardDeviationArrayLocal.push(currentEmployeeFairnessScore);
       }
-
+      console.log("standardDeviationArrayLocal", standardDeviationArrayLocal);
+      let meanValue: number = mean(standardDeviationArrayLocal);
+      console.log("this is mean", mean(standardDeviationArrayLocal));
+      let sortedArray = standardDeviationArrayLocal.sort((a, b) => a - b);
+      console.log(
+        "sort aarray",
+        standardDeviationArrayLocal.sort((a, b) => a - b)
+      );
+      let meanDeviationArrayIntermediate = [];
+      let meanDeviationArray = [];
+ 
+      for (let i = 0; i < sortedArray.length; i++) {
+        meanDeviationArrayIntermediate.push(sortedArray[i] - meanValue);
+      }
+ 
+      for (let i = 0; i < meanDeviationArrayIntermediate.length; i++) {
+        meanDeviationArray.push(parseFloat(meanDeviationArrayIntermediate[i].toFixed(0)));
+      }
+      console.log("thi sis subtracted values", meanDeviationArray);
+      standardMeanArray.value = meanDeviationArray;
+      standardMeanValue.value = meanValue;
       let leftArray = [];
       let rightArray = [];
-
+ 
       for (let i = 0; i < standardDeviationArrayLocal.length; i++) {
         if (i < standardDeviationArrayLocal.length / 2) {
           leftArray.push(standardDeviationArrayLocal[i]);
@@ -670,22 +698,22 @@ console.log("demandful", totalDemand, demandNotMet)
       }
       leftArray.sort((a, b) => a - b);
       rightArray.sort((a, b) => b - a);
-
+ 
       standardDeviationArrayLocal = leftArray.concat(rightArray);
       // console.log("standardDeviationArrayLocal, left and right",standardDeviationArrayLocal, leftArray, rightArray)
-
+ 
       standardDeviation.value = std(standardDeviationArrayLocal);
-
+ 
       standardDeviationArray.value = standardDeviationArrayLocal;
-
+ 
       // console.log("standardDeviation, standardDeviationArray", standardDeviation.value, standardDeviationArray.value);
     }
-
+ 
     calGroupData();
-
+ 
     function calGroupData() {
       let barArrayObject: any = [];
-      // console.log("ep_powers", ep_powers);
+      console.log("ep_powers", ep_powers);
       for (let i = 0; i < ep_powers.length; i++) {
         // console.log("inside");
         let currentDayEmpWishes = [];
@@ -718,11 +746,11 @@ console.log("demandful", totalDemand, demandNotMet)
         barArrayObject.push({ data: currentDayEmpWishes });
       }
       bar_array_object.value = barArrayObject;
-      // console.log("bar object", barArrayObject);
+      console.log("bar object", barArrayObject);
     }
-
+ 
     columnWithDataLabels();
-
+ 
     function columnWithDataLabels() {
       let finalData = [];
       for (let i = 0; i < employee.length; i++) {
@@ -758,11 +786,13 @@ console.log("demandful", totalDemand, demandNotMet)
         //   totalWish,
         //   wishFulfilled
         // );
-        let wishFulfilledPercentage = (wishFulfilled/totalWish)*100
-        finalData.push(wishFulfilledPercentage.toFixed(2))
+        let wishFulfilledPercentage = (wishFulfilled / totalWish) * 100;
+        finalData.push(wishFulfilledPercentage.toFixed(2));
       }
       // console.log("this is final perecenteage", data)
-      columnWithDataLabelsData.value = [{name: 'wish fulfilled', data: finalData}] 
+      columnWithDataLabelsData.value = [
+        { name: "wish fulfilled", data: finalData },
+      ];
     }
     return {
       officeOpenTimings,
@@ -777,11 +807,13 @@ console.log("demandful", totalDemand, demandNotMet)
       makePieChart,
       wish_fulfil_not_fulfil_array,
       standardDeviationArray,
+      standardMeanArray,
+      standardMeanValue,
       standardDeviation,
       weekly_timetable_array,
       demant_met_not_met_array,
       bar_array_object,
-      columnWithDataLabelsData
+      columnWithDataLabelsData,
       // fairness_array,
       // staffing_array,
     };
@@ -794,7 +826,7 @@ console.log("demandful", totalDemand, demandNotMet)
   // },
 });
 </script>
-
+ 
 <style scoped>
 table,
 th,
