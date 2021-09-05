@@ -536,6 +536,8 @@ export default defineComponent({
       calcTotalWishesNotFulfilledWeek();
       calcTotalDeamndMetAndNotMet();
       calStandardDeviationOfIndividualsFairness();
+    calGroupData();
+
       //           console.log("weekly_timetable_array on click", weekly_timetable_array.value)
       // console.log("ep_powers on click", ep_powers)
       //   employeeObjectForThisTimetable = empPower(
@@ -588,11 +590,10 @@ export default defineComponent({
       }
       totalWeeklyWishNotFulfilled.value = totalWishesNotFulfilled;
       totalWeeklyWishForAllEmployees.value = totalWishes;
-      wish_fulfil_not_fulfil_array.value = [
+      wish_fulfil_not_fulfil_array.value = [        
         totalWeeklyWishForAllEmployees.value -
           totalWeeklyWishNotFulfilled.value,
-        totalWeeklyWishNotFulfilled.value
-        
+          totalWeeklyWishNotFulfilled.value        
       ];
     }
  
